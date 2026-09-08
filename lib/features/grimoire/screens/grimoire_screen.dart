@@ -1,0 +1,245 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:sbee/sbee.dart';
+
+import '../../../core/theme/theme.dart';
+import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
+import '../widgets/metro_transit_map.dart';
+import '../widgets/station_inspector_sheet.dart';
+
+/// The Grimoire (運動系統樹): Visual Metro Transit Map of Movement Progressions.
+class GrimoireScreen extends StatefulWidget {
+  final bool isIntermediateUser;
+
+  const GrimoireScreen({super.key, this.isIntermediateUser = false});
+
+  @override
+  State<GrimoireScreen> createState() => _GrimoireScreenState();
+}
+
+class _GrimoireScreenState extends State<GrimoireScreen> {
+  MovementPattern? _selectedPattern;
+
+  void _handleSelectStation(Exercise exercise) {
+    StationInspectorSheet.show(
+      context,
+      exercise: exercise,
+      isIntermediateUser: widget.isIntermediateUser,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+
+    return Scaffold(
+      backgroundColor: colors.backgroundVoid,
+      body: RailsideAtmosphereBackdrop(
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Header Section
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 12.0,
+                ),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, size: 20.0),
+                      color: colors.amberAccent,
+                      tooltip: 'Back to Dispatch',
+                      onPressed: () {
+                        if (Navigator.canPop(context)) {
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'THE GRIMOIRE // 運動系統樹',
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.5,
+                              color: colors.amberAccent,
+                            ),
+                          ),
+                          const SizedBox(height: 2.0),
+                          Text(
+                            'METRO TRANSIT MAP OF MOVEMENT PROGRESSIONS',
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 9.0,
+                              letterSpacing: 0.8,
+                              color: colors.textMuted,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Divider(height: 1.0, thickness: 1.0),
+
+              // Filter Pills Strip
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 10.0,
+                ),
+                decoration: BoxDecoration(
+                  color: colors.surfaceDark,
+                  border: Border(
+                    bottom: BorderSide(color: colors.borderBright, width: 1.0),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _FilterPill(
+                        label: 'ALL LINES',
+                        isSelected: _selectedPattern == null,
+                        activeColor: colors.amberAccent,
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          setState(() => _selectedPattern = null);
+                        },
+                      ),
+                      const SizedBox(width: 8.0),
+                      _FilterPill(
+                        label: 'PUSH',
+                        isSelected: _selectedPattern == MovementPattern.pushing,
+                        activeColor: const Color(0xFFFFAE34),
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          setState(
+                            () => _selectedPattern = MovementPattern.pushing,
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8.0),
+                      _FilterPill(
+                        label: 'PULL',
+                        isSelected: _selectedPattern == MovementPattern.pulling,
+                        activeColor: const Color(0xFF2EE6D6),
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          setState(
+                            () => _selectedPattern = MovementPattern.pulling,
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8.0),
+                      _FilterPill(
+                        label: 'BEND & LIFT',
+                        isSelected:
+                            _selectedPattern == MovementPattern.bendAndLift,
+                        activeColor: const Color(0xFFFF493A),
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          setState(
+                            () =>
+                                _selectedPattern = MovementPattern.bendAndLift,
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8.0),
+                      _FilterPill(
+                        label: 'LEGS',
+                        isSelected:
+                            _selectedPattern == MovementPattern.singleLeg,
+                        activeColor: const Color(0xFF4B8E62),
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          setState(
+                            () => _selectedPattern = MovementPattern.singleLeg,
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8.0),
+                      _FilterPill(
+                        label: 'ROTATION',
+                        isSelected:
+                            _selectedPattern == MovementPattern.rotation,
+                        activeColor: const Color(0xFFD154EC),
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          setState(
+                            () => _selectedPattern = MovementPattern.rotation,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Metro Diagram Track
+              Expanded(
+                child: MetroTransitMap(
+                  activePatternFilter: _selectedPattern,
+                  onStationSelected: _handleSelectStation,
+                  isIntermediateUser: widget.isIntermediateUser,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FilterPill extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final Color activeColor;
+  final VoidCallback onTap;
+
+  const _FilterPill({
+    required this.label,
+    required this.isSelected,
+    required this.activeColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        decoration: BoxDecoration(
+          color: isSelected ? activeColor : colors.backgroundVoid,
+          border: Border.all(
+            color: isSelected ? activeColor : colors.borderMuted,
+            width: 1.0,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Courier',
+            fontSize: 9.0,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0.8,
+            color: isSelected ? colors.surfaceDark : colors.textMuted,
+          ),
+        ),
+      ),
+    );
+  }
+}

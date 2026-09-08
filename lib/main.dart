@@ -7,6 +7,7 @@ import 'core/widgets/widgets.dart';
 import 'engine/engine.dart';
 import 'features/armory/armory.dart';
 import 'features/districts/railside_outskirts/railside_atmosphere_backdrop.dart';
+import 'features/grimoire/grimoire.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -311,6 +312,16 @@ class _ZenithLandingScreenState extends ConsumerState<ZenithLandingScreen> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const ArmoryScreen()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10.0),
+                PixelButton(
+                  label: 'THE GRIMOIRE // 運動系統樹',
+                  variant: PixelButtonVariant.secondary,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const GrimoireScreen()),
                     );
                   },
                 ),

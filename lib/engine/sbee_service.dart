@@ -1,18 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbee/sbee.dart';
 
-import 'bootstrap_catalog.dart';
 import 'database_provider.dart';
+import 'expanded_catalog.dart';
 
 /// Primary SBEE Engine provider initialized with Drift repositories and
-/// the baseline exercise graph.
+/// the expanded exercise graph.
 final sbeeEngineProvider = Provider<SbeeEngine>((ref) {
   final sessionRepo = ref.watch(sessionRepositoryProvider);
   final progressionRepo = ref.watch(progressionRepositoryProvider);
   return SbeeEngine(
     sessionRepository: sessionRepo,
     progressionRepository: progressionRepo,
-    exerciseGraph: baselineExerciseGraph,
+    exerciseGraph: expandedExerciseGraph,
   );
 });
 
