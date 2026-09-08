@@ -1,30 +1,52 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+import 'package:drift/native.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:sbee/sbee.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zenith/core/theme/theme.dart';
+import 'package:zenith/engine/engine.dart';
 import 'package:zenith/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets(
+    'ZenithApp smoke test renders landing shell and initiates dispatch',
+    (WidgetTester tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(
+              SbeeDatabase(NativeDatabase.memory()),
+            ),
+          ],
+          child: const ZenithApp(),
+        ),
+      );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      // Initial frame
+      await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+      // Verify header and district identity
+      expect(find.text('ZENITH // 頂点'), findsOneWidget);
+      expect(find.textContaining('RAILSIDE OUTSKIRTS'), findsOneWidget);
+      expect(find.text('SECTOR 01'), findsOneWidget);
+
+      // Verify engine status card
+      expect(find.text('SBEE ENGINE CORE // ONLINE'), findsOneWidget);
+      expect(find.text('INITIATE EXPEDITION'), findsOneWidget);
+
+      // Tap initiate expedition button
+      await tester.tap(find.text('INITIATE EXPEDITION'));
+      await tester.pump();
+
+      // Let the generation future resolve
+      await tester.pumpAndSettle();
+
+      // Verify dispatch feedback displays
+      expect(find.textContaining('DISPATCH PREPARED'), findsOneWidget);
+    },
+  );
 }
