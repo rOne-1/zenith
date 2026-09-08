@@ -2,7 +2,6 @@ import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sbee/sbee.dart';
-import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/features/districts/railside_outskirts/railside_outskirts_theme.dart';
 import 'package:zenith/features/expedition/utils/warning_translator.dart';
 
