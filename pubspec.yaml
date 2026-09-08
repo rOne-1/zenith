@@ -52,6 +52,7 @@ dependencies:
 
   # Local Persistence
   drift: ^2.20.0
+  sqlite3: ^3.3.4
   path: ^1.9.0
   path_provider: ^2.1.5
 

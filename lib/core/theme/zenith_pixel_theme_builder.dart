@@ -1,16 +1,10 @@
-import 'dart:io' as io;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
+import 'test_env/test_env.dart';
 import 'zenith_district_colors.dart';
 import 'zenith_district_palette.dart';
 import 'zenith_pixel_metrics.dart';
-
-bool get _isTestEnvironment {
-  if (kIsWeb) return false;
-  return io.Platform.environment.containsKey('FLUTTER_TEST');
-}
 
 /// Route transitions builder powered by [HouseSpring.curve].
 class HouseSpringPageTransitionsBuilder extends PageTransitionsBuilder {
@@ -71,7 +65,7 @@ class ZenithPixelThemeBuilder {
     final FontBuilder effectiveDisplayFont;
     if (displayFont != null) {
       effectiveDisplayFont = displayFont;
-    } else if (_isTestEnvironment) {
+    } else if (isTestEnvironment) {
       effectiveDisplayFont =
           ({
             TextStyle? textStyle,
@@ -165,7 +159,7 @@ class ZenithPixelThemeBuilder {
     final FontBuilder effectiveBodyFont;
     if (bodyFont != null) {
       effectiveBodyFont = bodyFont;
-    } else if (_isTestEnvironment) {
+    } else if (isTestEnvironment) {
       effectiveBodyFont =
           ({
             TextStyle? textStyle,
