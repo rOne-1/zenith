@@ -9,44 +9,69 @@ import 'package:zenith/main.dart';
 
 void main() {
   testWidgets(
-    'ZenithApp smoke test renders landing shell and initiates dispatch',
+    'ZenithApp smoke test renders AppShell, navigation bar, and dispatches expedition',
     (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
+      final db = SbeeDatabase(NativeDatabase.memory());
 
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            sharedPreferencesProvider.overrideWithValue(prefs),
-            sbeeDatabaseProvider.overrideWithValue(
-              SbeeDatabase(NativeDatabase.memory()),
-            ),
-          ],
-          child: const ZenithApp(),
-        ),
-      );
+      try {
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedPreferencesProvider.overrideWithValue(prefs),
+              sbeeDatabaseProvider.overrideWithValue(db),
+            ],
+            child: const ZenithApp(),
+          ),
+        );
 
-      // Initial frame
-      await tester.pumpAndSettle();
+        // Initial frame
+        await tester.pumpAndSettle();
 
-      // Verify header and district identity
-      expect(find.text('ZENITH // 頂点'), findsOneWidget);
-      expect(find.textContaining('RAILSIDE OUTSKIRTS'), findsOneWidget);
-      expect(find.text('SECTOR 01'), findsOneWidget);
+        // Verify header and district identity in Expedition tab
+        expect(find.text('ZENITH // 頂点'), findsOneWidget);
+        expect(find.textContaining('PLATFORM 01'), findsOneWidget);
+        expect(find.text('SECTOR 01'), findsOneWidget);
 
-      // Verify engine status card
-      expect(find.text('SBEE ENGINE CORE // ONLINE'), findsOneWidget);
-      expect(find.text('INITIATE EXPEDITION'), findsOneWidget);
+        // Verify navigation tabs
+        expect(find.text('EXPEDITION'), findsOneWidget);
+        expect(find.text('GRIMOIRE'), findsOneWidget);
+        expect(find.text('ARMORY'), findsOneWidget);
+        expect(find.text('SANCTUARY'), findsOneWidget);
 
-      // Tap initiate expedition button
-      await tester.tap(find.text('INITIATE EXPEDITION'));
-      await tester.pump();
+        // Verify itinerary and initiate button
+        expect(find.text('EXPEDITION ITINERARY // 運行表'), findsOneWidget);
+        final initiateBtn = find.text('▶ INITIATE EXPEDITION');
+        expect(initiateBtn, findsOneWidget);
 
-      // Let the generation future resolve
-      await tester.pumpAndSettle();
+        // Tap initiate expedition button
+        await tester.tap(initiateBtn);
+        await tester.pumpAndSettle();
 
-      // Verify dispatch feedback displays
-      expect(find.textContaining('DISPATCH PREPARED'), findsOneWidget);
+        // Verify dispatch feedback displays
+        expect(find.textContaining('EXPEDITION DISPATCHED'), findsOneWidget);
+
+        // Test tab switching to Armory
+        await tester.tap(find.text('ARMORY'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('EQUIPMENT INVENTORY'), findsOneWidget);
+
+        // Test tab switching to Grimoire
+        await tester.tap(find.text('GRIMOIRE'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('THE GRIMOIRE // 運動系統樹'), findsOneWidget);
+
+        // Test tab switching to Sanctuary
+        await tester.tap(find.text('SANCTUARY'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('SANCTUARY // 聖域'), findsOneWidget);
+      } finally {
+        await db.close();
+      }
     },
   );
 }

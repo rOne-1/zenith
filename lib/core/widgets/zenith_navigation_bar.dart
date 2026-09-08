@@ -1,0 +1,188 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../theme/theme.dart';
+
+/// Specification for an individual ticket tab in [ZenithNavigationBar].
+class ZenithNavigationTabItem {
+  final String indexLabel;
+  final String title;
+  final String kanji;
+  final IconData icon;
+
+  const ZenithNavigationTabItem({
+    required this.indexLabel,
+    required this.title,
+    required this.kanji,
+    required this.icon,
+  });
+}
+
+/// A retro 16-bit Japanese railway ticket navigation bar.
+///
+/// Features authentic ticket-punch tab styling, high contrast active highlights,
+/// and tactile micro-haptic selection feedback.
+class ZenithNavigationBar extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onDestinationSelected;
+
+  const ZenithNavigationBar({
+    super.key,
+    required this.currentIndex,
+    required this.onDestinationSelected,
+  });
+
+  static const List<ZenithNavigationTabItem> tabs = [
+    ZenithNavigationTabItem(
+      indexLabel: '01',
+      title: 'EXPEDITION',
+      kanji: '遠征',
+      icon: Icons.explore_outlined,
+    ),
+    ZenithNavigationTabItem(
+      indexLabel: '02',
+      title: 'GRIMOIRE',
+      kanji: '魔導書',
+      icon: Icons.map_outlined,
+    ),
+    ZenithNavigationTabItem(
+      indexLabel: '03',
+      title: 'ARMORY',
+      kanji: '兵装',
+      icon: Icons.fitness_center_outlined,
+    ),
+    ZenithNavigationTabItem(
+      indexLabel: '04',
+      title: 'SANCTUARY',
+      kanji: '聖域',
+      icon: Icons.nightlight_round_outlined,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colors.backgroundVoid,
+        border: Border(
+          top: BorderSide(
+            color: colors.borderMuted,
+            width: 2.0,
+          ),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Container(
+          height: 64.0,
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: List.generate(tabs.length, (index) {
+              final item = tabs[index];
+              final isSelected = index == currentIndex;
+
+              return Expanded(
+                child: _TicketTabItem(
+                  item: item,
+                  isSelected: isSelected,
+                  onTap: () {
+                    if (!isSelected) {
+                      HapticFeedback.selectionClick();
+                      onDestinationSelected(index);
+                    }
+                  },
+                ),
+              );
+            }),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TicketTabItem extends StatelessWidget {
+  final ZenithNavigationTabItem item;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _TicketTabItem({
+    required this.item,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+
+    final activeBorderColor = colors.amberAccent;
+    final activeTextColor = colors.amberAccent;
+    final inactiveTextColor = colors.textMuted;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 2.0),
+        decoration: BoxDecoration(
+          color: isSelected ? colors.surfaceDark : Colors.transparent,
+          border: Border.all(
+            color: isSelected ? activeBorderColor : Colors.transparent,
+            width: 1.5,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  item.icon,
+                  size: 16.0,
+                  color: isSelected ? activeTextColor : inactiveTextColor,
+                ),
+                const SizedBox(width: 4.0),
+                Text(
+                  item.indexLabel,
+                  style: TextStyle(
+                    fontFamily: 'Courier',
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.w700,
+                    color: isSelected ? activeTextColor : inactiveTextColor,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 2.0),
+            Text(
+              item.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: 'Courier',
+                fontSize: 9.0,
+                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                letterSpacing: 0.8,
+                color: isSelected ? activeTextColor : inactiveTextColor,
+              ),
+            ),
+            Text(
+              item.kanji,
+              maxLines: 1,
+              style: TextStyle(
+                fontFamily: 'Courier',
+                fontSize: 8.0,
+                color: isSelected ? colors.amberGlow : colors.borderMuted,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
