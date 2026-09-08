@@ -1,0 +1,276 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:zenith/core/widgets/widgets.dart';
+
+void main() {
+  group('SteppedPixelBorder', () {
+    test('dimensions matches side width', () {
+      const border = SteppedPixelBorder(
+        side: BorderSide(color: Colors.white, width: 3.0),
+        stepSize: 4.0,
+      );
+      expect(border.dimensions, const EdgeInsets.all(3.0));
+    });
+
+    test('scale scales side width and step size', () {
+      const border = SteppedPixelBorder(
+        side: BorderSide(color: Colors.white, width: 2.0),
+        stepSize: 4.0,
+      );
+      final scaled = border.scale(2.0) as SteppedPixelBorder;
+      expect(scaled.side.width, 4.0);
+      expect(scaled.stepSize, 8.0);
+    });
+
+    test('copyWith updates specified properties', () {
+      const border = SteppedPixelBorder(
+        side: BorderSide(color: Colors.white, width: 2.0),
+        stepSize: 4.0,
+      );
+      final copied =
+          border.copyWith(
+                side: const BorderSide(color: Colors.red, width: 3.0),
+                stepSize: 6.0,
+              )
+              as SteppedPixelBorder;
+
+      expect(copied.side.color, Colors.red);
+      expect(copied.side.width, 3.0);
+      expect(copied.stepSize, 6.0);
+    });
+
+    test('getOuterPath returns non-empty path with bounds matching rect', () {
+      const border = SteppedPixelBorder(stepSize: 4.0);
+      const rect = Rect.fromLTWH(0, 0, 100, 50);
+      final path = border.getOuterPath(rect);
+
+      expect(path, isNotNull);
+      expect(path.getBounds(), const Rect.fromLTWH(0, 0, 100, 50));
+    });
+
+    test('getInnerPath returns deflated path', () {
+      const border = SteppedPixelBorder(
+        side: BorderSide(color: Colors.white, width: 2.0),
+        stepSize: 4.0,
+      );
+      const rect = Rect.fromLTWH(0, 0, 100, 50);
+      final innerPath = border.getInnerPath(rect);
+
+      expect(innerPath, isNotNull);
+      expect(innerPath.getBounds(), const Rect.fromLTWH(2, 2, 96, 46));
+    });
+
+    test('lerp correctly interpolates borders', () {
+      const a = SteppedPixelBorder(
+        side: BorderSide(color: Colors.black, width: 2.0),
+        stepSize: 2.0,
+      );
+      const b = SteppedPixelBorder(
+        side: BorderSide(color: Colors.black, width: 4.0),
+        stepSize: 6.0,
+      );
+
+      final lerped = ShapeBorder.lerp(a, b, 0.5) as SteppedPixelBorder;
+      expect(lerped.side.width, 3.0);
+      expect(lerped.stepSize, 4.0);
+    });
+
+    test('equality and hashCode contract', () {
+      const b1 = SteppedPixelBorder(
+        side: BorderSide(color: Colors.white, width: 2.0),
+        stepSize: 4.0,
+      );
+      const b2 = SteppedPixelBorder(
+        side: BorderSide(color: Colors.white, width: 2.0),
+        stepSize: 4.0,
+      );
+      const b3 = SteppedPixelBorder(
+        side: BorderSide(color: Colors.red, width: 2.0),
+        stepSize: 4.0,
+      );
+
+      expect(b1, equals(b2));
+      expect(b1.hashCode, equals(b2.hashCode));
+      expect(b1, isNot(equals(b3)));
+    });
+  });
+
+  group('PixelCard', () {
+    testWidgets('renders child content with default padding', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: PixelCard(child: Text('Card Content'))),
+        ),
+      );
+
+      expect(find.text('Card Content'), findsOneWidget);
+    });
+
+    testWidgets('triggers onTap callback when pressed', (tester) async {
+      var tapped = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: PixelCard(
+              onTap: () => tapped = true,
+              child: const Text('Tappable Card'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('Tappable Card'));
+      await tester.pumpAndSettle();
+
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('renders with custom colors and metrics', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: PixelCard(
+              backgroundColor: Color(0xFF123456),
+              borderColor: Color(0xFF654321),
+              bevelColor: Color(0xFF000000),
+              bevelDepth: 6.0,
+              cornerStepSize: 5.0,
+              padding: EdgeInsets.all(24.0),
+              margin: EdgeInsets.all(8.0),
+              child: Text('Custom Card'),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Custom Card'), findsOneWidget);
+    });
+  });
+
+  group('PixelButton', () {
+    testWidgets('renders label and triggers onPressed callback', (
+      tester,
+    ) async {
+      var pressed = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: PixelButton(
+              label: 'START WORKOUT',
+              onPressed: () => pressed = true,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('START WORKOUT'), findsOneWidget);
+
+      await tester.tap(find.text('START WORKOUT'));
+      await tester.pumpAndSettle();
+
+      expect(pressed, isTrue);
+    });
+
+    testWidgets('does not trigger callback when disabled', (tester) async {
+      var pressed = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: PixelButton(
+              label: 'DISABLED',
+              enabled: false,
+              onPressed: () => pressed = true,
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('DISABLED'));
+      await tester.pumpAndSettle();
+
+      expect(pressed, isFalse);
+    });
+
+    testWidgets('renders secondary and danger variants cleanly', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                PixelButton(
+                  label: 'SECONDARY',
+                  variant: PixelButtonVariant.secondary,
+                ),
+                PixelButton(
+                  label: 'DANGER',
+                  variant: PixelButtonVariant.danger,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('SECONDARY'), findsOneWidget);
+      expect(find.text('DANGER'), findsOneWidget);
+    });
+
+    testWidgets('renders icon alongside label', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: PixelButton(
+              label: 'WITH ICON',
+              icon: Icon(Icons.play_arrow, key: ValueKey('btn_icon')),
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('WITH ICON'), findsOneWidget);
+      expect(find.byKey(const ValueKey('btn_icon')), findsOneWidget);
+    });
+  });
+
+  group('PixelCountdownBar', () {
+    test('computes filled block count deterministically', () {
+      const bar0 = PixelCountdownBar(progress: 0.0, totalBlocks: 20);
+      expect(bar0.filledBlocks, 0);
+
+      const barHalf = PixelCountdownBar(progress: 0.5, totalBlocks: 20);
+      expect(barHalf.filledBlocks, 10);
+
+      const barFull = PixelCountdownBar(progress: 1.0, totalBlocks: 20);
+      expect(barFull.filledBlocks, 20);
+
+      const barQuarter = PixelCountdownBar(progress: 0.25, totalBlocks: 20);
+      expect(barQuarter.filledBlocks, 5);
+    });
+
+    testWidgets('renders 20 block children in Row', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: PixelCountdownBar(progress: 0.5, totalBlocks: 20),
+          ),
+        ),
+      );
+
+      expect(find.byType(PixelCountdownBar), findsOneWidget);
+      expect(find.byType(Row), findsOneWidget);
+    });
+
+    testWidgets('clamps progress values outside [0.0, 1.0]', (tester) async {
+      const negativeBar = PixelCountdownBar(progress: -0.5, totalBlocks: 10);
+      expect(negativeBar.filledBlocks, 0);
+
+      const overflowBar = PixelCountdownBar(progress: 1.5, totalBlocks: 10);
+      expect(overflowBar.filledBlocks, 10);
+    });
+  });
+}
