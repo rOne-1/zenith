@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'core/theme/theme.dart';
 import 'core/widgets/widgets.dart';
 import 'engine/engine.dart';
+import 'features/armory/armory.dart';
 import 'features/districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 
 void main() async {
@@ -57,8 +58,12 @@ class _ZenithLandingScreenState extends ConsumerState<ZenithLandingScreen> {
 
     try {
       final sbeeService = ref.read(sbeeServiceProvider);
+      final profile = ref.read(userProfileProvider);
       final session = await sbeeService.generateNextWorkout(
         currentTime: DateTime.now(),
+        availableEquipment: profile.availableEquipment,
+        femaleProfile: profile.femaleProfile,
+        hasJointPain: profile.hasJointPain,
       );
 
       if (mounted) {
@@ -298,6 +303,16 @@ class _ZenithLandingScreenState extends ConsumerState<ZenithLandingScreen> {
                       : 'INITIATE EXPEDITION',
                   enabled: !_isGenerating,
                   onPressed: _isGenerating ? null : _handleInitiateExpedition,
+                ),
+                const SizedBox(height: 10.0),
+                PixelButton(
+                  label: 'THE ARMORY // 装備庫',
+                  variant: PixelButtonVariant.secondary,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const ArmoryScreen()),
+                    );
+                  },
                 ),
                 const SizedBox(height: 12.0),
               ],
