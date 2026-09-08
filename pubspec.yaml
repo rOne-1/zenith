@@ -35,6 +35,24 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+  # Core Domain & Mathematical Engine
+  sbee:
+    path: ../SBEE
+
+  # Visual FX, Physics & Theming Kit
+  flutter_refined_kit:
+    path: ../flutter-refined-kit
+
+  # State Management
+  flutter_riverpod: ^2.6.1
+
+  # Typography & Storage
+  google_fonts: ^6.2.1
+  shared_preferences: ^2.5.5
+
+  # Local Persistence
+  drift: ^2.20.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -45,6 +63,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+
+dependency_overrides:
+  # file_picker ^11.0.3 and share_plus ^13.3.0 pin incompatible win32 ranges otherwise.
+  win32: ^5.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
