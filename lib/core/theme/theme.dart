@@ -1,3 +1,4 @@
+export 'district_registry.dart';
 export 'theme_context_extensions.dart';
 export 'zenith_district_colors.dart';
 export 'zenith_district_palette.dart';
