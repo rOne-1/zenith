@@ -8,8 +8,10 @@ import '../../../engine/engine.dart';
 import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../../grimoire/widgets/metro_transit_map.dart';
 import '../../grimoire/widgets/station_inspector_sheet.dart';
+import '../controllers/active_session_controller.dart';
 import '../services/workout_preview_service.dart';
 import '../utils/warning_translator.dart';
+import 'active_expedition_screen.dart';
 
 /// Screen 1a: The Expedition Portal.
 ///
@@ -99,8 +101,9 @@ class _ExpeditionPortalScreenState
         }
       }
 
-      final sbeeService = ref.read(sbeeServiceProvider);
-      sbeeService.createWorkoutSession(session: session);
+      await ref
+          .read(activeSessionControllerProvider.notifier)
+          .startSession(session);
 
       if (mounted) {
         setState(() {
@@ -108,6 +111,11 @@ class _ExpeditionPortalScreenState
           _statusFeedback =
               'EXPEDITION DISPATCHED // 遠征開始 (${session.sets.length} SETS)';
         });
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const ActiveExpeditionScreen(),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
@@ -390,14 +398,20 @@ class _ExpeditionPortalScreenState
                                         Expanded(
                                           child: PixelButton(
                                             label: 'RESUME',
-                                            variant:
-                                                PixelButtonVariant.primary,
+                                            variant: PixelButtonVariant.primary,
                                             onPressed: () {
-                                              // Future sprint will transition to Active Workout HUD
-                                              setState(() {
-                                                _statusFeedback =
-                                                    'RESUMING SESSION STREAM // 再開';
-                                              });
+                                              ref
+                                                  .read(
+                                                    activeSessionControllerProvider
+                                                        .notifier,
+                                                  )
+                                                  .resumeSession(manager);
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const ActiveExpeditionScreen(),
+                                                ),
+                                              );
                                             },
                                           ),
                                         ),

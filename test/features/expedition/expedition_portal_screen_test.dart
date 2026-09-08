@@ -94,15 +94,16 @@ void main() {
       await tester.tap(initiateBtn);
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('EXPEDITION DISPATCHED'), findsOneWidget);
+      expect(find.byType(ActiveExpeditionScreen), findsOneWidget);
     });
 
     testWidgets(
       'triggers same-day advisory dialog if a completed session exists today',
       (tester) async {
-        // Save a completed session earlier today
+        // Save a completed session earlier today (guaranteed same calendar day)
         final sessionRepo = DriftSessionRepository(database);
-        final todayMorning = DateTime.now().subtract(const Duration(hours: 2));
+        final now = DateTime.now();
+        final todayMorning = DateTime(now.year, now.month, now.day, 0, 5);
         final morningSession = WorkoutSession(
           id: 'morning_completed',
           startTime: todayMorning,

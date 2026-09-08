@@ -1,10 +1,12 @@
 import 'package:drift/native.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sbee/sbee.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/engine/engine.dart';
+import 'package:zenith/features/expedition/expedition.dart';
 import 'package:zenith/main.dart';
 
 void main() {
@@ -49,8 +51,14 @@ void main() {
         await tester.tap(initiateBtn);
         await tester.pumpAndSettle();
 
-        // Verify dispatch feedback displays
-        expect(find.textContaining('EXPEDITION DISPATCHED'), findsOneWidget);
+        // Verify navigation to active expedition screen
+        expect(find.byType(ActiveExpeditionScreen), findsOneWidget);
+
+        // Pop back to shell to test navigation bar tabs
+        final nav =
+            Navigator.of(tester.element(find.byType(ActiveExpeditionScreen)));
+        nav.pop();
+        await tester.pumpAndSettle();
 
         // Test tab switching to Armory
         await tester.tap(find.text('ARMORY'));

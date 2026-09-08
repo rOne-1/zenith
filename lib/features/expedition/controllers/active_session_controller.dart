@@ -444,16 +444,18 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   /// Discards the active workout attempt and resets state.
   Future<void> abortSession() async {
     _cancelTimer();
-    await _progressSubscription?.cancel();
+    _manager = null;
+    state = ActiveSessionState.initial;
+
+    final sub = _progressSubscription;
+    _progressSubscription = null;
+    await sub?.cancel();
 
     final sbeeService = _ref.read(sbeeServiceProvider);
     await sbeeService.discardActiveSession();
 
     _ref.read(workoutPreviewProvider.notifier).invalidate();
     _ref.invalidate(activeSessionResumeProvider);
-
-    _manager = null;
-    state = ActiveSessionState.initial;
   }
 
   void _cancelTimer() {
