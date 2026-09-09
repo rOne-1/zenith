@@ -76,5 +76,47 @@ void main() {
 
       expect(selectedIndex, equals(3));
     });
+
+    testWidgets(
+      'tab press-down produces a spring-scaled tactile response, not a static tap',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: district01RailsideOutskirts.themeData,
+            home: Scaffold(
+              bottomNavigationBar: ZenithNavigationBar(
+                currentIndex: 0,
+                onDestinationSelected: (_) {},
+              ),
+            ),
+          ),
+        );
+
+        // The tab bar uses AnimatedScale (HouseSpring-driven), not a bare
+        // GestureDetector with no visual feedback.
+        expect(find.byType(AnimatedScale), findsNWidgets(4));
+
+        final armoryFinder = find.text('ARMORY');
+        final gesture = await tester.startGesture(
+          tester.getCenter(armoryFinder),
+        );
+        await tester.pump(const Duration(milliseconds: 16));
+
+        final pressedScale = tester
+            .widgetList<AnimatedScale>(find.byType(AnimatedScale))
+            .firstWhere(
+              (w) => w.scale != 1.0,
+              orElse: () => const AnimatedScale(
+                scale: 1.0,
+                duration: Duration.zero,
+                child: SizedBox(),
+              ),
+            );
+        expect(pressedScale.scale, lessThan(1.0));
+
+        await gesture.up();
+        await tester.pumpAndSettle();
+      },
+    );
   });
 }

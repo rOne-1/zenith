@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/theme.dart';
@@ -195,34 +197,14 @@ class RestScreen extends ConsumerWidget {
                                   color: colors.textMuted,
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => controller.addRestTime(),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0,
-                                        vertical: 3.0,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: colors.backgroundVoid,
-                                        border: Border.all(
-                                          color: colors.amberAccent,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      child: Text(
-                                        '+30s',
-                                        style: TextStyle(
-                                          fontFamily: 'Courier',
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.w700,
-                                          color: colors.amberAccent,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              PixelButton(
+                                label: '+30s',
+                                variant: PixelButtonVariant.secondary,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 3.0,
+                                ),
+                                onPressed: () => controller.addRestTime(),
                               ),
                             ],
                           ),
@@ -505,7 +487,7 @@ class RestScreen extends ConsumerWidget {
   }
 }
 
-class _RpeButton extends StatelessWidget {
+class _RpeButton extends StatefulWidget {
   final int score;
   final bool isSelected;
   final bool isTarget;
@@ -519,8 +501,32 @@ class _RpeButton extends StatelessWidget {
   });
 
   @override
+  State<_RpeButton> createState() => _RpeButtonState();
+}
+
+class _RpeButtonState extends State<_RpeButton> {
+  bool _isPressed = false;
+
+  void _handleTapDown(TapDownDetails details) {
+    HapticFeedback.selectionClick();
+    setState(() => _isPressed = true);
+  }
+
+  void _handleTapUp(TapUpDetails details) {
+    setState(() => _isPressed = false);
+    widget.onTap();
+  }
+
+  void _handleTapCancel() {
+    setState(() => _isPressed = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final score = widget.score;
+    final isSelected = widget.isSelected;
+    final isTarget = widget.isTarget;
 
     final Color bgColor = isSelected
         ? colors.amberAccent
@@ -533,25 +539,34 @@ class _RpeButton extends StatelessWidget {
         : (isSelected ? colors.amberAccent : colors.borderBright);
 
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 2.0),
-        height: 38.0,
-        decoration: BoxDecoration(
-          color: bgColor,
-          border: Border.all(
-            color: borderColor,
-            width: isTarget || isSelected ? 1.5 : 1.0,
+      onTapDown: _handleTapDown,
+      onTapUp: _handleTapUp,
+      onTapCancel: _handleTapCancel,
+      child: AnimatedScale(
+        scale: _isPressed ? 0.9 : 1.0,
+        duration: _isPressed
+            ? const Duration(milliseconds: 60)
+            : HouseSpring.duration,
+        curve: HouseSpring.curve,
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 2.0),
+          height: 38.0,
+          decoration: BoxDecoration(
+            color: bgColor,
+            border: Border.all(
+              color: borderColor,
+              width: isTarget || isSelected ? 1.5 : 1.0,
+            ),
           ),
-        ),
-        child: Center(
-          child: Text(
-            '$score',
-            style: TextStyle(
-              fontFamily: 'Courier',
-              fontSize: 13.0,
-              fontWeight: FontWeight.w900,
-              color: textColor,
+          child: Center(
+            child: Text(
+              '$score',
+              style: TextStyle(
+                fontFamily: 'Courier',
+                fontSize: 13.0,
+                fontWeight: FontWeight.w900,
+                color: textColor,
+              ),
             ),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
 import '../theme/theme.dart';
 
@@ -90,7 +91,6 @@ class ZenithNavigationBar extends StatelessWidget {
                   isSelected: isSelected,
                   onTap: () {
                     if (!isSelected) {
-                      HapticFeedback.selectionClick();
                       onDestinationSelected(index);
                     }
                   },
@@ -104,7 +104,7 @@ class ZenithNavigationBar extends StatelessWidget {
   }
 }
 
-class _TicketTabItem extends StatelessWidget {
+class _TicketTabItem extends StatefulWidget {
   final ZenithNavigationTabItem item;
   final bool isSelected;
   final VoidCallback onTap;
@@ -116,8 +116,31 @@ class _TicketTabItem extends StatelessWidget {
   });
 
   @override
+  State<_TicketTabItem> createState() => _TicketTabItemState();
+}
+
+class _TicketTabItemState extends State<_TicketTabItem> {
+  bool _isPressed = false;
+
+  void _handleTapDown(TapDownDetails details) {
+    HapticFeedback.selectionClick();
+    setState(() => _isPressed = true);
+  }
+
+  void _handleTapUp(TapUpDetails details) {
+    setState(() => _isPressed = false);
+    widget.onTap();
+  }
+
+  void _handleTapCancel() {
+    setState(() => _isPressed = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final item = widget.item;
+    final isSelected = widget.isSelected;
 
     final activeBorderColor = colors.amberAccent;
     final activeTextColor = colors.amberAccent;
@@ -125,62 +148,71 @@ class _TicketTabItem extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 2.0),
-        decoration: BoxDecoration(
-          color: isSelected ? colors.surfaceDark : Colors.transparent,
-          border: Border.all(
-            color: isSelected ? activeBorderColor : Colors.transparent,
-            width: 1.5,
+      onTapDown: _handleTapDown,
+      onTapUp: _handleTapUp,
+      onTapCancel: _handleTapCancel,
+      child: AnimatedScale(
+        scale: _isPressed ? 0.92 : 1.0,
+        duration: _isPressed
+            ? const Duration(milliseconds: 60)
+            : HouseSpring.duration,
+        curve: HouseSpring.curve,
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 2.0),
+          decoration: BoxDecoration(
+            color: isSelected ? colors.surfaceDark : Colors.transparent,
+            border: Border.all(
+              color: isSelected ? activeBorderColor : Colors.transparent,
+              width: 1.5,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  size: 16.0,
-                  color: isSelected ? activeTextColor : inactiveTextColor,
-                ),
-                const SizedBox(width: 4.0),
-                Text(
-                  item.indexLabel,
-                  style: TextStyle(
-                    fontFamily: 'Courier',
-                    fontSize: 10.0,
-                    fontWeight: FontWeight.w700,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    item.icon,
+                    size: 16.0,
                     color: isSelected ? activeTextColor : inactiveTextColor,
                   ),
+                  const SizedBox(width: 4.0),
+                  Text(
+                    item.indexLabel,
+                    style: TextStyle(
+                      fontFamily: 'Courier',
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.w700,
+                      color: isSelected ? activeTextColor : inactiveTextColor,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 2.0),
+              Text(
+                item.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: 'Courier',
+                  fontSize: 9.0,
+                  fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                  letterSpacing: 0.8,
+                  color: isSelected ? activeTextColor : inactiveTextColor,
                 ),
-              ],
-            ),
-            const SizedBox(height: 2.0),
-            Text(
-              item.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontFamily: 'Courier',
-                fontSize: 9.0,
-                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                letterSpacing: 0.8,
-                color: isSelected ? activeTextColor : inactiveTextColor,
               ),
-            ),
-            Text(
-              item.kanji,
-              maxLines: 1,
-              style: TextStyle(
-                fontFamily: 'Courier',
-                fontSize: 8.0,
-                color: isSelected ? colors.amberGlow : colors.borderMuted,
+              Text(
+                item.kanji,
+                maxLines: 1,
+                style: TextStyle(
+                  fontFamily: 'Courier',
+                  fontSize: 8.0,
+                  color: isSelected ? colors.amberGlow : colors.borderMuted,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
