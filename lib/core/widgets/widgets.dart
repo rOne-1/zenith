@@ -6,5 +6,6 @@ export 'pixel_toast.dart';
 export 'zenith_dialog.dart';
 export 'pixel_countdown_bar.dart';
 export 'pixel_loading_indicator.dart';
+export 'pixel_pulse_dot.dart';
 export 'stepped_pixel_border.dart';
 export 'zenith_navigation_bar.dart';

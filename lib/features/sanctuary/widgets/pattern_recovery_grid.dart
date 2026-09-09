@@ -256,18 +256,41 @@ class _PatternRecoveryRow extends StatelessWidget {
                     width: 1.0,
                   ),
                 ),
-                child: Text(
-                  status.statusChipLabel,
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
-                    fontSize: 9.0,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 0.5,
-                    color: statusColor,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (!isFresh) ...[
+                      PixelPulseDot(
+                        color: statusColor,
+                        size: 6.0,
+                        // Far from unlocking reads as more urgent: a
+                        // faster, harder blink than a lock that's close to
+                        // clearing.
+                        hardCut: status.remainingLockDuration.inHours > 24,
+                        period: status.remainingLockDuration.inHours > 24
+                            ? const Duration(milliseconds: 1400)
+                            : const Duration(milliseconds: 2200),
+                        minOpacity:
+                            status.remainingLockDuration.inHours > 24
+                                ? 0.15
+                                : 0.35,
+                      ),
+                      const SizedBox(width: 5.0),
+                    ],
+                    Text(
+                      status.statusChipLabel,
+                      style: TextStyle(
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
+                        fontSize: 9.0,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.5,
+                        color: statusColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
             ],

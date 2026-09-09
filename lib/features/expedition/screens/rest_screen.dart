@@ -191,15 +191,26 @@ class RestScreen extends ConsumerWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'REST TIME REMAINING',
-                                style: TextStyle(
-                                  fontFamily: 'Silkscreen',
-                                  fontFamilyFallback: const ['monospace'],
-                                  fontSize: 10.0,
-                                  fontWeight: FontWeight.w700,
-                                  color: colors.textMuted,
-                                ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  PixelPulseDot(
+                                    color: colors.amberAccent,
+                                    size: 8.0,
+                                    animate: remainingSeconds > 0,
+                                  ),
+                                  const SizedBox(width: 6.0),
+                                  Text(
+                                    'REST TIME REMAINING',
+                                    style: TextStyle(
+                                      fontFamily: 'Silkscreen',
+                                      fontFamilyFallback: const ['monospace'],
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: colors.textMuted,
+                                    ),
+                                  ),
+                                ],
                               ),
                               PixelButton(
                                 label: '+30s',

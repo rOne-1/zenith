@@ -273,4 +273,103 @@ void main() {
       expect(overflowBar.filledBlocks, 10);
     });
   });
+
+  group('PixelPulseDot', () {
+    test('opacityAt: hardCut is a step function, not a fade', () {
+      // First half of the cycle: fully opaque.
+      expect(
+        PixelPulseDot.opacityAt(0.0, hardCut: true, minOpacity: 0.35),
+        1.0,
+      );
+      expect(
+        PixelPulseDot.opacityAt(0.49, hardCut: true, minOpacity: 0.35),
+        1.0,
+      );
+      // Second half: an instant cut to minOpacity, no interpolation.
+      expect(
+        PixelPulseDot.opacityAt(0.5, hardCut: true, minOpacity: 0.35),
+        0.35,
+      );
+      expect(
+        PixelPulseDot.opacityAt(0.99, hardCut: true, minOpacity: 0.35),
+        0.35,
+      );
+    });
+
+    test('opacityAt: smooth pulse eases between 1.0 and minOpacity', () {
+      // Start/end of the cycle: at the trough (opacity == minOpacity).
+      expect(
+        PixelPulseDot.opacityAt(0.0, hardCut: false, minOpacity: 0.15),
+        closeTo(0.15, 0.001),
+      );
+      // Midpoint of the cycle: at the peak (opacity 1.0).
+      expect(
+        PixelPulseDot.opacityAt(0.5, hardCut: false, minOpacity: 0.15),
+        closeTo(1.0, 0.001),
+      );
+      // Unlike hardCut, values strictly between the peak and trough are
+      // genuinely interpolated, not snapped to one of two values.
+      final quarter = PixelPulseDot.opacityAt(
+        0.25,
+        hardCut: false,
+        minOpacity: 0.15,
+      );
+      expect(quarter, greaterThan(0.15));
+      expect(quarter, lessThan(1.0));
+    });
+
+    testWidgets('renders a circular dot at the given size and color', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: PixelPulseDot(color: Colors.red, size: 12.0),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final container = tester.widget<Container>(find.byType(Container));
+      expect(container.constraints?.maxWidth, 12.0);
+      expect(container.constraints?.maxHeight, 12.0);
+      final decoration = container.decoration as BoxDecoration;
+      expect(decoration.shape, BoxShape.circle);
+      expect(decoration.color, Colors.red);
+    });
+
+    testWidgets('animate: false renders a static, fully-opaque dot', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: PixelPulseDot(color: Colors.amber, animate: false),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final opacity = tester.widget<Opacity>(find.byType(Opacity));
+      expect(opacity.opacity, 1.0);
+    });
+
+    testWidgets(
+      'does not hang pumpAndSettle even when animate is true (test-env guard)',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: PixelPulseDot(color: Colors.amber, animate: true),
+            ),
+          ),
+        );
+        // Would time out if a real repeating AnimationController were
+        // running under test, since it never settles.
+        await tester.pumpAndSettle();
+
+        expect(find.byType(PixelPulseDot), findsOneWidget);
+      },
+    );
+  });
 }
