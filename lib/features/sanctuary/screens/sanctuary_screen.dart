@@ -116,17 +116,33 @@ class SanctuaryScreen extends ConsumerWidget {
                         ),
                         const SizedBox(width: 8.0),
                         Expanded(
-                          child: Text(
-                            'NEUROMUSCULAR SUPERCOMPENSATION',
-                            style: TextStyle(
-                              fontFamily: 'Courier',
-                              fontSize: 11.0,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1.0,
-                              color: const Color(0xFF2EE6D6),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'REST BUILDS YOU BACK STRONGER',
+                                style: TextStyle(
+                                  fontFamily: 'Courier',
+                                  fontSize: 11.0,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.0,
+                                  color: const Color(0xFF2EE6D6),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                'NEUROMUSCULAR SUPERCOMPENSATION',
+                                style: TextStyle(
+                                  fontFamily: 'Courier',
+                                  fontSize: 8.0,
+                                  letterSpacing: 0.6,
+                                  color: colors.textMuted,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
                         ),
                       ],

@@ -125,10 +125,10 @@ void main() {
 
       // 2. Working Set 1
       expect(find.textContaining('SET 1 / 2'), findsOneWidget);
-      expect(find.text('⚔ COMPLETE SET'), findsOneWidget);
+      expect(find.text('✓ COMPLETE SET'), findsOneWidget);
 
       // Tap complete set 1
-      await tester.tap(find.text('⚔ COMPLETE SET'));
+      await tester.tap(find.text('✓ COMPLETE SET'));
       await tester.pump();
 
       // 3. Rest Screen
@@ -149,10 +149,10 @@ void main() {
 
       // 4. Working Set 2
       expect(find.textContaining('SET 2 / 2'), findsOneWidget);
-      expect(find.text('⚔ COMPLETE SET'), findsOneWidget);
+      expect(find.text('✓ COMPLETE SET'), findsOneWidget);
 
       // Complete Set 2 (last set)
-      await tester.tap(find.text('⚔ COMPLETE SET'));
+      await tester.tap(find.text('✓ COMPLETE SET'));
       await tester.pump();
 
       // 5. Cool-Down Phase

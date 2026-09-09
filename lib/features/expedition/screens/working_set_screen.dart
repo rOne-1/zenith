@@ -302,12 +302,21 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'KENNETH MILLER ACTIVE VARIABLES',
+                            "TODAY'S DIFFICULTY DIALS",
                             style: TextStyle(
                               fontFamily: 'Courier',
-                              fontSize: 9.0,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 10.0,
+                              fontWeight: FontWeight.w900,
                               letterSpacing: 0.8,
+                              color: colors.amberAccent,
+                            ),
+                          ),
+                          Text(
+                            'KENNETH MILLER VARIABLES',
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 8.0,
+                              letterSpacing: 0.6,
                               color: colors.textMuted,
                             ),
                           ),
@@ -491,7 +500,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                     Expanded(
                       flex: 3,
                       child: PixelButton(
-                        label: '⚔ COMPLETE SET',
+                        label: '✓ COMPLETE SET',
                         variant: PixelButtonVariant.primary,
                         height: 52.0,
                         onPressed: () {

@@ -81,17 +81,33 @@ class AdaptationLedgerCard extends ConsumerWidget {
                   ),
                   const SizedBox(width: 8.0),
                   Expanded(
-                    child: Text(
-                      'KENNETH MILLER ADAPTATION LEDGER',
-                      style: TextStyle(
-                        fontFamily: 'Courier',
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.0,
-                        color: colors.amberAccent,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'YOUR PROGRESS LOG',
+                          style: TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.0,
+                            color: colors.amberAccent,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          'KENNETH MILLER ADAPTATION LEDGER',
+                          style: TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 8.0,
+                            letterSpacing: 0.5,
+                            color: colors.textMuted,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
                 ],

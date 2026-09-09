@@ -44,17 +44,34 @@ class _ExpeditionPortalScreenState
   String _formatDayTypeHeader(DayType? dayType) {
     switch (dayType) {
       case DayType.veryHeavy:
-        return 'VERY HEAVY // NEUROMUSCULAR';
+        return 'HEAVY DAY';
       case DayType.moderate:
-        return 'MODERATE // HYPERTROPHY';
+        return 'MODERATE DAY';
       case DayType.power:
-        return 'POWER // EXPLOSIVE SPEED';
+        return 'POWER DAY';
       case DayType.veryLight:
-        return 'VERY LIGHT // MUSCULAR ENDURANCE';
+        return 'LIGHT DAY';
       case DayType.highLactic:
-        return 'HIGH LACTIC // METABOLIC EMOM';
+        return 'METABOLIC DAY';
       case null:
         return 'CUSTOM EXPEDITION';
+    }
+  }
+
+  String _formatDayTypeSubtitle(DayType? dayType) {
+    switch (dayType) {
+      case DayType.veryHeavy:
+        return 'NEUROMUSCULAR STRENGTH';
+      case DayType.moderate:
+        return 'MUSCLE-BUILDING (HYPERTROPHY)';
+      case DayType.power:
+        return 'EXPLOSIVE SPEED';
+      case DayType.veryLight:
+        return 'MUSCULAR ENDURANCE';
+      case DayType.highLactic:
+        return 'EMOM CONDITIONING';
+      case null:
+        return 'CUSTOM PRESCRIPTION';
     }
   }
 
@@ -443,19 +460,39 @@ class _ExpeditionPortalScreenState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: Text(
-                                      _formatDayTypeHeader(session.dayType),
-                                      style: TextStyle(
-                                        fontFamily: 'Courier',
-                                        fontSize: 13.0,
-                                        fontWeight: FontWeight.w900,
-                                        letterSpacing: 1.2,
-                                        color: colors.amberAccent,
-                                      ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          _formatDayTypeHeader(
+                                            session.dayType,
+                                          ),
+                                          style: TextStyle(
+                                            fontFamily: 'Courier',
+                                            fontSize: 13.0,
+                                            fontWeight: FontWeight.w900,
+                                            letterSpacing: 1.2,
+                                            color: colors.amberAccent,
+                                          ),
+                                        ),
+                                        Text(
+                                          _formatDayTypeSubtitle(
+                                            session.dayType,
+                                          ),
+                                          style: TextStyle(
+                                            fontFamily: 'Courier',
+                                            fontSize: 9.0,
+                                            letterSpacing: 0.6,
+                                            color: colors.textMuted,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Container(

@@ -243,20 +243,37 @@ class RestScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Flexible(
-                                child: Text(
-                                  'SET EXERTION (BORG RPE)',
-                                  style: TextStyle(
-                                    fontFamily: 'Courier',
-                                    fontSize: 11.0,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 1.0,
-                                    color: colors.amberAccent,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'HOW HARD DID THAT FEEL?',
+                                      style: TextStyle(
+                                        fontFamily: 'Courier',
+                                        fontSize: 11.0,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 1.0,
+                                        color: colors.amberAccent,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      'BORG RPE SCALE',
+                                      style: TextStyle(
+                                        fontFamily: 'Courier',
+                                        fontSize: 8.0,
+                                        letterSpacing: 0.6,
+                                        color: colors.textMuted,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 8.0),

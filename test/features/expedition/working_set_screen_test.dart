@@ -113,7 +113,7 @@ void main() {
       expect(find.text('TARGET: 10 REPS'), findsOneWidget);
 
       // Hero complete button
-      expect(find.text('⚔ COMPLETE SET'), findsOneWidget);
+      expect(find.text('✓ COMPLETE SET'), findsOneWidget);
 
       // Cleanup
       await tester.pumpWidget(const SizedBox());
@@ -187,7 +187,7 @@ void main() {
       await tester.pump();
 
       // Tap Complete Set
-      await tester.tap(find.text('⚔ COMPLETE SET'));
+      await tester.tap(find.text('✓ COMPLETE SET'));
       await tester.pump();
 
       expect(

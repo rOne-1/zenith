@@ -121,7 +121,7 @@ void main() {
       expect(find.byType(PixelCountdownBar), findsOneWidget);
 
       // RPE section
-      expect(find.text('SET EXERTION (BORG RPE)'), findsOneWidget);
+      expect(find.text('HOW HARD DID THAT FEEL?'), findsOneWidget);
       expect(find.text('TARGET: 8 RPE'), findsOneWidget);
 
       // Next station ticket
