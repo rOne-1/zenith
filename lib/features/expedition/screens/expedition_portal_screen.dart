@@ -10,6 +10,7 @@ import '../../grimoire/widgets/metro_transit_map.dart';
 import '../../grimoire/widgets/station_inspector_sheet.dart';
 import '../controllers/active_session_controller.dart';
 import '../services/workout_preview_service.dart';
+import '../utils/session_summary_formatter.dart';
 import '../utils/warning_translator.dart';
 import 'active_expedition_screen.dart';
 
@@ -39,57 +40,6 @@ class _ExpeditionPortalScreenState
     final hh = date.hour.toString().padLeft(2, '0');
     final mm = date.minute.toString().padLeft(2, '0');
     return '$y.$m.$d // $hh:$mm JST';
-  }
-
-  String _formatDayTypeHeader(DayType? dayType) {
-    switch (dayType) {
-      case DayType.veryHeavy:
-        return 'HEAVY DAY';
-      case DayType.moderate:
-        return 'MODERATE DAY';
-      case DayType.power:
-        return 'POWER DAY';
-      case DayType.veryLight:
-        return 'LIGHT DAY';
-      case DayType.highLactic:
-        return 'METABOLIC DAY';
-      case null:
-        return 'CUSTOM EXPEDITION';
-    }
-  }
-
-  String _formatDayTypeSubtitle(DayType? dayType) {
-    switch (dayType) {
-      case DayType.veryHeavy:
-        return 'NEUROMUSCULAR STRENGTH';
-      case DayType.moderate:
-        return 'MUSCLE-BUILDING (HYPERTROPHY)';
-      case DayType.power:
-        return 'EXPLOSIVE SPEED';
-      case DayType.veryLight:
-        return 'MUSCULAR ENDURANCE';
-      case DayType.highLactic:
-        return 'EMOM CONDITIONING';
-      case null:
-        return 'CUSTOM PRESCRIPTION';
-    }
-  }
-
-  String _formatRmZone(DayType? dayType) {
-    switch (dayType) {
-      case DayType.veryHeavy:
-        return '1-5 RM';
-      case DayType.moderate:
-        return '8-12 RM';
-      case DayType.power:
-        return '3-5 RM';
-      case DayType.veryLight:
-        return '15-20 RM';
-      case DayType.highLactic:
-        return 'EMOM';
-      case null:
-        return 'VARIABLE';
-    }
   }
 
   Future<void> _handleInitiateExpedition(WorkoutSession session) async {
@@ -180,6 +130,25 @@ class _ExpeditionPortalScreenState
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    PixelButton(
+                      variant: PixelButtonVariant.secondary,
+                      padding: const EdgeInsets.all(8.0),
+                      onPressed: () {
+                        if (Navigator.canPop(context)) {
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text(
+                        '←',
+                        style: TextStyle(
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
+                          fontSize: 18.0,
+                          color: colors.amberAccent,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10.0),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -483,7 +452,7 @@ class _ExpeditionPortalScreenState
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          _formatDayTypeHeader(
+                                          formatDayTypeHeader(
                                             session.dayType,
                                           ),
                                           style: TextStyle(
@@ -496,7 +465,7 @@ class _ExpeditionPortalScreenState
                                           ),
                                         ),
                                         Text(
-                                          _formatDayTypeSubtitle(
+                                          formatDayTypeSubtitle(
                                             session.dayType,
                                           ),
                                           style: TextStyle(
@@ -527,7 +496,7 @@ class _ExpeditionPortalScreenState
                                       ),
                                     ),
                                     child: Text(
-                                      _formatRmZone(session.dayType),
+                                      formatRmZone(session.dayType),
                                       style: TextStyle(
                                         fontFamily: 'Silkscreen',
                                         fontFamilyFallback: const ['monospace'],

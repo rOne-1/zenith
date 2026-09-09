@@ -33,16 +33,26 @@ void main() {
         // Initial frame
         await tester.pumpAndSettle();
 
-        // Verify header and district identity in Expedition tab
-        expect(find.text('ZENITH'), findsOneWidget);
-        expect(find.textContaining('PLATFORM 01'), findsOneWidget);
-        expect(find.text('SECTOR 01'), findsOneWidget);
+        // Verify the Outpost dashboard renders as the home screen
+        expect(find.text('THE OUTPOST'), findsOneWidget);
 
         // Verify navigation tabs
-        expect(find.text('EXPEDITION'), findsOneWidget);
+        expect(find.text('OUTPOST'), findsOneWidget);
         expect(find.text('ATLAS'), findsOneWidget);
         expect(find.text('DEPOT'), findsOneWidget);
         expect(find.text('SANCTUARY'), findsOneWidget);
+
+        // Push into the full Expedition Portal itinerary via the Outpost's
+        // quick-start CTA
+        final startBtn = find.text("▶ TODAY'S EXPEDITION");
+        expect(startBtn, findsOneWidget);
+        await tester.tap(startBtn);
+        await tester.pumpAndSettle();
+
+        // Verify header and district identity in the pushed Expedition Portal
+        expect(find.text('ZENITH'), findsOneWidget);
+        expect(find.textContaining('PLATFORM 01'), findsOneWidget);
+        expect(find.text('SECTOR 01'), findsOneWidget);
 
         // Verify itinerary and initiate button
         expect(find.text('EXPEDITION ITINERARY'), findsOneWidget);
@@ -56,19 +66,26 @@ void main() {
         // Verify navigation to active expedition screen
         expect(find.byType(ActiveExpeditionScreen), findsOneWidget);
 
-        // Pop back to shell to test navigation bar tabs
+        // Pop back to the Expedition Portal, then back to the Outpost shell
         final nav =
             Navigator.of(tester.element(find.byType(ActiveExpeditionScreen)));
         nav.pop();
         await tester.pumpAndSettle();
+        expect(find.byType(ExpeditionPortalScreen), findsOneWidget);
 
-        // Test tab switching to Armory
+        final portalNav =
+            Navigator.of(tester.element(find.byType(ExpeditionPortalScreen)));
+        portalNav.pop();
+        await tester.pumpAndSettle();
+        expect(find.text('THE OUTPOST'), findsOneWidget);
+
+        // Test tab switching to Depot
         await tester.tap(find.text('DEPOT'));
         await tester.pumpAndSettle();
 
         expect(find.text('EQUIPMENT INVENTORY'), findsOneWidget);
 
-        // Test tab switching to Grimoire
+        // Test tab switching to Atlas
         await tester.tap(find.text('ATLAS'));
         await tester.pumpAndSettle();
 

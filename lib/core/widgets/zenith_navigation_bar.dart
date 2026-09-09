@@ -40,7 +40,7 @@ class ZenithNavigationBar extends StatelessWidget {
   static const List<ZenithNavigationTabItem> tabs = [
     ZenithNavigationTabItem(
       indexLabel: '01',
-      title: 'EXPEDITION',
+      title: 'OUTPOST',
       glyph: '◉', // ◉ fisheye
     ),
     ZenithNavigationTabItem(

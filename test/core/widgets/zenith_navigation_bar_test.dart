@@ -29,7 +29,7 @@ void main() {
       expect(find.text('04'), findsOneWidget);
 
       // Verify all 4 English tab names
-      expect(find.text('EXPEDITION'), findsOneWidget);
+      expect(find.text('OUTPOST'), findsOneWidget);
       expect(find.text('ATLAS'), findsOneWidget);
       expect(find.text('DEPOT'), findsOneWidget);
       expect(find.text('SANCTUARY'), findsOneWidget);
