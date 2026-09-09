@@ -298,18 +298,35 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                       icon: Icons.tune,
                       title: "TODAY'S DIFFICULTY DIALS",
                       subtitle: 'KENNETH MILLER VARIABLES',
-                      child: Wrap(
-                        spacing: 8.0,
-                        runSpacing: 6.0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _VariableBadge(label: 'LOAD', value: '${set.variables.load}/5'),
-                          _VariableBadge(label: 'POS', value: '${set.variables.bodyPosition}/5'),
-                          _VariableBadge(label: 'ROM', value: '${set.variables.rom}/5'),
-                          _VariableBadge(label: 'ELEV', value: '${set.variables.height}/5'),
-                          _VariableBadge(
+                          MillerVariableGauge(
+                            label: 'LOAD',
+                            score: set.variables.load,
+                          ),
+                          MillerVariableGauge(
+                            label: 'POS',
+                            score: set.variables.bodyPosition,
+                          ),
+                          MillerVariableGauge(
+                            label: 'ROM',
+                            score: set.variables.rom,
+                          ),
+                          MillerVariableGauge(
+                            label: 'ELEV',
+                            score: set.variables.height,
+                          ),
+                          MillerVariableGauge(
                             label: 'TEMPO',
-                            value: set.variables.tempo == 2 ? '6s (ADV)' : '4s',
-                            isHighlight: set.variables.tempo == 2,
+                            score: set.variables.tempo,
+                            maxScore: 2,
+                            displayValueOverride: set.variables.tempo == 2
+                                ? '6s (ADV)'
+                                : '4s',
+                            activeColor: set.variables.tempo == 2
+                                ? const Color(0xFF2EE6D6)
+                                : null,
                           ),
                         ],
                       ),
@@ -494,52 +511,3 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
   }
 }
 
-class _VariableBadge extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool isHighlight;
-
-  const _VariableBadge({
-    required this.label,
-    required this.value,
-    this.isHighlight = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
-      decoration: BoxDecoration(
-        color: colors.backgroundVoid,
-        border: Border.all(
-          color: isHighlight ? const Color(0xFF2EE6D6) : colors.borderBright,
-          width: 1.0,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '$label: ',
-            style: TextStyle(
-              fontFamily: 'Courier',
-              fontSize: 10.0,
-              color: colors.textMuted,
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              fontFamily: 'Courier',
-              fontSize: 10.0,
-              fontWeight: FontWeight.w700,
-              color: isHighlight ? const Color(0xFF2EE6D6) : colors.amberAccent,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

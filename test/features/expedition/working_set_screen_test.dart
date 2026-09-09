@@ -104,16 +104,16 @@ void main() {
       // Kenneth Miller variables card is secondary — collapsed by default
       final variablesHeaderFinder = find.text("TODAY'S DIFFICULTY DIALS");
       expect(variablesHeaderFinder, findsOneWidget);
-      expect(find.text('LOAD: '), findsNothing);
+      expect(find.text('LOAD'), findsNothing);
 
       // Tap to expand — full detail becomes visible, nothing lost
       await tester.tap(variablesHeaderFinder);
       await tester.pumpAndSettle();
-      expect(find.text('LOAD: '), findsOneWidget);
-      expect(find.text('POS: '), findsOneWidget);
-      expect(find.text('ROM: '), findsOneWidget);
-      expect(find.text('ELEV: '), findsOneWidget);
-      expect(find.text('TEMPO: '), findsOneWidget);
+      expect(find.text('LOAD'), findsOneWidget);
+      expect(find.text('POS'), findsOneWidget);
+      expect(find.text('ROM'), findsOneWidget);
+      expect(find.text('ELEV'), findsOneWidget);
+      expect(find.text('TEMPO'), findsOneWidget);
 
       // Reps verification
       expect(find.text('10'), findsWidgets);

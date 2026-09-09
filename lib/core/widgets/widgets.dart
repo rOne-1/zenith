@@ -1,4 +1,5 @@
 export 'collapsible_card.dart';
+export 'miller_variable_gauge.dart';
 export 'pixel_button.dart';
 export 'pixel_card.dart';
 export 'pixel_toast.dart';

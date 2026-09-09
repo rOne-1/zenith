@@ -3,6 +3,7 @@ import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 import 'package:sbee/sbee.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/miller_variable_gauge.dart';
 import '../../../core/widgets/pixel_button.dart';
 import '../../../core/widgets/stepped_pixel_border.dart';
 import '../../../engine/expanded_catalog.dart';
@@ -249,35 +250,25 @@ class StationInspectorSheet extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-                _SegmentedGaugeRow(
+                MillerVariableGauge(
                   label: 'LOAD VECTOR',
                   score: meta.defaultLoadScore,
-                  activeColor: colors.amberAccent,
-                  inactiveColor: colors.backgroundVoid,
                 ),
-                _SegmentedGaugeRow(
+                MillerVariableGauge(
                   label: 'BODY POSITION',
                   score: meta.defaultPositionScore,
-                  activeColor: colors.amberAccent,
-                  inactiveColor: colors.backgroundVoid,
                 ),
-                _SegmentedGaugeRow(
+                MillerVariableGauge(
                   label: 'RANGE OF MOTION',
                   score: meta.defaultRomScore,
-                  activeColor: colors.amberAccent,
-                  inactiveColor: colors.backgroundVoid,
                 ),
-                _SegmentedGaugeRow(
+                MillerVariableGauge(
                   label: 'LIMB ELEVATION',
                   score: meta.defaultElevationScore,
-                  activeColor: colors.amberAccent,
-                  inactiveColor: colors.backgroundVoid,
                 ),
-                _SegmentedGaugeRow(
+                MillerVariableGauge(
                   label: 'TEMPO / TIME-UNDER-TENSION',
                   score: meta.defaultTempoScore,
-                  activeColor: colors.amberAccent,
-                  inactiveColor: colors.backgroundVoid,
                 ),
 
                 const SizedBox(height: 24.0),
@@ -330,63 +321,3 @@ class _PillBadge extends StatelessWidget {
   }
 }
 
-class _SegmentedGaugeRow extends StatelessWidget {
-  final String label;
-  final int score; // 1 to 5
-  final Color activeColor;
-  final Color inactiveColor;
-
-  const _SegmentedGaugeRow({
-    required this.label,
-    required this.score,
-    required this.activeColor,
-    required this.inactiveColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontFamily: 'Courier',
-              fontSize: 10.0,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Row(
-            children: [
-              for (int i = 1; i <= 5; i++)
-                Container(
-                  width: 14.0,
-                  height: 8.0,
-                  margin: const EdgeInsets.only(left: 3.0),
-                  decoration: BoxDecoration(
-                    color: i <= score ? activeColor : inactiveColor,
-                    border: Border.all(
-                      color: activeColor.withValues(alpha: 0.7),
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              const SizedBox(width: 6.0),
-              Text(
-                '$score/5',
-                style: TextStyle(
-                  fontFamily: 'Courier',
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
-                  color: activeColor,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}

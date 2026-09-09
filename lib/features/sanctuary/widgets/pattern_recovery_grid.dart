@@ -270,19 +270,18 @@ class _PatternRecoveryRow extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.zero,
-                  child: Container(
-                    height: 6.0,
-                    color: colors.surfaceDark,
-                    child: FractionallySizedBox(
-                      alignment: Alignment.centerLeft,
-                      widthFactor: progress,
-                      child: Container(
-                        color: statusColor,
-                      ),
-                    ),
-                  ),
+                child: PixelCountdownBar(
+                  progress: progress,
+                  totalBlocks: 12,
+                  height: 10.0,
+                  borderWidth: 1.0,
+                  cornerStepSize: 1.5,
+                  blockSpacing: 1.5,
+                  padding: const EdgeInsets.all(2.0),
+                  activeColor: statusColor,
+                  inactiveColor: colors.surfaceDark,
+                  borderColor: colors.borderMuted,
+                  backgroundColor: colors.backgroundVoid,
                 ),
               ),
               const SizedBox(width: 8.0),
