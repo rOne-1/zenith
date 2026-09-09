@@ -221,7 +221,8 @@ class _GearTileState extends State<GearTile>
                     child: Text(
                       info.code,
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 10.0,
                         fontWeight: FontWeight.bold,
                         color: statusTextColor,
@@ -231,7 +232,8 @@ class _GearTileState extends State<GearTile>
                   Text(
                     statusLabel,
                     style: TextStyle(
-                      fontFamily: 'Courier',
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
                       fontSize: 9.0,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5,
@@ -249,7 +251,8 @@ class _GearTileState extends State<GearTile>
                   Text(
                     info.displayName,
                     style: TextStyle(
-                      fontFamily: 'Courier',
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
                       fontSize: 13.0,
                       fontWeight: FontWeight.bold,
                       color: widget.isEquipped
@@ -263,7 +266,8 @@ class _GearTileState extends State<GearTile>
                   Text(
                     info.categoryTag,
                     style: TextStyle(
-                      fontFamily: 'Courier',
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
                       fontSize: 9.0,
                       letterSpacing: 1.0,
                       color: colors.textMuted.withValues(alpha: 0.8),

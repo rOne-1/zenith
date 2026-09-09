@@ -187,7 +187,8 @@ class _ExpeditionPortalScreenState
                           Text(
                             'ZENITH',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 22.0,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 2.0,
@@ -200,7 +201,8 @@ class _ExpeditionPortalScreenState
                           Text(
                             'PLATFORM 01 // ${district.displayName.toUpperCase()}',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 11.0,
                               letterSpacing: 1.5,
                               color: colors.textMuted,
@@ -233,7 +235,8 @@ class _ExpeditionPortalScreenState
                           child: Text(
                             'SECTOR 01',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 10.0,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 1.2,
@@ -245,7 +248,8 @@ class _ExpeditionPortalScreenState
                         Text(
                           _formatDepartureStamp(now),
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 9.0,
                             color: colors.textMuted,
                           ),
@@ -272,7 +276,8 @@ class _ExpeditionPortalScreenState
                         Text(
                           'SYNCHRONIZING TIMETABLE...',
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 12.0,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 1.2,
@@ -304,7 +309,8 @@ class _ExpeditionPortalScreenState
                           Text(
                             'DISPATCH COMPILATION ERROR',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 14.0,
                               fontWeight: FontWeight.w900,
                               color: colors.signalRed,
@@ -315,7 +321,8 @@ class _ExpeditionPortalScreenState
                             err.toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 11.0,
                               color: colors.textMuted,
                             ),
@@ -340,7 +347,8 @@ class _ExpeditionPortalScreenState
                         child: Text(
                           'NO DISPATCH AVAILABLE',
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             color: colors.textMuted,
                           ),
                         ),
@@ -390,7 +398,8 @@ class _ExpeditionPortalScreenState
                                           child: Text(
                                             'UNFINISHED EXPEDITION',
                                             style: TextStyle(
-                                              fontFamily: 'Courier',
+                                              fontFamily: 'Silkscreen',
+                                              fontFamilyFallback: const ['monospace'],
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.w900,
                                               letterSpacing: 1.0,
@@ -404,7 +413,8 @@ class _ExpeditionPortalScreenState
                                     Text(
                                       'An active workout was interrupted. You can resume your logged sets or discard the attempt to begin fresh.',
                                       style: TextStyle(
-                                        fontFamily: 'Courier',
+                                        fontFamily: 'Silkscreen',
+                                        fontFamilyFallback: const ['monospace'],
                                         fontSize: 11.0,
                                         color: colors.textPrimary,
                                       ),
@@ -477,7 +487,8 @@ class _ExpeditionPortalScreenState
                                             session.dayType,
                                           ),
                                           style: TextStyle(
-                                            fontFamily: 'Courier',
+                                            fontFamily: 'Silkscreen',
+                                            fontFamilyFallback: const ['monospace'],
                                             fontSize: 13.0,
                                             fontWeight: FontWeight.w900,
                                             letterSpacing: 1.2,
@@ -489,7 +500,8 @@ class _ExpeditionPortalScreenState
                                             session.dayType,
                                           ),
                                           style: TextStyle(
-                                            fontFamily: 'Courier',
+                                            fontFamily: 'Silkscreen',
+                                            fontFamilyFallback: const ['monospace'],
                                             fontSize: 9.0,
                                             letterSpacing: 0.6,
                                             color: colors.textMuted,
@@ -517,7 +529,8 @@ class _ExpeditionPortalScreenState
                                     child: Text(
                                       _formatRmZone(session.dayType),
                                       style: TextStyle(
-                                        fontFamily: 'Courier',
+                                        fontFamily: 'Silkscreen',
+                                        fontFamilyFallback: const ['monospace'],
                                         fontSize: 10.0,
                                         fontWeight: FontWeight.w700,
                                         color: colors.amberGlow,
@@ -535,7 +548,8 @@ class _ExpeditionPortalScreenState
                                   Text(
                                     'TARGET RPE: ${session.sets.isNotEmpty ? session.sets.first.targetRpe : 8}',
                                     style: const TextStyle(
-                                      fontFamily: 'Courier',
+                                      fontFamily: 'Silkscreen',
+                                      fontFamilyFallback: ['monospace'],
                                       fontSize: 11.0,
                                       fontWeight: FontWeight.w700,
                                       color: Color(0xFF2EE6D6),
@@ -548,7 +562,8 @@ class _ExpeditionPortalScreenState
                                   Text(
                                     '${setsByExercise.length} EXERCISES / ${session.sets.length} TOTAL SETS',
                                     style: TextStyle(
-                                      fontFamily: 'Courier',
+                                      fontFamily: 'Silkscreen',
+                                      fontFamilyFallback: const ['monospace'],
                                       fontSize: 11.0,
                                       color: colors.textMuted,
                                     ),
@@ -579,7 +594,8 @@ class _ExpeditionPortalScreenState
                                 child: Text(
                                   notice.message,
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Inter',
+                                    fontFamilyFallback: const ['sans-serif'],
                                     fontSize: 11.0,
                                     height: 1.4,
                                     color: colors.textPrimary,
@@ -598,7 +614,8 @@ class _ExpeditionPortalScreenState
                                 child: Text(
                                   'EXPEDITION ITINERARY',
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 11.0,
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: 1.2,
@@ -676,7 +693,8 @@ class _ExpeditionPortalScreenState
                                         child: Text(
                                           lineTheme.lineNameEn,
                                           style: TextStyle(
-                                            fontFamily: 'Courier',
+                                            fontFamily: 'Silkscreen',
+                                            fontFamilyFallback: const ['monospace'],
                                             fontSize: 9.0,
                                             fontWeight: FontWeight.w900,
                                             letterSpacing: 0.8,
@@ -687,7 +705,8 @@ class _ExpeditionPortalScreenState
                                       Text(
                                         '[T${exercise.difficultyTier}]',
                                         style: TextStyle(
-                                          fontFamily: 'Courier',
+                                          fontFamily: 'Silkscreen',
+                                          fontFamilyFallback: const ['monospace'],
                                           fontSize: 11.0,
                                           fontWeight: FontWeight.w900,
                                           color: colors.amberGlow,
@@ -701,7 +720,8 @@ class _ExpeditionPortalScreenState
                                   Text(
                                     '${meta.stationCode} // ${exercise.name.toUpperCase()}',
                                     style: TextStyle(
-                                      fontFamily: 'Courier',
+                                      fontFamily: 'Silkscreen',
+                                      fontFamilyFallback: const ['monospace'],
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w900,
                                       letterSpacing: 1.0,
@@ -720,7 +740,8 @@ class _ExpeditionPortalScreenState
                                       Text(
                                         '${exerciseSets.length} SETS × $repText',
                                         style: TextStyle(
-                                          fontFamily: 'Courier',
+                                          fontFamily: 'Silkscreen',
+                                          fontFamilyFallback: const ['monospace'],
                                           fontSize: 11.0,
                                           fontWeight: FontWeight.w700,
                                           color: colors.amberAccent,
@@ -734,7 +755,8 @@ class _ExpeditionPortalScreenState
                                       Text(
                                         '${restSeconds}s REST',
                                         style: const TextStyle(
-                                          fontFamily: 'Courier',
+                                          fontFamily: 'Silkscreen',
+                                          fontFamilyFallback: ['monospace'],
                                           fontSize: 11.0,
                                           color: Color(0xFF2EE6D6),
                                         ),
@@ -763,7 +785,8 @@ class _ExpeditionPortalScreenState
                                             child: Text(
                                               eq.name.toUpperCase(),
                                               style: TextStyle(
-                                                fontFamily: 'Courier',
+                                                fontFamily: 'Silkscreen',
+                                                fontFamilyFallback: const ['monospace'],
                                                 fontSize: 8.0,
                                                 color: colors.textMuted,
                                               ),
@@ -794,7 +817,8 @@ class _ExpeditionPortalScreenState
                   child: Text(
                     _statusFeedback!,
                     style: TextStyle(
-                      fontFamily: 'Courier',
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
                       fontSize: 11.0,
                       fontWeight: FontWeight.w700,
                       color: colors.amberAccent,

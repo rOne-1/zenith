@@ -63,7 +63,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
               Text(
                 'SKIP SET',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 14.0,
                   fontWeight: FontWeight.w900,
                   color: colors.amberAccent,
@@ -74,7 +75,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                 'Are you sure you want to skip this set? It will be logged with 0 reps.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 12.0,
                   color: colors.textPrimary,
                 ),
@@ -188,7 +190,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                               child: Text(
                                 lineTheme.lineNameEn,
                                 style: TextStyle(
-                                  fontFamily: 'Courier',
+                                  fontFamily: 'Silkscreen',
+                                  fontFamilyFallback: const ['monospace'],
                                   fontSize: 10.0,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 1.0,
@@ -218,7 +221,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                           child: Text(
                             'SET ${state.currentSetIndex + 1} / ${state.totalSets}',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 11.0,
                               fontWeight: FontWeight.w900,
                               color: colors.amberAccent,
@@ -233,7 +237,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                     Text(
                       '${meta?.stationCode ?? 'S01'} // ${(exercise?.name ?? set.exerciseId).toUpperCase()}',
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 18.0,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.2,
@@ -244,7 +249,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                     Text(
                       targetRepsText,
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 11.0,
                         fontWeight: FontWeight.w700,
                         color: colors.amberGlow,
@@ -278,7 +284,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                             Text(
                               'WORK TIME: ${_formatTimer(_workSeconds)}',
                               style: TextStyle(
-                                fontFamily: 'Courier',
+                                fontFamily: 'Silkscreen',
+                                fontFamilyFallback: const ['monospace'],
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.w700,
                                 color: colors.amberAccent,
@@ -289,7 +296,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                         Text(
                           'TARGET RPE: ${set.targetRpe}',
                           style: const TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: ['monospace'],
                             fontSize: 12.0,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF2EE6D6),
@@ -359,7 +367,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                               Text(
                                 'FORM CUES',
                                 style: TextStyle(
-                                  fontFamily: 'Courier',
+                                  fontFamily: 'Silkscreen',
+                                  fontFamilyFallback: const ['monospace'],
                                   fontSize: 12.0,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 1.0,
@@ -385,7 +394,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                                   child: Text(
                                     cue,
                                     style: TextStyle(
-                                      fontFamily: 'Courier',
+                                      fontFamily: 'Inter',
+                                      fontFamilyFallback: const ['sans-serif'],
                                       fontSize: 13.0,
                                       height: 1.4,
                                       fontWeight: FontWeight.w600,
@@ -415,7 +425,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                           Text(
                             'REPS COMPLETED',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 11.0,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 1.0,
@@ -441,7 +452,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                               Text(
                                 '${state.currentRepsInput}',
                                 style: TextStyle(
-                                  fontFamily: 'Courier',
+                                  fontFamily: 'Silkscreen',
+                                  fontFamilyFallback: const ['monospace'],
                                   fontSize: 44.0,
                                   fontWeight: FontWeight.w900,
                                   color: colors.amberAccent,

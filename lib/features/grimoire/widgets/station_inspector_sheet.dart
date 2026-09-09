@@ -103,7 +103,8 @@ class StationInspectorSheet extends StatelessWidget {
                           child: Text(
                             meta.stationCode,
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 12.0,
                               fontWeight: FontWeight.w900,
                               color: colors.amberAccent,
@@ -114,7 +115,8 @@ class StationInspectorSheet extends StatelessWidget {
                         Text(
                           'STATION INSPECTION PASS',
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 10.0,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 1.0,
@@ -135,7 +137,8 @@ class StationInspectorSheet extends StatelessWidget {
                       child: Text(
                         statusBadgeText,
                         style: TextStyle(
-                          fontFamily: 'Courier',
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
                           fontSize: 9.0,
                           fontWeight: FontWeight.bold,
                           color: statusColor,
@@ -150,7 +153,8 @@ class StationInspectorSheet extends StatelessWidget {
                 Text(
                   exercise.name,
                   style: TextStyle(
-                    fontFamily: 'Courier',
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 18.0,
                     fontWeight: FontWeight.w900,
                     color: colors.textPrimary,
@@ -185,7 +189,8 @@ class StationInspectorSheet extends StatelessWidget {
                 Text(
                   'BIOMECHANICAL FORM SPECIFICATIONS',
                   style: TextStyle(
-                    fontFamily: 'Courier',
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 10.0,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
@@ -212,7 +217,8 @@ class StationInspectorSheet extends StatelessWidget {
                               Text(
                                 '> ',
                                 style: TextStyle(
-                                  fontFamily: 'Courier',
+                                  fontFamily: 'Silkscreen',
+                                  fontFamilyFallback: const ['monospace'],
                                   fontSize: 11.0,
                                   fontWeight: FontWeight.bold,
                                   color: colors.amberAccent,
@@ -222,7 +228,8 @@ class StationInspectorSheet extends StatelessWidget {
                                 child: Text(
                                   exercise.defaultCues[i],
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Inter',
+                                    fontFamilyFallback: const ['sans-serif'],
                                     fontSize: 11.0,
                                     height: 1.4,
                                     color: colors.textPrimary,
@@ -242,7 +249,8 @@ class StationInspectorSheet extends StatelessWidget {
                 Text(
                   'KENNETH MILLER PROGRESSION GAUGES',
                   style: TextStyle(
-                    fontFamily: 'Courier',
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 10.0,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
@@ -310,7 +318,8 @@ class _PillBadge extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          fontFamily: 'Courier',
+          fontFamily: 'Silkscreen',
+          fontFamilyFallback: const ['monospace'],
           fontSize: 9.0,
           fontWeight: FontWeight.bold,
           letterSpacing: 0.5,

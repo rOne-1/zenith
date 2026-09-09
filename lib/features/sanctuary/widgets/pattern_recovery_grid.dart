@@ -44,7 +44,8 @@ class PatternRecoveryGrid extends ConsumerWidget {
                           Text(
                             'RECOVERY STATUS',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 12.0,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1.0,
@@ -56,7 +57,8 @@ class PatternRecoveryGrid extends ConsumerWidget {
                           Text(
                             'NEUROMUSCULAR RECOVERY RADAR',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 8.0,
                               letterSpacing: 0.5,
                               color: colors.textMuted,
@@ -86,7 +88,8 @@ class PatternRecoveryGrid extends ConsumerWidget {
                 child: Text(
                   '48H PROTOCOL',
                   style: TextStyle(
-                    fontFamily: 'Courier',
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 8.0,
                     fontWeight: FontWeight.w700,
                     color: colors.textMuted,
@@ -101,7 +104,8 @@ class PatternRecoveryGrid extends ConsumerWidget {
           Text(
             'High-threshold sets (RPE ≥ 8) trigger a 48-hour neuromuscular cooldown lock per ACE IFT movement pattern.',
             style: TextStyle(
-              fontFamily: 'Courier',
+              fontFamily: 'Inter',
+              fontFamilyFallback: const ['sans-serif'],
               fontSize: 10.0,
               height: 1.3,
               color: colors.textMuted,
@@ -139,7 +143,8 @@ class PatternRecoveryGrid extends ConsumerWidget {
               child: Text(
                 'RADAR TELEMETRY OFFLINE: $err',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 11.0,
                   color: colors.signalRed,
                 ),
@@ -209,7 +214,8 @@ class _PatternRecoveryRow extends StatelessWidget {
                       child: Text(
                         lineTheme.codePrefix,
                         style: TextStyle(
-                          fontFamily: 'Courier',
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
                           fontSize: 11.0,
                           fontWeight: FontWeight.w900,
                           color: lineTheme.color,
@@ -221,7 +227,8 @@ class _PatternRecoveryRow extends StatelessWidget {
                       child: Text(
                         lineTheme.lineNameEn,
                         style: TextStyle(
-                          fontFamily: 'Courier',
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
                           fontSize: 11.0,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 0.8,
@@ -252,7 +259,8 @@ class _PatternRecoveryRow extends StatelessWidget {
                 child: Text(
                   status.statusChipLabel,
                   style: TextStyle(
-                    fontFamily: 'Courier',
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 9.0,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.5,
@@ -288,7 +296,8 @@ class _PatternRecoveryRow extends StatelessWidget {
               Text(
                 '${(progress * 100).toInt()}%',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 9.0,
                   fontWeight: FontWeight.w700,
                   color: statusColor,

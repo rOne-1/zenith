@@ -35,7 +35,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
         child: Text(
           'CALCULATING MACROCYCLE TELEMETRY...',
           style: TextStyle(
-            fontFamily: 'Courier',
+            fontFamily: 'Silkscreen',
+            fontFamilyFallback: const ['monospace'],
             fontSize: 11.0,
             fontWeight: FontWeight.w700,
             letterSpacing: 1.2,
@@ -52,7 +53,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
       child: Text(
         'ERROR RESOLVING MACROCYCLE: $message',
         style: TextStyle(
-          fontFamily: 'Courier',
+          fontFamily: 'Silkscreen',
+          fontFamilyFallback: const ['monospace'],
           fontSize: 11.0,
           color: colors.signalRed,
         ),
@@ -87,7 +89,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
                         Text(
                           'TRAINING CYCLE PROGRESS',
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 12.0,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.0,
@@ -99,7 +102,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
                         Text(
                           'DELOAD MACROCYCLE TRACKER',
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 8.0,
                             letterSpacing: 0.5,
                             color: colors.textMuted,
@@ -129,7 +133,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
               child: Text(
                 'CYCLE ${state.cycleNumber.toString().padLeft(2, '0')}',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 10.0,
                   fontWeight: FontWeight.w800,
                   color: colors.textMuted,
@@ -174,7 +179,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
             Text(
               state.steppedMeterText,
               style: TextStyle(
-                fontFamily: 'Courier',
+                fontFamily: 'Silkscreen',
+                fontFamilyFallback: const ['monospace'],
                 fontSize: 11.0,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.0,
@@ -196,7 +202,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
               child: Text(
                 state.phaseName,
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 10.0,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0.8,
@@ -231,7 +238,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
                   Text(
                     '>> RESTORATIVE GUIDANCE',
                     style: TextStyle(
-                      fontFamily: 'Courier',
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
                       fontSize: 10.0,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.8,
@@ -241,7 +249,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
                   Text(
                     'TARGET: ${state.targetRpeGuidance}',
                     style: TextStyle(
-                      fontFamily: 'Courier',
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
                       fontSize: 9.5,
                       fontWeight: FontWeight.w800,
                       color: colors.textMuted,
@@ -253,7 +262,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
               Text(
                 state.restorativeGuidance,
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Inter',
+                  fontFamilyFallback: const ['sans-serif'],
                   fontSize: 10.5,
                   height: 1.35,
                   color: colors.textPrimary,
@@ -347,7 +357,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
           Text(
             weekTag,
             style: TextStyle(
-              fontFamily: 'Courier',
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
               fontSize: 9.0,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.5,
@@ -388,7 +399,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
           Text(
             label,
             style: TextStyle(
-              fontFamily: 'Courier',
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
               fontSize: 8.5,
               fontWeight: FontWeight.w700,
               color: colors.textMuted,
@@ -402,7 +414,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
               Text(
                 value,
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 14.0,
                   fontWeight: FontWeight.w900,
                   color: colors.textPrimary,
@@ -412,7 +425,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
               Text(
                 unit,
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 8.0,
                   fontWeight: FontWeight.w700,
                   color: colors.amberGlow,

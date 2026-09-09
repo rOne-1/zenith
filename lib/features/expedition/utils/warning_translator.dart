@@ -200,7 +200,8 @@ class SameDayAdvisoryDialog extends StatelessWidget {
                   child: Text(
                     WarningTranslator.sameDayAdvisoryTitle,
                     style: TextStyle(
-                      fontFamily: 'Courier',
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
                       fontSize: 14.0,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
@@ -223,7 +224,8 @@ class SameDayAdvisoryDialog extends StatelessWidget {
             Text(
               WarningTranslator.sameDayAdvisoryMessage,
               style: TextStyle(
-                fontFamily: 'Courier',
+                fontFamily: 'Inter',
+                fontFamilyFallback: const ['sans-serif'],
                 fontSize: 13.0,
                 height: 1.5,
                 color: colors.textPrimary,

@@ -127,7 +127,8 @@ class _MetroLineSection extends StatelessWidget {
                 child: Text(
                   lineTheme.lineNameEn,
                   style: TextStyle(
-                    fontFamily: 'Courier',
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 13.0,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.5,
@@ -292,7 +293,8 @@ class _MetroStationNode extends StatelessWidget {
                         child: Text(
                           meta.stationCode,
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 10.0,
                             fontWeight: FontWeight.bold,
                             color: isLocked ? colors.textMuted : lineColor,
@@ -306,7 +308,8 @@ class _MetroStationNode extends StatelessWidget {
                         child: Text(
                           exercise.name,
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 12.0,
                             fontWeight: FontWeight.bold,
                             color: isLocked
@@ -335,7 +338,8 @@ class _MetroStationNode extends StatelessWidget {
                           child: Text(
                             'T${exercise.difficultyTier} LOCKED',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 8.0,
                               fontWeight: FontWeight.bold,
                               color: colors.signalRed,
@@ -358,7 +362,8 @@ class _MetroStationNode extends StatelessWidget {
                           child: Text(
                             'TIER ${exercise.difficultyTier}',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 9.0,
                               fontWeight: FontWeight.bold,
                               color: colors.amberGlow,

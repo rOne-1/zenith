@@ -43,7 +43,8 @@ class SanctuaryScreen extends ConsumerWidget {
                         Text(
                           'SANCTUARY',
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 22.0,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 2.0,
@@ -56,7 +57,8 @@ class SanctuaryScreen extends ConsumerWidget {
                         Text(
                           'REST & PHYSIOLOGICAL ADAPTATION CHAMBER',
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 10.5,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 1.2,
@@ -87,7 +89,8 @@ class SanctuaryScreen extends ConsumerWidget {
                     child: Text(
                       'STATUS: NOMINAL',
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 9.5,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.0,
@@ -125,7 +128,8 @@ class SanctuaryScreen extends ConsumerWidget {
                               Text(
                                 'REST BUILDS YOU BACK STRONGER',
                                 style: TextStyle(
-                                  fontFamily: 'Courier',
+                                  fontFamily: 'Silkscreen',
+                                  fontFamilyFallback: const ['monospace'],
                                   fontSize: 11.0,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 1.0,
@@ -137,7 +141,8 @@ class SanctuaryScreen extends ConsumerWidget {
                               Text(
                                 'NEUROMUSCULAR SUPERCOMPENSATION',
                                 style: TextStyle(
-                                  fontFamily: 'Courier',
+                                  fontFamily: 'Silkscreen',
+                                  fontFamilyFallback: const ['monospace'],
                                   fontSize: 8.0,
                                   letterSpacing: 0.6,
                                   color: colors.textMuted,
@@ -154,7 +159,8 @@ class SanctuaryScreen extends ConsumerWidget {
                     Text(
                       'Musculoskeletal remodeling, collagen repair, and CNS resensitization occur during downtime. Honor cooldown timers and periodization deloads to consolidate progress.',
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Inter',
+                        fontFamilyFallback: const ['sans-serif'],
                         fontSize: 11.0,
                         height: 1.4,
                         color: colors.textPrimary,
@@ -188,7 +194,8 @@ class SanctuaryScreen extends ConsumerWidget {
                     Text(
                       'DISTRICT ATMOSPHERE',
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 10.0,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.0,
@@ -199,7 +206,8 @@ class SanctuaryScreen extends ConsumerWidget {
                     Text(
                       district.displayName,
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 13.0,
                         fontWeight: FontWeight.w900,
                         color: colors.amberAccent,
@@ -209,7 +217,8 @@ class SanctuaryScreen extends ConsumerWidget {
                     Text(
                       'Rainfall frequency: 72% · Ambient Temp: 14°C · Line Voltage: 1500V DC · Platform Hum: 48Hz',
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 9.5,
                         color: colors.textMuted,
                       ),

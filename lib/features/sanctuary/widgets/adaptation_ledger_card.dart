@@ -36,7 +36,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
         child: Text(
           'LOADING ADAPTATION LEDGER...',
           style: TextStyle(
-            fontFamily: 'Courier',
+            fontFamily: 'Silkscreen',
+            fontFamilyFallback: const ['monospace'],
             fontSize: 11.0,
             fontWeight: FontWeight.w700,
             letterSpacing: 1.2,
@@ -53,7 +54,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
       child: Text(
         'ERROR READING ADAPTATION LEDGER: $message',
         style: TextStyle(
-          fontFamily: 'Courier',
+          fontFamily: 'Silkscreen',
+          fontFamilyFallback: const ['monospace'],
           fontSize: 11.0,
           color: colors.signalRed,
         ),
@@ -87,7 +89,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                         Text(
                           'YOUR PROGRESS LOG',
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 12.0,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.0,
@@ -99,7 +102,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                         Text(
                           'KENNETH MILLER ADAPTATION LEDGER',
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 8.0,
                             letterSpacing: 0.5,
                             color: colors.textMuted,
@@ -129,7 +133,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
               child: Text(
                 'MAX TIER 0${state.highestCompetencyTier}',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 10.0,
                   fontWeight: FontWeight.w800,
                   color: colors.textMuted,
@@ -160,7 +165,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                 Text(
                   '>> RECENT AUTOREGULATION PROMOTIONS',
                   style: TextStyle(
-                    fontFamily: 'Courier',
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 9.5,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.8,
@@ -178,7 +184,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                           child: Text(
                             promo.exerciseName.toUpperCase(),
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 10.0,
                               fontWeight: FontWeight.w800,
                               color: colors.textPrimary,
@@ -189,7 +196,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                         Text(
                           promo.variableDelta,
                           style: TextStyle(
-                            fontFamily: 'Courier',
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 9.0,
                             fontWeight: FontWeight.w700,
                             color: const Color(0xFF2EE6D6),
@@ -248,7 +256,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                       child: Text(
                         item.exerciseName.toUpperCase(),
                         style: TextStyle(
-                          fontFamily: 'Courier',
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
                           fontSize: 11.5,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 0.5,
@@ -277,7 +286,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                 child: Text(
                   '${item.tierLabel} // ${item.masteryTitle}',
                   style: TextStyle(
-                    fontFamily: 'Courier',
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 9.0,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.6,
@@ -364,7 +374,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
           Text(
             '$label L$level',
             style: TextStyle(
-              fontFamily: 'Courier',
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
               fontSize: 8.0,
               fontWeight: FontWeight.w700,
               color: level > 1 ? colors.amberAccent : colors.textMuted,
@@ -410,7 +421,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
           Text(
             'TEMPO',
             style: TextStyle(
-              fontFamily: 'Courier',
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
               fontSize: 8.0,
               fontWeight: FontWeight.w700,
               color: isSlow ? const Color(0xFF2EE6D6) : colors.textMuted,
@@ -420,7 +432,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
           Text(
             isSlow ? '6s SLOW' : '4s STD',
             style: TextStyle(
-              fontFamily: 'Courier',
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
               fontSize: 7.0,
               fontWeight: FontWeight.w800,
               color: isSlow ? const Color(0xFF2EE6D6) : colors.textMuted,

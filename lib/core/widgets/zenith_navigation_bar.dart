@@ -180,7 +180,8 @@ class _TicketTabItemState extends State<_TicketTabItem> {
                   Text(
                     item.indexLabel,
                     style: TextStyle(
-                      fontFamily: 'Courier',
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
                       fontSize: 10.0,
                       fontWeight: FontWeight.w700,
                       color: isSelected ? activeTextColor : inactiveTextColor,
@@ -194,7 +195,8 @@ class _TicketTabItemState extends State<_TicketTabItem> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 9.0,
                   fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
                   letterSpacing: 0.8,

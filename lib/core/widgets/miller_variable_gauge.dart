@@ -49,7 +49,8 @@ class MillerVariableGauge extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontFamily: 'Courier',
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
               fontSize: 10.0,
               fontWeight: FontWeight.w600,
               color: colors.textPrimary,
@@ -74,7 +75,8 @@ class MillerVariableGauge extends StatelessWidget {
               Text(
                 displayValueOverride ?? '$score/$maxScore',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 10.0,
                   fontWeight: FontWeight.bold,
                   color: effectiveActive,

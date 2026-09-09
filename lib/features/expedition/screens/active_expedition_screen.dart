@@ -33,7 +33,8 @@ class ActiveExpeditionScreen extends ConsumerWidget {
               Text(
                 'ABORT EXPEDITION',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 14.0,
                   fontWeight: FontWeight.w900,
                   color: colors.signalRed,
@@ -44,7 +45,8 @@ class ActiveExpeditionScreen extends ConsumerWidget {
                 'Are you sure you want to abort? All in-progress sets will be discarded from persistence.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 12.0,
                   color: colors.textPrimary,
                 ),
@@ -134,7 +136,8 @@ class ActiveExpeditionScreen extends ConsumerWidget {
                     child: Text(
                       'ACTIVE EXPEDITION',
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 12.0,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.2,
@@ -185,7 +188,8 @@ class _WarmUpView extends StatelessWidget {
               Text(
                 'WARM-UP MOBILIZATION',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 20.0,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5,
@@ -196,7 +200,8 @@ class _WarmUpView extends StatelessWidget {
               Text(
                 'DYNAMIC RANGE OF MOTION & TISSUE PREPARATION',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 11.0,
                   color: colors.textMuted,
                 ),
@@ -213,7 +218,8 @@ class _WarmUpView extends StatelessWidget {
                       Text(
                         'PRE-EXPEDITION CHECKLIST:',
                         style: TextStyle(
-                          fontFamily: 'Courier',
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
                           fontSize: 12.0,
                           fontWeight: FontWeight.w700,
                           color: colors.amberGlow,
@@ -272,7 +278,8 @@ class _WarmUpView extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                fontFamily: 'Courier',
+                fontFamily: 'Inter',
+                fontFamilyFallback: const ['sans-serif'],
                 fontSize: 12.0,
                 height: 1.4,
                 color: colors.textPrimary,
@@ -305,7 +312,8 @@ class _CoolDownView extends StatelessWidget {
               Text(
                 'COOL-DOWN DOWNSHIFT',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 20.0,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5,
@@ -316,7 +324,8 @@ class _CoolDownView extends StatelessWidget {
               Text(
                 'PARASYMPATHETIC RECOVERY & DIAPHRAGMATIC PACING',
                 style: TextStyle(
-                  fontFamily: 'Courier',
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
                   fontSize: 11.0,
                   color: colors.textMuted,
                 ),
@@ -333,7 +342,8 @@ class _CoolDownView extends StatelessWidget {
                       Text(
                         'RESTORATIVE PROTOCOL:',
                         style: TextStyle(
-                          fontFamily: 'Courier',
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
                           fontSize: 12.0,
                           fontWeight: FontWeight.w700,
                           color: const Color(0xFF2EE6D6),
@@ -345,7 +355,8 @@ class _CoolDownView extends StatelessWidget {
                         '2. Child’s pose or passive spinal decompression for 60s.\n'
                         '3. Hydrate with electrolyte-balanced water.',
                         style: TextStyle(
-                          fontFamily: 'Courier',
+                          fontFamily: 'Inter',
+                          fontFamilyFallback: const ['sans-serif'],
                           fontSize: 13.0,
                           height: 1.6,
                           color: colors.textPrimary,

@@ -70,7 +70,8 @@ class _GrimoireScreenState extends State<GrimoireScreen> {
                           Text(
                             'THE GRIMOIRE',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 16.0,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1.5,
@@ -81,7 +82,8 @@ class _GrimoireScreenState extends State<GrimoireScreen> {
                           Text(
                             'METRO TRANSIT MAP OF MOVEMENT PROGRESSIONS',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 9.0,
                               letterSpacing: 0.8,
                               color: colors.textMuted,
@@ -238,7 +240,8 @@ class _FilterPill extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            fontFamily: 'Courier',
+            fontFamily: 'Silkscreen',
+            fontFamilyFallback: const ['monospace'],
             fontSize: 9.0,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.8,

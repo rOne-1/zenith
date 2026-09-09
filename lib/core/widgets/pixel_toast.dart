@@ -80,7 +80,8 @@ class PixelToastHostState extends State<PixelToastHost> {
                   child: Text(
                     _message ?? '',
                     style: TextStyle(
-                      fontFamily: 'Courier',
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
                       fontSize: 12.0,
                       color: colors.textPrimary,
                     ),

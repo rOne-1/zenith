@@ -46,7 +46,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                     Text(
                       'EXPEDITION CONCLUDED',
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 20.0,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.8,
@@ -57,7 +58,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                     Text(
                       'SESSION DEBRIEF & NEUROMUSCULAR TELEMETRY',
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 10.0,
                         letterSpacing: 1.0,
                         color: colors.textMuted,
@@ -91,7 +93,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 Text(
                                   'COMPLETED SETS',
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 9.0,
                                     color: colors.textMuted,
                                   ),
@@ -100,7 +103,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 Text(
                                   '$completedSets',
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 26.0,
                                     fontWeight: FontWeight.w900,
                                     color: colors.amberAccent,
@@ -122,7 +126,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 Text(
                                   'TOTAL VOLUME',
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 9.0,
                                     color: colors.textMuted,
                                   ),
@@ -131,7 +136,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 Text(
                                   '$totalReps REPS',
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w900,
                                     color: const Color(0xFF2EE6D6),
@@ -158,7 +164,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 Text(
                                   'AVERAGE RPE',
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 9.0,
                                     color: colors.textMuted,
                                   ),
@@ -167,7 +174,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 Text(
                                   avgRpe,
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 26.0,
                                     fontWeight: FontWeight.w900,
                                     color: colors.amberGlow,
@@ -189,7 +197,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 Text(
                                   'DURATION',
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 9.0,
                                     color: colors.textMuted,
                                   ),
@@ -198,7 +207,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 Text(
                                   durationText,
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w900,
                                     color: colors.textPrimary,
@@ -232,7 +242,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                               Text(
                                 'KENNETH MILLER ADAPTATIONS',
                                 style: TextStyle(
-                                  fontFamily: 'Courier',
+                                  fontFamily: 'Silkscreen',
+                                  fontFamilyFallback: const ['monospace'],
                                   fontSize: 11.0,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 1.0,
@@ -246,7 +257,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                             Text(
                               'Standard baseline completed. Mastery state saved to progression ledger.',
                               style: TextStyle(
-                                fontFamily: 'Courier',
+                                fontFamily: 'Silkscreen',
+                                fontFamilyFallback: const ['monospace'],
                                 fontSize: 11.0,
                                 color: colors.textMuted,
                               ),
@@ -282,7 +294,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                         Text(
                                           a.exerciseName.toUpperCase(),
                                           style: TextStyle(
-                                            fontFamily: 'Courier',
+                                            fontFamily: 'Silkscreen',
+                                            fontFamilyFallback: const ['monospace'],
                                             fontSize: 12.0,
                                             fontWeight: FontWeight.w900,
                                             color: colors.textPrimary,
@@ -291,7 +304,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                         Text(
                                           'RPE ${a.reportedRpe} (TARGET ${a.targetRpe})',
                                           style: TextStyle(
-                                            fontFamily: 'Courier',
+                                            fontFamily: 'Silkscreen',
+                                            fontFamilyFallback: const ['monospace'],
                                             fontSize: 9.0,
                                             fontWeight: FontWeight.w700,
                                             color: actionColor,
@@ -303,7 +317,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                     Text(
                                       a.adaptationSummary,
                                       style: TextStyle(
-                                        fontFamily: 'Courier',
+                                        fontFamily: 'Inter',
+                                        fontFamilyFallback: const ['sans-serif'],
                                         fontSize: 10.0,
                                         height: 1.3,
                                         color: colors.textMuted,

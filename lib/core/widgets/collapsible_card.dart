@@ -67,7 +67,8 @@ class _CollapsibleCardState extends State<CollapsibleCard> {
                     Text(
                       widget.title,
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 11.0,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 0.8,
@@ -80,7 +81,8 @@ class _CollapsibleCardState extends State<CollapsibleCard> {
                       Text(
                         widget.subtitle!,
                         style: TextStyle(
-                          fontFamily: 'Courier',
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
                           fontSize: 8.0,
                           letterSpacing: 0.5,
                           color: colors.textMuted,

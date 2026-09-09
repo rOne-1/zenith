@@ -127,7 +127,8 @@ class RestScreen extends ConsumerWidget {
                           Text(
                             'REST & RECOVERY',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 16.0,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1.5,
@@ -140,7 +141,8 @@ class RestScreen extends ConsumerWidget {
                           Text(
                             'METABOLIC CLEARANCE & RPE LOGGING',
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 9.0,
                               letterSpacing: 0.8,
                               color: colors.textMuted,
@@ -155,7 +157,8 @@ class RestScreen extends ConsumerWidget {
                     Text(
                       'SET ${state.currentSetIndex + 1} DONE',
                       style: TextStyle(
-                        fontFamily: 'Courier',
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
                         fontSize: 11.0,
                         fontWeight: FontWeight.w700,
                         color: colors.amberGlow,
@@ -191,7 +194,8 @@ class RestScreen extends ConsumerWidget {
                               Text(
                                 'REST TIME REMAINING',
                                 style: TextStyle(
-                                  fontFamily: 'Courier',
+                                  fontFamily: 'Silkscreen',
+                                  fontFamilyFallback: const ['monospace'],
                                   fontSize: 10.0,
                                   fontWeight: FontWeight.w700,
                                   color: colors.textMuted,
@@ -212,7 +216,8 @@ class RestScreen extends ConsumerWidget {
                           Text(
                             _formatRestTime(state.restRemaining),
                             style: TextStyle(
-                              fontFamily: 'Courier',
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
                               fontSize: 52.0,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 2.0,
@@ -253,7 +258,8 @@ class RestScreen extends ConsumerWidget {
                                     Text(
                                       'HOW HARD DID THAT FEEL?',
                                       style: TextStyle(
-                                        fontFamily: 'Courier',
+                                        fontFamily: 'Silkscreen',
+                                        fontFamilyFallback: const ['monospace'],
                                         fontSize: 11.0,
                                         fontWeight: FontWeight.w900,
                                         letterSpacing: 1.0,
@@ -265,7 +271,8 @@ class RestScreen extends ConsumerWidget {
                                     Text(
                                       'BORG RPE SCALE',
                                       style: TextStyle(
-                                        fontFamily: 'Courier',
+                                        fontFamily: 'Silkscreen',
+                                        fontFamilyFallback: const ['monospace'],
                                         fontSize: 8.0,
                                         letterSpacing: 0.6,
                                         color: colors.textMuted,
@@ -295,7 +302,8 @@ class RestScreen extends ConsumerWidget {
                                 child: Text(
                                   'TARGET: $targetRpe RPE',
                                   style: const TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: ['monospace'],
                                     fontSize: 9.0,
                                     fontWeight: FontWeight.w700,
                                     color: Color(0xFF2EE6D6),
@@ -360,7 +368,8 @@ class RestScreen extends ConsumerWidget {
                                     Text(
                                       'RPE $selectedRpe: ',
                                       style: TextStyle(
-                                        fontFamily: 'Courier',
+                                        fontFamily: 'Silkscreen',
+                                        fontFamilyFallback: const ['monospace'],
                                         fontSize: 11.0,
                                         fontWeight: FontWeight.w900,
                                         color: colors.amberAccent,
@@ -370,7 +379,8 @@ class RestScreen extends ConsumerWidget {
                                       child: Text(
                                         _getRpeHint(selectedRpe),
                                         style: TextStyle(
-                                          fontFamily: 'Courier',
+                                          fontFamily: 'Inter',
+                                          fontFamilyFallback: const ['sans-serif'],
                                           fontSize: 10.0,
                                           height: 1.3,
                                           color: colors.textPrimary,
@@ -386,7 +396,8 @@ class RestScreen extends ConsumerWidget {
                                     targetRpe: targetRpe,
                                   ),
                                   style: TextStyle(
-                                    fontFamily: 'Courier',
+                                    fontFamily: 'Silkscreen',
+                                    fontFamilyFallback: const ['monospace'],
                                     fontSize: 9.0,
                                     fontWeight: FontWeight.w700,
                                     color: _getFeedbackColor(
@@ -417,7 +428,8 @@ class RestScreen extends ConsumerWidget {
                             Text(
                               '${nextMeta.stationCode} // ${nextExercise.name.toUpperCase()}',
                               style: TextStyle(
-                                fontFamily: 'Courier',
+                                fontFamily: 'Silkscreen',
+                                fontFamilyFallback: const ['monospace'],
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.w900,
                                 color: colors.textPrimary,
@@ -427,7 +439,8 @@ class RestScreen extends ConsumerWidget {
                             Text(
                               'Prescribed: ${nextSet?.reps ?? 10} reps · Equipment: ${nextExercise.equipmentRequirements.map((e) => e.name.toUpperCase()).join(', ')}',
                               style: TextStyle(
-                                fontFamily: 'Courier',
+                                fontFamily: 'Silkscreen',
+                                fontFamilyFallback: const ['monospace'],
                                 fontSize: 10.0,
                                 color: colors.amberGlow,
                               ),
@@ -552,7 +565,8 @@ class _RpeButtonState extends State<_RpeButton> {
             child: Text(
               '$score',
               style: TextStyle(
-                fontFamily: 'Courier',
+                fontFamily: 'Silkscreen',
+                fontFamilyFallback: const ['monospace'],
                 fontSize: 13.0,
                 fontWeight: FontWeight.w900,
                 color: textColor,
