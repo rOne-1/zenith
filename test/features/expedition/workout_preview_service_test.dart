@@ -105,7 +105,7 @@ void main() {
     });
 
     test(
-      're-generates preview when user profile equipment is modified in Armory',
+      're-generates preview when user profile equipment is modified in the Depot',
       () async {
         final service = container.read(workoutPreviewServiceProvider);
         final baseProfile = UserProfile.baseline;
@@ -116,7 +116,7 @@ void main() {
           currentTime: now,
         );
 
-        // User equips bands in Armory
+        // User equips bands in the Depot
         final modifiedProfile = baseProfile.copyWith(
           availableEquipment: {Equipment.bodyweight, Equipment.bands},
         );

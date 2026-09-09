@@ -5,6 +5,8 @@ import 'package:sbee/sbee.dart';
 
 import '../../../engine/engine.dart';
 import '../../armory/providers/user_profile_provider.dart';
+import '../../outpost/services/streak_service.dart';
+import '../../sanctuary/services/macrocycle_service.dart';
 import '../services/workout_preview_service.dart';
 
 /// Decision output of the Kenneth Miller autoregulation evaluation.
@@ -423,9 +425,15 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       );
       await sessionRepo.saveSession(completedSession);
 
-      // Invalidate preview cache and active session probe
+      // Invalidate preview cache, active session probe, and the Outpost
+      // dashboard's streak/weekly-stats (a completed session just changed
+      // both, and neither provider would otherwise ever refresh since
+      // OutpostScreen stays alive for the app's lifetime inside the
+      // IndexedStack shell).
       _ref.read(workoutPreviewProvider.notifier).invalidate();
       _ref.invalidate(activeSessionResumeProvider);
+      _ref.invalidate(currentStreakProvider);
+      _ref.invalidate(macrocycleProvider);
 
       state = state.copyWith(
         session: completedSession,

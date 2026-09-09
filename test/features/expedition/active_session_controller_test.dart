@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/engine/engine.dart';
 import 'package:zenith/features/expedition/controllers/active_session_controller.dart';
+import 'package:zenith/features/outpost/services/streak_service.dart';
+import 'package:zenith/features/sanctuary/services/macrocycle_service.dart';
 
 void main() {
   group('ActiveSessionController Unit Tests', () {
@@ -208,6 +210,53 @@ void main() {
         expect(state.fsmState, equals(SessionState.completed));
         expect(state.session!.isCompleted, isTrue);
         expect(state.adaptations, isNotEmpty);
+      },
+    );
+
+    test(
+      'completeCoolDown invalidates the Outpost dashboard\'s streak and weekly-stats providers',
+      () async {
+        // Force both dashboard providers to resolve once, up front, so
+        // there's a "before" Future identity to compare against -- a
+        // FutureProvider's read().future returns a new Future instance
+        // each time the provider is invalidated and recomputed, which is
+        // exactly what should happen once a session completes (the Outpost
+        // screen would otherwise show stale numbers forever, since it never
+        // gets disposed inside the app shell's IndexedStack).
+        final streakBefore = container.read(currentStreakProvider.future);
+        final macrocycleBefore = container.read(macrocycleProvider.future);
+        await streakBefore;
+        await macrocycleBefore;
+
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final session = createTestSession(setCount: 1);
+
+        await controller.startSession(session);
+        controller.completeWarmUp();
+        controller.completeCurrentSet(actualReps: 10);
+        await controller.logRpe(8);
+        await controller.completeCoolDown();
+
+        final streakAfter = container.read(currentStreakProvider.future);
+        final macrocycleAfter = container.read(macrocycleProvider.future);
+
+        expect(
+          identical(streakBefore, streakAfter),
+          isFalse,
+          reason:
+              'currentStreakProvider must be invalidated on session completion',
+        );
+        expect(
+          identical(macrocycleBefore, macrocycleAfter),
+          isFalse,
+          reason: 'macrocycleProvider must be invalidated on session completion',
+        );
+
+        // Both must still resolve cleanly after invalidation.
+        await streakAfter;
+        await macrocycleAfter;
       },
     );
 

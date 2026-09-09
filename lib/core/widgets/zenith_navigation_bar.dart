@@ -56,7 +56,7 @@ class ZenithNavigationBar extends StatelessWidget {
     ZenithNavigationTabItem(
       indexLabel: '04',
       title: 'SANCTUARY',
-      glyph: '⛊', // ⛊ shield
+      glyph: '◐', // ◐ half-shaded circle (moon/rest motif)
     ),
   ];
 

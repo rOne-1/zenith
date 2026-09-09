@@ -96,11 +96,12 @@ class _StreakCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final hasError = streakAsync.hasError;
     final streak = streakAsync.valueOrNull ?? 0;
 
     return PixelCard(
       backgroundColor: colors.surfaceDark,
-      borderColor: colors.amberAccent,
+      borderColor: hasError ? colors.signalRed : colors.amberAccent,
       bevelColor: colors.borderMuted,
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
       child: Row(
@@ -122,31 +123,43 @@ class _StreakCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4.0),
                 Text(
-                  streak == 1 ? 'CONSECUTIVE DAY' : 'CONSECUTIVE DAYS',
+                  hasError
+                      ? 'UNAVAILABLE'
+                      : (streak == 1 ? 'CONSECUTIVE DAY' : 'CONSECUTIVE DAYS'),
                   style: TextStyle(
                     fontFamily: 'Silkscreen',
                     fontFamilyFallback: const ['monospace'],
                     fontSize: 9.0,
-                    color: colors.textMuted,
+                    color: hasError ? colors.signalRed : colors.textMuted,
                   ),
                 ),
               ],
             ),
           ),
-          streakAsync.isLoading
-              ? const SizedBox(
-                  width: 32.0,
-                  height: 32.0,
-                  child: PixelLoadingIndicator(width: 32.0, height: 8.0),
-                )
-              : Text(
-                  '$streak',
-                  style: pixelHudNumeral(
-                    fontSize: 36.0,
-                    fontWeight: FontWeight.w900,
-                    color: colors.amberAccent,
-                  ),
-                ),
+          if (streakAsync.isLoading)
+            const SizedBox(
+              width: 32.0,
+              height: 32.0,
+              child: PixelLoadingIndicator(width: 32.0, height: 8.0),
+            )
+          else if (hasError)
+            Text(
+              '--',
+              style: pixelHudNumeral(
+                fontSize: 36.0,
+                fontWeight: FontWeight.w900,
+                color: colors.signalRed,
+              ),
+            )
+          else
+            Text(
+              '$streak',
+              style: pixelHudNumeral(
+                fontSize: 36.0,
+                fontWeight: FontWeight.w900,
+                color: colors.amberAccent,
+              ),
+            ),
         ],
       ),
     );
@@ -294,6 +307,8 @@ class _WeeklyStatsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = macrocycleAsync.valueOrNull;
+    final isLoading = macrocycleAsync.isLoading;
+    final hasError = macrocycleAsync.hasError;
 
     return Row(
       children: [
@@ -301,6 +316,8 @@ class _WeeklyStatsRow extends StatelessWidget {
           child: _StatChip(
             label: 'SESSIONS',
             value: '${state?.completedSessionsInWeek ?? 0}',
+            isLoading: isLoading,
+            hasError: hasError,
           ),
         ),
         const SizedBox(width: 10.0),
@@ -308,6 +325,8 @@ class _WeeklyStatsRow extends StatelessWidget {
           child: _StatChip(
             label: 'SETS',
             value: '${state?.completedSetsInWeek ?? 0}',
+            isLoading: isLoading,
+            hasError: hasError,
           ),
         ),
         const SizedBox(width: 10.0),
@@ -315,6 +334,8 @@ class _WeeklyStatsRow extends StatelessWidget {
           child: _StatChip(
             label: 'TONNAGE',
             value: '${state?.totalTonnageInWeek ?? 0}',
+            isLoading: isLoading,
+            hasError: hasError,
           ),
         ),
       ],
@@ -325,28 +346,41 @@ class _WeeklyStatsRow extends StatelessWidget {
 class _StatChip extends StatelessWidget {
   final String label;
   final String value;
+  final bool isLoading;
+  final bool hasError;
 
-  const _StatChip({required this.label, required this.value});
+  const _StatChip({
+    required this.label,
+    required this.value,
+    this.isLoading = false,
+    this.hasError = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    // A real "0" is only ever shown once the query has actually resolved --
+    // while loading or on error, show a placeholder instead so an empty
+    // week is never visually indistinguishable from data that hasn't
+    // loaded yet or failed to load.
+    final displayValue = hasError ? '--' : (isLoading ? '···' : value);
+    final valueColor = hasError ? colors.signalRed : colors.amberAccent;
 
     return PixelCard(
       backgroundColor: colors.surfaceDark,
-      borderColor: colors.borderMuted,
+      borderColor: hasError ? colors.signalRed : colors.borderMuted,
       bevelColor: colors.borderMuted,
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
       child: Column(
         children: [
           Text(
-            value,
+            displayValue,
             style: TextStyle(
               fontFamily: 'Silkscreen',
               fontFamilyFallback: const ['monospace'],
               fontSize: 16.0,
               fontWeight: FontWeight.w900,
-              color: colors.amberAccent,
+              color: valueColor,
             ),
           ),
           const SizedBox(height: 4.0),
