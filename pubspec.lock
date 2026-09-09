@@ -501,7 +501,7 @@ packages:
       path: "../SBEE"
       relative: true
     source: path
-    version: "0.6.0"
+    version: "0.7.0"
   share_plus:
     dependency: transitive
     description:
