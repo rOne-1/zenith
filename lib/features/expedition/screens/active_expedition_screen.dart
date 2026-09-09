@@ -152,10 +152,14 @@ class ActiveExpeditionScreen extends ConsumerWidget {
                     variant: PixelButtonVariant.secondary,
                     padding: const EdgeInsets.all(8.0),
                     onPressed: () => _handleAbort(context, ref),
-                    child: Icon(
-                      Icons.close,
-                      color: colors.signalRed,
-                      size: 18.0,
+                    child: Text(
+                      '✕',
+                      style: TextStyle(
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
+                        fontSize: 16.0,
+                        color: colors.signalRed,
+                      ),
                     ),
                   ),
                 ],

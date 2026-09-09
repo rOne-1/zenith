@@ -9,12 +9,17 @@ import 'stepped_pixel_border.dart';
 class ZenithNavigationTabItem {
   final String indexLabel;
   final String title;
-  final IconData icon;
+
+  /// A bespoke pixel glyph character (rendered in the display font), not a
+  /// Material [IconData] -- keeps the nav bar's iconography as hand-picked
+  /// as its borders and typography instead of falling back to a stock icon
+  /// font glyph.
+  final String glyph;
 
   const ZenithNavigationTabItem({
     required this.indexLabel,
     required this.title,
-    required this.icon,
+    required this.glyph,
   });
 }
 
@@ -36,22 +41,22 @@ class ZenithNavigationBar extends StatelessWidget {
     ZenithNavigationTabItem(
       indexLabel: '01',
       title: 'EXPEDITION',
-      icon: Icons.explore_outlined,
+      glyph: '◉', // ◉ fisheye
     ),
     ZenithNavigationTabItem(
       indexLabel: '02',
       title: 'GRIMOIRE',
-      icon: Icons.map_outlined,
+      glyph: '◈', // ◈ diamond-in-diamond
     ),
     ZenithNavigationTabItem(
       indexLabel: '03',
       title: 'ARMORY',
-      icon: Icons.fitness_center_outlined,
+      glyph: '▣', // ▣ square-in-square
     ),
     ZenithNavigationTabItem(
       indexLabel: '04',
       title: 'SANCTUARY',
-      icon: Icons.nightlight_round_outlined,
+      glyph: '⛊', // ⛊ shield
     ),
   ];
 
@@ -171,10 +176,14 @@ class _TicketTabItemState extends State<_TicketTabItem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    item.icon,
-                    size: 16.0,
-                    color: isSelected ? activeTextColor : inactiveTextColor,
+                  Text(
+                    item.glyph,
+                    style: TextStyle(
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
+                      fontSize: 15.0,
+                      color: isSelected ? activeTextColor : inactiveTextColor,
+                    ),
                   ),
                   const SizedBox(width: 4.0),
                   Text(

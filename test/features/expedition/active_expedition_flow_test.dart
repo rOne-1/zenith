@@ -196,8 +196,8 @@ void main() {
       await tester.pumpWidget(createTestWidget(container: container));
       await tester.pump();
 
-      // Tap close/abort icon in AppBar
-      await tester.tap(find.byIcon(Icons.close));
+      // Tap close/abort button in the header
+      await tester.tap(find.text('✕'));
       await tester.pumpAndSettle();
 
       // Abort Dialog displayed
@@ -216,7 +216,7 @@ void main() {
       );
 
       // Tap close again and confirm ABORT
-      await tester.tap(find.byIcon(Icons.close));
+      await tester.tap(find.text('✕'));
       await tester.pumpAndSettle();
 
       final abortDialogButton = find.descendant(

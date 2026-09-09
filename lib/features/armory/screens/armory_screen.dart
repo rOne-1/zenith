@@ -60,10 +60,14 @@ class ArmoryScreen extends ConsumerWidget {
                             Navigator.pop(context);
                           }
                         },
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: colors.amberAccent,
-                          size: 18.0,
+                        child: Text(
+                          '←',
+                          style: TextStyle(
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
+                            fontSize: 18.0,
+                            color: colors.amberAccent,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 10.0),
