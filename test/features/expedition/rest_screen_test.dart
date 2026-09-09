@@ -124,8 +124,15 @@ void main() {
       expect(find.text('HOW HARD DID THAT FEEL?'), findsOneWidget);
       expect(find.text('TARGET: 8 RPE'), findsOneWidget);
 
-      // Next station ticket
-      expect(find.text('NEXT STATION'), findsOneWidget);
+      // Next station ticket (secondary — collapsed by default, summary visible)
+      final nextStationFinder = find.textContaining('NEXT: ');
+      expect(nextStationFinder, findsOneWidget);
+      expect(find.textContaining('Prescribed:'), findsNothing);
+
+      // Tap to expand — full detail becomes visible, nothing lost
+      await tester.tap(nextStationFinder);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Prescribed:'), findsOneWidget);
 
       // Action footer
       expect(find.text('SKIP REST & START NEXT SET'), findsOneWidget);

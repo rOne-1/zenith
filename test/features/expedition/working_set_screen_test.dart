@@ -101,7 +101,14 @@ void main() {
       // Cues card verification
       expect(find.text('FORM CUES'), findsOneWidget);
 
-      // Kenneth Miller badges verification (LOAD, POS, ROM, ELEV, TEMPO)
+      // Kenneth Miller variables card is secondary — collapsed by default
+      final variablesHeaderFinder = find.text("TODAY'S DIFFICULTY DIALS");
+      expect(variablesHeaderFinder, findsOneWidget);
+      expect(find.text('LOAD: '), findsNothing);
+
+      // Tap to expand — full detail becomes visible, nothing lost
+      await tester.tap(variablesHeaderFinder);
+      await tester.pumpAndSettle();
       expect(find.text('LOAD: '), findsOneWidget);
       expect(find.text('POS: '), findsOneWidget);
       expect(find.text('ROM: '), findsOneWidget);

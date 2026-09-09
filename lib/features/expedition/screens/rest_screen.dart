@@ -401,42 +401,16 @@ class RestScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 18.0),
 
-                    // "Next Up" Station Preview Ticket
+                    // "Next Up" Station Preview Ticket (secondary — collapsed by default)
                     if (nextExercise != null && nextMeta != null)
-                      PixelCard(
-                        backgroundColor: colors.surfaceDark,
-                        borderColor: colors.borderMuted,
-                        padding: const EdgeInsets.all(14.0),
+                      CollapsibleCard(
+                        icon: Icons.arrow_forward,
+                        title: 'NEXT: ${nextExercise.name.toUpperCase()}',
+                        subtitle: nextLineTheme?.lineNameEn,
+                        accentColor: nextLineTheme?.color,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'NEXT STATION',
-                                  style: TextStyle(
-                                    fontFamily: 'Courier',
-                                    fontSize: 9.0,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.8,
-                                    color: colors.textMuted,
-                                  ),
-                                ),
-                                if (nextLineTheme != null)
-                                  Text(
-                                    nextLineTheme.lineNameEn,
-                                    style: TextStyle(
-                                      fontFamily: 'Courier',
-                                      fontSize: 9.0,
-                                      fontWeight: FontWeight.w700,
-                                      color: nextLineTheme.color,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 6.0),
                             Text(
                               '${nextMeta.stationCode} // ${nextExercise.name.toUpperCase()}',
                               style: TextStyle(

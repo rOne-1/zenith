@@ -293,48 +293,23 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                     ),
                     const SizedBox(height: 16.0),
 
-                    // Kenneth Miller Variables Tag Bar
-                    PixelCard(
-                      backgroundColor: colors.surfaceDark,
-                      borderColor: colors.borderMuted,
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    // Kenneth Miller Variables Tag Bar (secondary — collapsed by default)
+                    CollapsibleCard(
+                      icon: Icons.tune,
+                      title: "TODAY'S DIFFICULTY DIALS",
+                      subtitle: 'KENNETH MILLER VARIABLES',
+                      child: Wrap(
+                        spacing: 8.0,
+                        runSpacing: 6.0,
                         children: [
-                          Text(
-                            "TODAY'S DIFFICULTY DIALS",
-                            style: TextStyle(
-                              fontFamily: 'Courier',
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 0.8,
-                              color: colors.amberAccent,
-                            ),
-                          ),
-                          Text(
-                            'KENNETH MILLER VARIABLES',
-                            style: TextStyle(
-                              fontFamily: 'Courier',
-                              fontSize: 8.0,
-                              letterSpacing: 0.6,
-                              color: colors.textMuted,
-                            ),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Wrap(
-                            spacing: 8.0,
-                            runSpacing: 6.0,
-                            children: [
-                              _VariableBadge(label: 'LOAD', value: '${set.variables.load}/5'),
-                              _VariableBadge(label: 'POS', value: '${set.variables.bodyPosition}/5'),
-                              _VariableBadge(label: 'ROM', value: '${set.variables.rom}/5'),
-                              _VariableBadge(label: 'ELEV', value: '${set.variables.height}/5'),
-                              _VariableBadge(
-                                label: 'TEMPO',
-                                value: set.variables.tempo == 2 ? '6s (ADV)' : '4s',
-                                isHighlight: set.variables.tempo == 2,
-                              ),
-                            ],
+                          _VariableBadge(label: 'LOAD', value: '${set.variables.load}/5'),
+                          _VariableBadge(label: 'POS', value: '${set.variables.bodyPosition}/5'),
+                          _VariableBadge(label: 'ROM', value: '${set.variables.rom}/5'),
+                          _VariableBadge(label: 'ELEV', value: '${set.variables.height}/5'),
+                          _VariableBadge(
+                            label: 'TEMPO',
+                            value: set.variables.tempo == 2 ? '6s (ADV)' : '4s',
+                            isHighlight: set.variables.tempo == 2,
                           ),
                         ],
                       ),

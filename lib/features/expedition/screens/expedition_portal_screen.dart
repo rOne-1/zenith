@@ -553,7 +553,7 @@ class _ExpeditionPortalScreenState
                         ),
                         const SizedBox(height: 14.0),
 
-                        // Postural / Recovery Coaching Cards
+                        // Postural / Recovery Coaching Cards (secondary — collapsed by default)
                         if (notices.isNotEmpty)
                           ...notices.map((notice) {
                             final Color noticeColor =
@@ -565,47 +565,18 @@ class _ExpeditionPortalScreenState
 
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 12.0),
-                              child: PixelCard(
-                                backgroundColor: colors.surfaceDark,
-                                borderColor: noticeColor,
-                                bevelColor: colors.borderMuted,
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.info_outline,
-                                          color: noticeColor,
-                                          size: 16.0,
-                                        ),
-                                        const SizedBox(width: 6.0),
-                                        Expanded(
-                                          child: Text(
-                                            notice.title,
-                                            style: TextStyle(
-                                              fontFamily: 'Courier',
-                                              fontSize: 11.0,
-                                              fontWeight: FontWeight.w900,
-                                              letterSpacing: 1.0,
-                                              color: noticeColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 6.0),
-                                    Text(
-                                      notice.message,
-                                      style: TextStyle(
-                                        fontFamily: 'Courier',
-                                        fontSize: 11.0,
-                                        height: 1.4,
-                                        color: colors.textPrimary,
-                                      ),
-                                    ),
-                                  ],
+                              child: CollapsibleCard(
+                                icon: Icons.info_outline,
+                                title: notice.title,
+                                accentColor: noticeColor,
+                                child: Text(
+                                  notice.message,
+                                  style: TextStyle(
+                                    fontFamily: 'Courier',
+                                    fontSize: 11.0,
+                                    height: 1.4,
+                                    color: colors.textPrimary,
+                                  ),
                                 ),
                               ),
                             );
