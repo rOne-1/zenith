@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 import 'package:sbee/sbee.dart';
 
 import '../../../core/theme/theme.dart';
@@ -59,233 +60,236 @@ class StationInspectorSheet extends StatelessWidget {
       statusColor = colors.amberGlow;
     }
 
-    return Container(
-      decoration: ShapeDecoration(
-        color: colors.surfaceDark,
-        shape: SteppedPixelBorder(
-          side: BorderSide(
-            color: colors.borderBright,
-            width: metrics.borderWidth,
+    return DragToDismissSheet(
+      onDismiss: () => Navigator.of(context).pop(),
+      handleColor: colors.borderBright,
+      child: Container(
+        decoration: ShapeDecoration(
+          color: colors.surfaceDark,
+          shape: SteppedPixelBorder(
+            side: BorderSide(
+              color: colors.borderBright,
+              width: metrics.borderWidth,
+            ),
+            stepSize: metrics.cornerStepSize,
           ),
-          stepSize: metrics.cornerStepSize,
         ),
-      ),
-      margin: const EdgeInsets.only(top: 40.0),
-      child: SafeArea(
-        top: false,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Ticket Top Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 3.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: colors.backgroundVoid,
-                          border: Border.all(
-                            color: colors.amberAccent,
-                            width: 1.0,
+        child: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Ticket Top Header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0,
+                            vertical: 3.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: colors.backgroundVoid,
+                            border: Border.all(
+                              color: colors.amberAccent,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Text(
+                            meta.stationCode,
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w900,
+                              color: colors.amberAccent,
+                            ),
                           ),
                         ),
-                        child: Text(
-                          meta.stationCode,
+                        const SizedBox(width: 8.0),
+                        Text(
+                          'STATION INSPECTION PASS',
                           style: TextStyle(
                             fontFamily: 'Courier',
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w900,
-                            color: colors.amberAccent,
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.0,
+                            color: colors.textMuted,
                           ),
                         ),
+                      ],
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 3.0,
                       ),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        'STATION INSPECTION PASS',
+                      decoration: BoxDecoration(
+                        color: colors.backgroundVoid,
+                        border: Border.all(color: statusColor, width: 1.0),
+                      ),
+                      child: Text(
+                        statusBadgeText,
                         style: TextStyle(
                           fontFamily: 'Courier',
-                          fontSize: 10.0,
+                          fontSize: 9.0,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: 1.0,
-                          color: colors.textMuted,
+                          color: statusColor,
                         ),
                       ),
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 3.0,
                     ),
-                    decoration: BoxDecoration(
-                      color: colors.backgroundVoid,
-                      border: Border.all(color: statusColor, width: 1.0),
-                    ),
-                    child: Text(
-                      statusBadgeText,
-                      style: TextStyle(
-                        fontFamily: 'Courier',
-                        fontSize: 9.0,
-                        fontWeight: FontWeight.bold,
-                        color: statusColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16.0),
-
-              // Exercise Title
-              Text(
-                exercise.name,
-                style: TextStyle(
-                  fontFamily: 'Courier',
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w900,
-                  color: colors.textPrimary,
+                  ],
                 ),
-              ),
-              const SizedBox(height: 12.0),
+                const SizedBox(height: 16.0),
 
-              // Route & Equipment Pills
-              Wrap(
-                spacing: 8.0,
-                runSpacing: 6.0,
-                children: [
-                  _PillBadge(
-                    label:
-                        'TIER ${exercise.difficultyTier} // ${exercise.movementPattern.name.toUpperCase()}',
-                    color: colors.borderBright,
-                    textColor: colors.textPrimary,
+                // Exercise Title
+                Text(
+                  exercise.name,
+                  style: TextStyle(
+                    fontFamily: 'Courier',
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w900,
+                    color: colors.textPrimary,
                   ),
-                  _PillBadge(
-                    label: 'GEAR: $equipmentNames',
-                    color: colors.borderMuted,
-                    textColor: colors.textMuted,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20.0),
-              const Divider(height: 1.0, thickness: 1.0),
-              const SizedBox(height: 16.0),
-
-              // Biomechanical Form Cues Terminal
-              Text(
-                'BIOMECHANICAL FORM SPECIFICATIONS',
-                style: TextStyle(
-                  fontFamily: 'Courier',
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                  color: colors.amberAccent,
                 ),
-              ),
-              const SizedBox(height: 8.0),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  color: colors.backgroundVoid,
-                  border: Border.all(color: colors.borderMuted, width: 1.0),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 12.0),
+
+                // Route & Equipment Pills
+                Wrap(
+                  spacing: 8.0,
+                  runSpacing: 6.0,
                   children: [
-                    for (int i = 0; i < exercise.defaultCues.length; i++)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 6.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '> ',
-                              style: TextStyle(
-                                fontFamily: 'Courier',
-                                fontSize: 11.0,
-                                fontWeight: FontWeight.bold,
-                                color: colors.amberAccent,
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                exercise.defaultCues[i],
+                    _PillBadge(
+                      label:
+                          'TIER ${exercise.difficultyTier} // ${exercise.movementPattern.name.toUpperCase()}',
+                      color: colors.borderBright,
+                      textColor: colors.textPrimary,
+                    ),
+                    _PillBadge(
+                      label: 'GEAR: $equipmentNames',
+                      color: colors.borderMuted,
+                      textColor: colors.textMuted,
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20.0),
+                const Divider(height: 1.0, thickness: 1.0),
+                const SizedBox(height: 16.0),
+
+                // Biomechanical Form Cues Terminal
+                Text(
+                  'BIOMECHANICAL FORM SPECIFICATIONS',
+                  style: TextStyle(
+                    fontFamily: 'Courier',
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                    color: colors.amberAccent,
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12.0),
+                  decoration: BoxDecoration(
+                    color: colors.backgroundVoid,
+                    border: Border.all(color: colors.borderMuted, width: 1.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (int i = 0; i < exercise.defaultCues.length; i++)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 6.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '> ',
                                 style: TextStyle(
                                   fontFamily: 'Courier',
                                   fontSize: 11.0,
-                                  height: 1.4,
-                                  color: colors.textPrimary,
+                                  fontWeight: FontWeight.bold,
+                                  color: colors.amberAccent,
                                 ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                child: Text(
+                                  exercise.defaultCues[i],
+                                  style: TextStyle(
+                                    fontFamily: 'Courier',
+                                    fontSize: 11.0,
+                                    height: 1.4,
+                                    color: colors.textPrimary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
-              const SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
 
-              // Kenneth Miller 5-Variable Segmented Gauges
-              Text(
-                'KENNETH MILLER PROGRESSION GAUGES',
-                style: TextStyle(
-                  fontFamily: 'Courier',
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                  color: colors.amberAccent,
+                // Kenneth Miller 5-Variable Segmented Gauges
+                Text(
+                  'KENNETH MILLER PROGRESSION GAUGES',
+                  style: TextStyle(
+                    fontFamily: 'Courier',
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                    color: colors.amberAccent,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10.0),
-              _SegmentedGaugeRow(
-                label: 'LOAD VECTOR',
-                score: meta.defaultLoadScore,
-                activeColor: colors.amberAccent,
-                inactiveColor: colors.backgroundVoid,
-              ),
-              _SegmentedGaugeRow(
-                label: 'BODY POSITION',
-                score: meta.defaultPositionScore,
-                activeColor: colors.amberAccent,
-                inactiveColor: colors.backgroundVoid,
-              ),
-              _SegmentedGaugeRow(
-                label: 'RANGE OF MOTION',
-                score: meta.defaultRomScore,
-                activeColor: colors.amberAccent,
-                inactiveColor: colors.backgroundVoid,
-              ),
-              _SegmentedGaugeRow(
-                label: 'LIMB ELEVATION',
-                score: meta.defaultElevationScore,
-                activeColor: colors.amberAccent,
-                inactiveColor: colors.backgroundVoid,
-              ),
-              _SegmentedGaugeRow(
-                label: 'TEMPO / TIME-UNDER-TENSION',
-                score: meta.defaultTempoScore,
-                activeColor: colors.amberAccent,
-                inactiveColor: colors.backgroundVoid,
-              ),
+                const SizedBox(height: 10.0),
+                _SegmentedGaugeRow(
+                  label: 'LOAD VECTOR',
+                  score: meta.defaultLoadScore,
+                  activeColor: colors.amberAccent,
+                  inactiveColor: colors.backgroundVoid,
+                ),
+                _SegmentedGaugeRow(
+                  label: 'BODY POSITION',
+                  score: meta.defaultPositionScore,
+                  activeColor: colors.amberAccent,
+                  inactiveColor: colors.backgroundVoid,
+                ),
+                _SegmentedGaugeRow(
+                  label: 'RANGE OF MOTION',
+                  score: meta.defaultRomScore,
+                  activeColor: colors.amberAccent,
+                  inactiveColor: colors.backgroundVoid,
+                ),
+                _SegmentedGaugeRow(
+                  label: 'LIMB ELEVATION',
+                  score: meta.defaultElevationScore,
+                  activeColor: colors.amberAccent,
+                  inactiveColor: colors.backgroundVoid,
+                ),
+                _SegmentedGaugeRow(
+                  label: 'TEMPO / TIME-UNDER-TENSION',
+                  score: meta.defaultTempoScore,
+                  activeColor: colors.amberAccent,
+                  inactiveColor: colors.backgroundVoid,
+                ),
 
-              const SizedBox(height: 24.0),
+                const SizedBox(height: 24.0),
 
-              // Close Button
-              PixelButton(
-                label: 'CLOSE INSPECTOR',
-                variant: PixelButtonVariant.secondary,
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
+                // Close Button
+                PixelButton(
+                  label: 'CLOSE INSPECTOR',
+                  variant: PixelButtonVariant.secondary,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

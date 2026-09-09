@@ -19,8 +19,8 @@ class ActiveExpeditionScreen extends ConsumerWidget {
 
   Future<void> _handleAbort(BuildContext context, WidgetRef ref) async {
     final colors = context.colors;
-    final confirm = await showDialog<bool>(
-      context: context,
+    final confirm = await ZenithDialog.show<bool>(
+      context,
       builder: (ctx) => Dialog(
         backgroundColor: Colors.transparent,
         child: PixelCard(

@@ -156,8 +156,8 @@ class WarningTranslator {
   ///
   /// Returns `true` if the operator chooses to proceed anyway, or `false` if cancelled.
   static Future<bool> showSameDayAdvisoryDialog(BuildContext context) async {
-    final result = await showDialog<bool>(
-      context: context,
+    final result = await ZenithDialog.show<bool>(
+      context,
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return const SameDayAdvisoryDialog();

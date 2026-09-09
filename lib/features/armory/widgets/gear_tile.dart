@@ -4,6 +4,7 @@ import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 import 'package:sbee/sbee.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/pixel_toast.dart';
 import '../../../core/widgets/stepped_pixel_border.dart';
 
 /// Presentation metadata for a piece of equipment.
@@ -137,15 +138,8 @@ class _GearTileState extends State<GearTile>
   void _triggerAction() {
     if (widget.isBodyweight) {
       HapticFeedback.lightImpact();
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Bodyweight is permanently anchored to guarantee calisthenic safety paths.',
-            style: TextStyle(fontFamily: 'Courier', fontSize: 12.0),
-          ),
-          duration: Duration(seconds: 2),
-        ),
+      PixelToastHost.of(context)?.show(
+        'Bodyweight is permanently anchored to guarantee calisthenic safety paths.',
       );
       return;
     }

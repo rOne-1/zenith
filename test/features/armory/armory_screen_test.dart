@@ -46,10 +46,9 @@ void main() {
         findsOneWidget,
       );
 
-      // 4. Tap Bodyweight -> must remain anchored and show snackbar explanation
+      // 4. Tap Bodyweight -> must remain anchored and show a themed toast explanation
       await tester.tap(find.text('Bodyweight'));
       await tester.pump();
-      expect(find.byType(SnackBar), findsOneWidget);
       expect(find.textContaining('permanently anchored'), findsOneWidget);
       expect(find.text('ANCHORED ●'), findsOneWidget);
 
