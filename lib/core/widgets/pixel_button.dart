@@ -33,6 +33,14 @@ class PixelButton extends StatefulWidget {
   final double? bevelDepth;
   final double? cornerStepSize;
 
+  /// Accessible name announced by screen readers. Defaults to [label] when
+  /// omitted, since a text-label button's visible text already doubles as
+  /// its accessible name -- but an icon-only button (built via [child],
+  /// with no [label]) has no text for [Semantics] to fall back on, so
+  /// callers using [child] alone must supply this explicitly or the button
+  /// is announced with no name at all.
+  final String? semanticLabel;
+
   const PixelButton({
     super.key,
     this.label,
@@ -47,6 +55,7 @@ class PixelButton extends StatefulWidget {
     this.buttonDropOffset,
     this.bevelDepth,
     this.cornerStepSize,
+    this.semanticLabel,
   }) : assert(
          label != null || child != null,
          'Either label or child must be provided to PixelButton',
@@ -163,7 +172,7 @@ class _PixelButtonState extends State<PixelButton> {
     return Semantics(
       button: true,
       enabled: _isInteractive,
-      label: widget.label,
+      label: widget.semanticLabel ?? widget.label,
       child: GestureDetector(
         onTapDown: _handleTapDown,
         onTapUp: _handleTapUp,

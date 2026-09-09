@@ -19,61 +19,54 @@ class ActiveExpeditionScreen extends ConsumerWidget {
 
   Future<void> _handleAbort(BuildContext context, WidgetRef ref) async {
     final colors = context.colors;
-    final confirm = await ZenithDialog.show<bool>(
+    final confirm = await ZenithDialog.showCard<bool>(
       context,
-      builder: (ctx) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: PixelCard(
-          backgroundColor: colors.surfaceDark,
-          borderColor: colors.signalRed,
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+      borderColor: colors.signalRed,
+      builder: (ctx) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'ABORT EXPEDITION',
+            style: TextStyle(
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
+              fontSize: 14.0,
+              fontWeight: FontWeight.w900,
+              color: colors.signalRed,
+            ),
+          ),
+          const SizedBox(height: 12.0),
+          Text(
+            'Are you sure you want to abort? All in-progress sets will be discarded from persistence.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
+              fontSize: 12.0,
+              color: colors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 20.0),
+          Row(
             children: [
-              Text(
-                'ABORT EXPEDITION',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w900,
-                  color: colors.signalRed,
+              Expanded(
+                child: PixelButton(
+                  label: 'CONTINUE',
+                  variant: PixelButtonVariant.secondary,
+                  onPressed: () => Navigator.of(ctx).pop(false),
                 ),
               ),
-              const SizedBox(height: 12.0),
-              Text(
-                'Are you sure you want to abort? All in-progress sets will be discarded from persistence.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 12.0,
-                  color: colors.textPrimary,
+              const SizedBox(width: 12.0),
+              Expanded(
+                child: PixelButton(
+                  label: 'ABORT',
+                  variant: PixelButtonVariant.danger,
+                  onPressed: () => Navigator.of(ctx).pop(true),
                 ),
-              ),
-              const SizedBox(height: 20.0),
-              Row(
-                children: [
-                  Expanded(
-                    child: PixelButton(
-                      label: 'CONTINUE',
-                      variant: PixelButtonVariant.secondary,
-                      onPressed: () => Navigator.of(ctx).pop(false),
-                    ),
-                  ),
-                  const SizedBox(width: 12.0),
-                  Expanded(
-                    child: PixelButton(
-                      label: 'ABORT',
-                      variant: PixelButtonVariant.danger,
-                      onPressed: () => Navigator.of(ctx).pop(true),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
 
@@ -151,6 +144,7 @@ class ActiveExpeditionScreen extends ConsumerWidget {
                   PixelButton(
                     variant: PixelButtonVariant.secondary,
                     padding: const EdgeInsets.all(8.0),
+                    semanticLabel: 'Abort expedition',
                     onPressed: () => _handleAbort(context, ref),
                     child: Text(
                       '✕',

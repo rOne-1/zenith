@@ -6,6 +6,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/miller_variable_gauge.dart';
 import '../../../core/widgets/pixel_button.dart';
 import '../../../core/widgets/stepped_pixel_border.dart';
+import '../../../core/widgets/zenith_sheet.dart';
 import '../../../engine/expanded_catalog.dart';
 
 /// Japanese railway inspection pass / station detail sheet for an [Exercise].
@@ -25,10 +26,8 @@ class StationInspectorSheet extends StatelessWidget {
     required Exercise exercise,
     bool isIntermediateUser = false,
   }) {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+    return ZenithSheet.show(
+      context,
       builder: (ctx) => StationInspectorSheet(
         exercise: exercise,
         isIntermediateUser: isIntermediateUser,

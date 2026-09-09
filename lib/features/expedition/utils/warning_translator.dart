@@ -156,9 +156,11 @@ class WarningTranslator {
   ///
   /// Returns `true` if the operator chooses to proceed anyway, or `false` if cancelled.
   static Future<bool> showSameDayAdvisoryDialog(BuildContext context) async {
-    final result = await ZenithDialog.show<bool>(
+    final colors = context.colors;
+    final result = await ZenithDialog.showCard<bool>(
       context,
       barrierDismissible: false,
+      borderColor: colors.amberAccent,
       builder: (BuildContext dialogContext) {
         return const SameDayAdvisoryDialog();
       },
@@ -167,7 +169,13 @@ class WarningTranslator {
   }
 }
 
-/// Retro 16-bit dialog container displaying the same-day expedition advisory.
+/// Retro 16-bit content for the same-day expedition advisory dialog.
+///
+/// Rendered inside [ZenithDialog.showCard]'s own `Dialog`/`PixelCard`
+/// chrome (see [WarningTranslator.showSameDayAdvisoryDialog]) rather than
+/// wrapping itself in a duplicate of that chrome, so this and every other
+/// confirmation dialog in the app share one implementation of the
+/// dialog-container styling (EP-3).
 class SameDayAdvisoryDialog extends StatelessWidget {
   const SameDayAdvisoryDialog({super.key});
 
@@ -175,87 +183,77 @@ class SameDayAdvisoryDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
-      child: PixelCard(
-        backgroundColor: colors.surfaceDark,
-        borderColor: colors.amberAccent,
-        bevelColor: colors.borderMuted,
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Header
+        Row(
           children: [
-            // Header
-            Row(
-              children: [
-                Icon(
-                  Icons.info_outline,
+            Icon(
+              Icons.info_outline,
+              color: colors.amberAccent,
+              size: 20.0,
+            ),
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: Text(
+                WarningTranslator.sameDayAdvisoryTitle,
+                style: TextStyle(
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
                   color: colors.amberAccent,
-                  size: 20.0,
                 ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: Text(
-                    WarningTranslator.sameDayAdvisoryTitle,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.2,
-                      color: colors.amberAccent,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14.0),
-
-            // Divider ribbon
-            Container(
-              height: 2.0,
-              color: colors.borderMuted,
-            ),
-            const SizedBox(height: 14.0),
-
-            // Supportive Message
-            Text(
-              WarningTranslator.sameDayAdvisoryMessage,
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontFamilyFallback: const ['sans-serif'],
-                fontSize: 13.0,
-                height: 1.5,
-                color: colors.textPrimary,
               ),
-            ),
-            const SizedBox(height: 22.0),
-
-            // Action Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: PixelButton(
-                    label: 'CANCEL',
-                    variant: PixelButtonVariant.secondary,
-                    onPressed: () => Navigator.of(context).pop(false),
-                  ),
-                ),
-                const SizedBox(width: 12.0),
-                Expanded(
-                  child: PixelButton(
-                    label: 'PROCEED',
-                    variant: PixelButtonVariant.primary,
-                    onPressed: () => Navigator.of(context).pop(true),
-                  ),
-                ),
-              ],
             ),
           ],
         ),
-      ),
+        const SizedBox(height: 14.0),
+
+        // Divider ribbon
+        Container(
+          height: 2.0,
+          color: colors.borderMuted,
+        ),
+        const SizedBox(height: 14.0),
+
+        // Supportive Message
+        Text(
+          WarningTranslator.sameDayAdvisoryMessage,
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontFamilyFallback: const ['sans-serif'],
+            fontSize: 13.0,
+            height: 1.5,
+            color: colors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 22.0),
+
+        // Action Buttons
+        Row(
+          children: [
+            Expanded(
+              child: PixelButton(
+                label: 'CANCEL',
+                variant: PixelButtonVariant.secondary,
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Expanded(
+              child: PixelButton(
+                label: 'PROCEED',
+                variant: PixelButtonVariant.primary,
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

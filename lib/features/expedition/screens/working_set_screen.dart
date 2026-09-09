@@ -49,61 +49,54 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
 
   Future<void> _handleSkip(BuildContext context) async {
     final colors = context.colors;
-    final confirm = await ZenithDialog.show<bool>(
+    final confirm = await ZenithDialog.showCard<bool>(
       context,
-      builder: (ctx) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: PixelCard(
-          backgroundColor: colors.surfaceDark,
-          borderColor: colors.amberAccent,
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+      borderColor: colors.amberAccent,
+      builder: (ctx) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'SKIP SET',
+            style: TextStyle(
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
+              fontSize: 14.0,
+              fontWeight: FontWeight.w900,
+              color: colors.amberAccent,
+            ),
+          ),
+          const SizedBox(height: 12.0),
+          Text(
+            'Are you sure you want to skip this set? It will be logged with 0 reps.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
+              fontSize: 12.0,
+              color: colors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 20.0),
+          Row(
             children: [
-              Text(
-                'SKIP SET',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w900,
-                  color: colors.amberAccent,
+              Expanded(
+                child: PixelButton(
+                  label: 'CANCEL',
+                  variant: PixelButtonVariant.secondary,
+                  onPressed: () => Navigator.of(ctx).pop(false),
                 ),
               ),
-              const SizedBox(height: 12.0),
-              Text(
-                'Are you sure you want to skip this set? It will be logged with 0 reps.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 12.0,
-                  color: colors.textPrimary,
+              const SizedBox(width: 12.0),
+              Expanded(
+                child: PixelButton(
+                  label: 'SKIP',
+                  variant: PixelButtonVariant.danger,
+                  onPressed: () => Navigator.of(ctx).pop(true),
                 ),
-              ),
-              const SizedBox(height: 20.0),
-              Row(
-                children: [
-                  Expanded(
-                    child: PixelButton(
-                      label: 'CANCEL',
-                      variant: PixelButtonVariant.secondary,
-                      onPressed: () => Navigator.of(ctx).pop(false),
-                    ),
-                  ),
-                  const SizedBox(width: 12.0),
-                  Expanded(
-                    child: PixelButton(
-                      label: 'SKIP',
-                      variant: PixelButtonVariant.danger,
-                      onPressed: () => Navigator.of(ctx).pop(true),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
 

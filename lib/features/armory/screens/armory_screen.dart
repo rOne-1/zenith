@@ -55,6 +55,7 @@ class ArmoryScreen extends ConsumerWidget {
                       PixelButton(
                         variant: PixelButtonVariant.secondary,
                         padding: const EdgeInsets.all(8.0),
+                        semanticLabel: 'Back to Outpost',
                         onPressed: () {
                           if (Navigator.canPop(context)) {
                             Navigator.pop(context);

@@ -4,6 +4,7 @@ export 'pixel_button.dart';
 export 'pixel_card.dart';
 export 'pixel_toast.dart';
 export 'zenith_dialog.dart';
+export 'zenith_sheet.dart';
 export 'pixel_countdown_bar.dart';
 export 'pixel_loading_indicator.dart';
 export 'pixel_pulse_dot.dart';

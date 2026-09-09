@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
+import '../theme/theme.dart';
+import 'pixel_card.dart';
+
 /// Presents a dialog using the app's own [HouseSpring] motion instead of
 /// Flutter's default fade+scale dialog transition.
 ///
@@ -24,7 +27,17 @@ class ZenithDialog {
       barrierColor: Colors.black54,
       transitionDuration: HouseSpring.duration,
       pageBuilder: (dialogContext, animation, secondaryAnimation) {
-        return builder(dialogContext);
+        // showDialog's DialogRoute wraps content in a route-scoping
+        // Semantics node and a SafeArea; showGeneralDialog doesn't do
+        // either on its own, so both are added explicitly here -- without
+        // them a screen reader never announces entering a modal context,
+        // and content isn't protected from notch/home-indicator overlap.
+        return Semantics(
+          scopesRoute: true,
+          explicitChildNodes: true,
+          label: MaterialLocalizations.of(dialogContext).dialogLabel,
+          child: SafeArea(child: builder(dialogContext)),
+        );
       },
       transitionBuilder: (dialogContext, animation, secondaryAnimation, child) {
         final curved = CurvedAnimation(
@@ -39,6 +52,43 @@ class ZenithDialog {
           ),
         );
       },
+    );
+  }
+
+  /// Convenience wrapper for the app's most common dialog shape: a
+  /// transparent [Dialog] hosting a single [PixelCard].
+  ///
+  /// Every confirmation dialog in the app (abort, skip-set, same-day
+  /// advisory) was independently hand-rolling this exact
+  /// `Dialog(backgroundColor: Colors.transparent, child: PixelCard(...))`
+  /// wrapper around [show] -- copy-pasted at each call site rather than
+  /// shared, which had already let the sites drift slightly out of sync
+  /// (one added `insetPadding` the others lacked). Centralizing it here
+  /// means a future chrome tweak (padding, inset, corner treatment) only
+  /// needs to change in one place (EP-3).
+  static Future<T?> showCard<T>(
+    BuildContext context, {
+    required WidgetBuilder builder,
+    Color? borderColor,
+    bool barrierDismissible = true,
+  }) {
+    final colors = context.colors;
+    return show<T>(
+      context,
+      barrierDismissible: barrierDismissible,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: 20.0,
+          vertical: 24.0,
+        ),
+        child: PixelCard(
+          backgroundColor: colors.surfaceDark,
+          borderColor: borderColor ?? colors.borderBright,
+          padding: const EdgeInsets.all(20.0),
+          child: builder(dialogContext),
+        ),
+      ),
     );
   }
 }

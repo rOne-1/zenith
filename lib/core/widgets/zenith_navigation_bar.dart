@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
 import '../theme/theme.dart';
@@ -104,7 +103,7 @@ class ZenithNavigationBar extends StatelessWidget {
   }
 }
 
-class _TicketTabItem extends StatefulWidget {
+class _TicketTabItem extends StatelessWidget {
   final ZenithNavigationTabItem item;
   final bool isSelected;
   final VoidCallback onTap;
@@ -116,104 +115,81 @@ class _TicketTabItem extends StatefulWidget {
   });
 
   @override
-  State<_TicketTabItem> createState() => _TicketTabItemState();
-}
-
-class _TicketTabItemState extends State<_TicketTabItem> {
-  bool _isPressed = false;
-
-  void _handleTapDown(TapDownDetails details) {
-    HapticFeedback.selectionClick();
-    setState(() => _isPressed = true);
-  }
-
-  void _handleTapUp(TapUpDetails details) {
-    setState(() => _isPressed = false);
-    widget.onTap();
-  }
-
-  void _handleTapCancel() {
-    setState(() => _isPressed = false);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     final metrics = context.pixelMetrics;
-    final item = widget.item;
-    final isSelected = widget.isSelected;
 
     final activeBorderColor = colors.amberAccent;
     final activeTextColor = colors.amberAccent;
     final inactiveTextColor = colors.textMuted;
 
-    return GestureDetector(
+    // The press-and-spring-back interaction itself (isPressed tracking +
+    // GestureDetector + AnimatedScale on HouseSpring) used to be hand-rolled
+    // here, near-line-for-line duplicating PixelButton's own version --
+    // flutter_refined_kit already ships exactly this as PressableScale, just
+    // never adopted here. scaleAmount/pressDuration/behavior are passed
+    // explicitly to preserve this tab's original tactile feel exactly.
+    return PressableScale(
+      onTap: onTap,
+      hapticFeedback: true,
+      scaleAmount: 0.92,
+      pressDuration: const Duration(milliseconds: 60),
       behavior: HitTestBehavior.opaque,
-      onTapDown: _handleTapDown,
-      onTapUp: _handleTapUp,
-      onTapCancel: _handleTapCancel,
-      child: AnimatedScale(
-        scale: _isPressed ? 0.92 : 1.0,
-        duration: _isPressed
-            ? const Duration(milliseconds: 60)
-            : HouseSpring.duration,
-        curve: HouseSpring.curve,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 2.0),
-          decoration: ShapeDecoration(
-            color: isSelected ? colors.surfaceDark : Colors.transparent,
-            shape: SteppedPixelBorder(
-              side: BorderSide(
-                color: isSelected ? activeBorderColor : Colors.transparent,
-                width: 1.5,
-              ),
-              stepSize: metrics.cornerStepSize,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 2.0),
+        decoration: ShapeDecoration(
+          color: isSelected ? colors.surfaceDark : Colors.transparent,
+          shape: SteppedPixelBorder(
+            side: BorderSide(
+              color: isSelected ? activeBorderColor : Colors.transparent,
+              width: 1.5,
             ),
+            stepSize: metrics.cornerStepSize,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    item.glyph,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
-                      fontSize: 15.0,
-                      color: isSelected ? activeTextColor : inactiveTextColor,
-                    ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  item.glyph,
+                  style: TextStyle(
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
+                    fontSize: 15.0,
+                    color: isSelected ? activeTextColor : inactiveTextColor,
                   ),
-                  const SizedBox(width: 4.0),
-                  Text(
-                    item.indexLabel,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.w700,
-                      color: isSelected ? activeTextColor : inactiveTextColor,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 2.0),
-              Text(
-                item.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 9.0,
-                  fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                  letterSpacing: 0.8,
-                  color: isSelected ? activeTextColor : inactiveTextColor,
                 ),
+                const SizedBox(width: 4.0),
+                Text(
+                  item.indexLabel,
+                  style: TextStyle(
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.w700,
+                    color: isSelected ? activeTextColor : inactiveTextColor,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 2.0),
+            Text(
+              item.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: 'Silkscreen',
+                fontFamilyFallback: const ['monospace'],
+                fontSize: 9.0,
+                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                letterSpacing: 0.8,
+                color: isSelected ? activeTextColor : inactiveTextColor,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -59,31 +59,42 @@ class PixelToastHostState extends State<PixelToastHost> {
           left: 16.0,
           right: 16.0,
           bottom: 16.0,
-          child: IgnorePointer(
-            child: AnimatedSlide(
-              offset: _message != null ? Offset.zero : const Offset(0, 0.3),
-              duration: HouseSpring.duration,
-              curve: HouseSpring.curve,
-              child: AnimatedOpacity(
-                opacity: _message != null ? 1.0 : 0.0,
+          // widget.child carries its own SafeArea further down its own
+          // subtree, but this toast is a Stack sibling of it, not a
+          // descendant -- so without its own SafeArea here, `bottom: 16.0`
+          // is measured against the full body and can render under a
+          // device's home indicator / gesture bar instead of above it.
+          child: SafeArea(
+            top: false,
+            child: IgnorePointer(
+              child: AnimatedSlide(
+                offset: _message != null ? Offset.zero : const Offset(0, 0.3),
                 duration: HouseSpring.duration,
                 curve: HouseSpring.curve,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14.0,
-                    vertical: 12.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colors.surfaceElevated,
-                    border: Border.all(color: colors.amberAccent, width: 1.5),
-                  ),
-                  child: Text(
-                    _message ?? '',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
-                      fontSize: 12.0,
-                      color: colors.textPrimary,
+                child: AnimatedOpacity(
+                  opacity: _message != null ? 1.0 : 0.0,
+                  duration: HouseSpring.duration,
+                  curve: HouseSpring.curve,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14.0,
+                      vertical: 12.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colors.surfaceElevated,
+                      border: Border.all(
+                        color: colors.amberAccent,
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Text(
+                      _message ?? '',
+                      style: TextStyle(
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
+                        fontSize: 12.0,
+                        color: colors.textPrimary,
+                      ),
                     ),
                   ),
                 ),
