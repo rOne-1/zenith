@@ -196,5 +196,64 @@ void main() {
       expect(find.text('ELEV L1'), findsOneWidget);
       expect(find.text('TEMPO'), findsOneWidget);
     });
+
+    testWidgets(
+      'renders without RenderFlex overflow at a narrow mobile viewport with a long exercise name',
+      (tester) async {
+        final now = DateTime(2026, 9, 8, 14, 0);
+
+        // Deliberately long, realistic catalog-style exercise name — the
+        // actual overflow risk vector for the exercise-title row.
+        final testState = AdaptationLedgerState(
+          adaptations: [
+            MillerAdaptationItem(
+              exerciseId: 'assisted_single_leg_romanian_deadlift',
+              exerciseName:
+                  'Assisted Single-Leg Romanian Deadlift With Band Anchor',
+              japaneseName: '片脚ルーマニアンデッドリフト',
+              pattern: MovementPattern.bendAndLift,
+              variables: const MillerVariables(load: 4, rom: 5, tempo: 2),
+              competencyLevel: 3,
+              lastPerformed: now,
+            ),
+          ],
+          recentPromotions: const [],
+          totalVariablesUpgraded: 8,
+          highestCompetencyTier: 3,
+        );
+
+        tester.view.physicalSize = const Size(375, 812);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              adaptationLedgerProvider.overrideWith(
+                (ref) => Future.value(testState),
+              ),
+            ],
+            child: MaterialApp(
+              theme: ThemeData.dark().copyWith(
+                extensions: const [ZenithDistrictColors.fallback],
+              ),
+              home: const Scaffold(
+                body: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: AdaptationLedgerCard(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }

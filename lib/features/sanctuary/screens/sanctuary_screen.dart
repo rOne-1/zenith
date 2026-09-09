@@ -36,32 +36,39 @@ class SanctuaryScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'SANCTUARY // 聖域',
-                        style: TextStyle(
-                          fontFamily: 'Courier',
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 2.0,
-                          color: colors.amberAccent,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'SANCTUARY // 聖域',
+                          style: TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 2.0,
+                            color: colors.amberAccent,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      const SizedBox(height: 4.0),
-                      Text(
-                        'REST & PHYSIOLOGICAL ADAPTATION CHAMBER',
-                        style: TextStyle(
-                          fontFamily: 'Courier',
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.2,
-                          color: colors.textMuted,
+                        const SizedBox(height: 4.0),
+                        Text(
+                          'REST & PHYSIOLOGICAL ADAPTATION CHAMBER',
+                          style: TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.2,
+                            color: colors.textMuted,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  const SizedBox(width: 8.0),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8.0,
@@ -83,6 +90,8 @@ class SanctuaryScreen extends ConsumerWidget {
                         letterSpacing: 1.0,
                         color: colors.amberAccent,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -106,14 +115,18 @@ class SanctuaryScreen extends ConsumerWidget {
                           size: 16.0,
                         ),
                         const SizedBox(width: 8.0),
-                        Text(
-                          'NEUROMUSCULAR SUPERCOMPENSATION // 超回復',
-                          style: TextStyle(
-                            fontFamily: 'Courier',
-                            fontSize: 11.0,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.0,
-                            color: const Color(0xFF2EE6D6),
+                        Expanded(
+                          child: Text(
+                            'NEUROMUSCULAR SUPERCOMPENSATION // 超回復',
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 11.0,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.0,
+                              color: const Color(0xFF2EE6D6),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],

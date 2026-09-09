@@ -83,4 +83,25 @@ void main() {
       expect(find.text('STATION INSPECTION PASS // 乗車券'), findsNothing);
     },
   );
+
+  testWidgets(
+    'GrimoireScreen renders without RenderFlex overflow at a narrow mobile viewport',
+    (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: zenithThemeRegistry.defaultTheme.themeData,
+          home: const GrimoireScreen(),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

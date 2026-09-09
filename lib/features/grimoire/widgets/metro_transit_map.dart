@@ -131,14 +131,18 @@ class _MetroLineSection extends StatelessWidget {
             children: [
               Container(width: 4.0, height: 18.0, color: lineTheme.color),
               const SizedBox(width: 8.0),
-              Text(
-                '${lineTheme.lineNameEn} // ${lineTheme.lineNameJp}',
-                style: TextStyle(
-                  fontFamily: 'Courier',
-                  fontSize: 13.0,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5,
-                  color: lineTheme.color,
+              Expanded(
+                child: Text(
+                  '${lineTheme.lineNameEn} // ${lineTheme.lineNameJp}',
+                  style: TextStyle(
+                    fontFamily: 'Courier',
+                    fontSize: 13.0,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.5,
+                    color: lineTheme.color,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

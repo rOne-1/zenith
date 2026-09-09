@@ -118,31 +118,38 @@ class RestScreen extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'REST & RECOVERY // 休息中',
-                          style: TextStyle(
-                            fontFamily: 'Courier',
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.5,
-                            color: colors.amberAccent,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'REST & RECOVERY // 休息中',
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.5,
+                              color: colors.amberAccent,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        const SizedBox(height: 2.0),
-                        Text(
-                          'METABOLIC CLEARANCE & RPE LOGGING',
-                          style: TextStyle(
-                            fontFamily: 'Courier',
-                            fontSize: 9.0,
-                            letterSpacing: 0.8,
-                            color: colors.textMuted,
+                          const SizedBox(height: 2.0),
+                          Text(
+                            'METABOLIC CLEARANCE & RPE LOGGING',
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 9.0,
+                              letterSpacing: 0.8,
+                              color: colors.textMuted,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8.0),
                     Text(
                       'SET ${state.currentSetIndex + 1} DONE',
                       style: TextStyle(
@@ -151,6 +158,8 @@ class RestScreen extends ConsumerWidget {
                         fontWeight: FontWeight.w700,
                         color: colors.amberGlow,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
@@ -254,16 +263,21 @@ class RestScreen extends ConsumerWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'SET EXERTION (BORG RPE)',
-                                style: TextStyle(
-                                  fontFamily: 'Courier',
-                                  fontSize: 11.0,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.0,
-                                  color: colors.amberAccent,
+                              Flexible(
+                                child: Text(
+                                  'SET EXERTION (BORG RPE)',
+                                  style: TextStyle(
+                                    fontFamily: 'Courier',
+                                    fontSize: 11.0,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1.0,
+                                    color: colors.amberAccent,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
+                              const SizedBox(width: 8.0),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 6.0,
@@ -284,6 +298,8 @@ class RestScreen extends ConsumerWidget {
                                     fontWeight: FontWeight.w700,
                                     color: Color(0xFF2EE6D6),
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],

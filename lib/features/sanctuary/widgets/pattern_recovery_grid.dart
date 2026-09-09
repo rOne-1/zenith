@@ -28,26 +28,33 @@ class PatternRecoveryGrid extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.radar_outlined,
-                    color: colors.amberAccent,
-                    size: 18.0,
-                  ),
-                  const SizedBox(width: 8.0),
-                  Text(
-                    'NEUROMUSCULAR RECOVERY RADAR // 回復状況',
-                    style: TextStyle(
-                      fontFamily: 'Courier',
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.0,
+              Expanded(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.radar_outlined,
                       color: colors.amberAccent,
+                      size: 18.0,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        'NEUROMUSCULAR RECOVERY RADAR // 回復状況',
+                        style: TextStyle(
+                          fontFamily: 'Courier',
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.0,
+                          color: colors.amberAccent,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8.0),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 6.0,
@@ -68,6 +75,8 @@ class PatternRecoveryGrid extends ConsumerWidget {
                     fontWeight: FontWeight.w700,
                     color: colors.textMuted,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -167,55 +176,64 @@ class _PatternRecoveryRow extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Line theme badge + Name
-              Row(
-                children: [
-                  Container(
-                    width: 22.0,
-                    height: 22.0,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: lineTheme.color.withValues(alpha: 0.2),
-                      border: Border.all(
-                        color: lineTheme.color,
-                        width: 1.5,
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 22.0,
+                      height: 22.0,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: lineTheme.color.withValues(alpha: 0.2),
+                        border: Border.all(
+                          color: lineTheme.color,
+                          width: 1.5,
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      lineTheme.codePrefix,
-                      style: TextStyle(
-                        fontFamily: 'Courier',
-                        fontSize: 11.0,
-                        fontWeight: FontWeight.w900,
-                        color: lineTheme.color,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        lineTheme.lineNameEn,
+                      child: Text(
+                        lineTheme.codePrefix,
                         style: TextStyle(
                           fontFamily: 'Courier',
                           fontSize: 11.0,
                           fontWeight: FontWeight.w900,
-                          letterSpacing: 0.8,
-                          color: colors.textPrimary,
+                          color: lineTheme.color,
                         ),
                       ),
-                      Text(
-                        lineTheme.lineNameJp,
-                        style: TextStyle(
-                          fontFamily: 'Courier',
-                          fontSize: 9.0,
-                          color: colors.textMuted,
-                        ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            lineTheme.lineNameEn,
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 11.0,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.8,
+                              color: colors.textPrimary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            lineTheme.lineNameJp,
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 9.0,
+                              color: colors.textMuted,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8.0),
 
               // Status chip
               Container(
@@ -239,6 +257,8 @@ class _PatternRecoveryRow extends StatelessWidget {
                     letterSpacing: 0.5,
                     color: statusColor,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

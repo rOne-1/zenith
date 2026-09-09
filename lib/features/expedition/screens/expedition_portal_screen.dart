@@ -163,31 +163,38 @@ class _ExpeditionPortalScreenState
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'ZENITH // 頂点',
-                          style: TextStyle(
-                            fontFamily: 'Courier',
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 2.0,
-                            color: colors.amberAccent,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ZENITH // 頂点',
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 2.0,
+                              color: colors.amberAccent,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        const SizedBox(height: 2.0),
-                        Text(
-                          'PLATFORM 01 // ${district.displayName.toUpperCase()}',
-                          style: TextStyle(
-                            fontFamily: 'Courier',
-                            fontSize: 11.0,
-                            letterSpacing: 1.5,
-                            color: colors.textMuted,
+                          const SizedBox(height: 2.0),
+                          Text(
+                            'PLATFORM 01 // ${district.displayName.toUpperCase()}',
+                            style: TextStyle(
+                              fontFamily: 'Courier',
+                              fontSize: 11.0,
+                              letterSpacing: 1.5,
+                              color: colors.textMuted,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8.0),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -476,7 +483,10 @@ class _ExpeditionPortalScreenState
                                 ],
                               ),
                               const SizedBox(height: 10.0),
-                              Row(
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                spacing: 12.0,
+                                runSpacing: 4.0,
                                 children: [
                                   Text(
                                     'TARGET RPE: ${session.sets.isNotEmpty ? session.sets.first.targetRpe : 8}',
@@ -487,12 +497,10 @@ class _ExpeditionPortalScreenState
                                       color: Color(0xFF2EE6D6),
                                     ),
                                   ),
-                                  const SizedBox(width: 12.0),
                                   Text(
                                     '·',
                                     style: TextStyle(color: colors.textMuted),
                                   ),
-                                  const SizedBox(width: 12.0),
                                   Text(
                                     '${setsByExercise.length} EXERCISES / ${session.sets.length} TOTAL SETS',
                                     style: TextStyle(
@@ -571,14 +579,18 @@ class _ExpeditionPortalScreenState
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
                             children: [
-                              Text(
-                                'EXPEDITION ITINERARY // 運行表',
-                                style: TextStyle(
-                                  fontFamily: 'Courier',
-                                  fontSize: 11.0,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.2,
-                                  color: colors.textMuted,
+                              Flexible(
+                                child: Text(
+                                  'EXPEDITION ITINERARY // 運行表',
+                                  style: TextStyle(
+                                    fontFamily: 'Courier',
+                                    fontSize: 11.0,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1.2,
+                                    color: colors.textMuted,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               const SizedBox(width: 8.0),
@@ -692,7 +704,11 @@ class _ExpeditionPortalScreenState
                                   const SizedBox(height: 10.0),
 
                                   // Prescription Details: Sets x Reps & Rest
-                                  Row(
+                                  Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    spacing: 12.0,
+                                    runSpacing: 4.0,
                                     children: [
                                       Text(
                                         '${exerciseSets.length} SETS × $repText',
@@ -703,13 +719,11 @@ class _ExpeditionPortalScreenState
                                           color: colors.amberAccent,
                                         ),
                                       ),
-                                      const SizedBox(width: 12.0),
                                       Text(
                                         '·',
                                         style:
                                             TextStyle(color: colors.textMuted),
                                       ),
-                                      const SizedBox(width: 12.0),
                                       Text(
                                         '${restSeconds}s REST',
                                         style: const TextStyle(

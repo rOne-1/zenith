@@ -265,5 +265,63 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       container.dispose();
     });
+
+    testWidgets(
+      'renders without RenderFlex overflow at a narrow mobile viewport',
+      (tester) async {
+        tester.view.physicalSize = const Size(375, 812);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
+
+        // Use the longest movement-pattern line name ("BEND & LIFT LINE")
+        // to stress-test the signboard header row at the narrowest width.
+        final session = WorkoutSession(
+          id: 'test_session_1',
+          startTime: DateTime.now(),
+          sets: [
+            WorkoutSet(
+              id: 'set_0',
+              sessionId: 'test_session_1',
+              exerciseId: 'bodyweight_hip_hinge',
+              movementPattern: MovementPattern.bendAndLift,
+              setNumber: 1,
+              reps: 10,
+              targetRpe: 8,
+              variables: const MillerVariables(
+                load: 2,
+                bodyPosition: 1,
+                rom: 3,
+                height: 1,
+                tempo: 2,
+              ),
+              timestamp: DateTime.now(),
+              restDuration: const Duration(seconds: 60),
+            ),
+          ],
+        );
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        await controller.startSession(session);
+        controller.completeWarmUp();
+
+        await tester.pumpWidget(createTestWidget(container: container));
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+
+        // Cleanup
+        await tester.pumpWidget(const SizedBox());
+        container.dispose();
+      },
+    );
   });
 }

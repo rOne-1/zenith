@@ -71,26 +71,33 @@ class AdaptationLedgerCard extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.military_tech_outlined,
-                  color: colors.amberAccent,
-                  size: 18.0,
-                ),
-                const SizedBox(width: 8.0),
-                Text(
-                  'KENNETH MILLER ADAPTATION LEDGER // 変数進捗',
-                  style: TextStyle(
-                    fontFamily: 'Courier',
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.0,
+            Expanded(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.military_tech_outlined,
                     color: colors.amberAccent,
+                    size: 18.0,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: Text(
+                      'KENNETH MILLER ADAPTATION LEDGER // 変数進捗',
+                      style: TextStyle(
+                        fontFamily: 'Courier',
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.0,
+                        color: colors.amberAccent,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(width: 8.0),
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 8.0,
@@ -111,6 +118,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                   fontWeight: FontWeight.w800,
                   color: colors.textMuted,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -205,42 +214,54 @@ class AdaptationLedgerCard extends ConsumerWidget {
         children: [
           // Station Title & Competency Badge
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 8.0,
-                    height: 8.0,
-                    decoration: BoxDecoration(
-                      color: patternColor,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Text(
-                    item.exerciseName.toUpperCase(),
-                    style: TextStyle(
-                      fontFamily: 'Courier',
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.5,
-                      color: colors.textPrimary,
-                    ),
-                  ),
-                  if (item.japaneseName != null) ...[
-                    const SizedBox(width: 6.0),
-                    Text(
-                      '// ${item.japaneseName}',
-                      style: TextStyle(
-                        fontFamily: 'Courier',
-                        fontSize: 9.5,
-                        color: colors.textMuted,
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      width: 8.0,
+                      height: 8.0,
+                      decoration: BoxDecoration(
+                        color: patternColor,
+                        shape: BoxShape.circle,
                       ),
                     ),
+                    const SizedBox(width: 8.0),
+                    Flexible(
+                      flex: 3,
+                      child: Text(
+                        item.exerciseName.toUpperCase(),
+                        style: TextStyle(
+                          fontFamily: 'Courier',
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.5,
+                          color: colors.textPrimary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (item.japaneseName != null) ...[
+                      const SizedBox(width: 6.0),
+                      Flexible(
+                        child: Text(
+                          '// ${item.japaneseName}',
+                          style: TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 9.5,
+                            color: colors.textMuted,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
+              const SizedBox(width: 8.0),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 6.0,
@@ -262,6 +283,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                     letterSpacing: 0.6,
                     color: patternColor,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

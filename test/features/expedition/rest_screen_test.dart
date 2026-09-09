@@ -220,6 +220,40 @@ void main() {
       container.dispose();
     });
 
+    testWidgets(
+      'renders without RenderFlex overflow at a narrow mobile viewport',
+      (tester) async {
+        tester.view.physicalSize = const Size(375, 812);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
+
+        final session = createTestSession(setCount: 2);
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        await controller.startSession(session);
+        controller.completeWarmUp();
+        controller.completeCurrentSet(actualReps: 10);
+
+        await tester.pumpWidget(createTestWidget(container: container));
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+
+        // Cleanup
+        await tester.pumpWidget(const SizedBox());
+        container.dispose();
+      },
+    );
+
     testWidgets('tapping skip rest advances to next active set', (tester) async {
       tester.view.physicalSize = const Size(600, 1200);
       tester.view.devicePixelRatio = 1.0;

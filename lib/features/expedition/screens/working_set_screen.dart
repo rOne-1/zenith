@@ -169,29 +169,34 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         if (lineTheme != null)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                              vertical: 3.0,
-                            ),
-                            decoration: BoxDecoration(
-                              color: lineTheme.color.withValues(alpha: 0.15),
-                              border: Border.all(
-                                color: lineTheme.color,
-                                width: 1.5,
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 3.0,
                               ),
-                            ),
-                            child: Text(
-                              lineTheme.lineNameEn,
-                              style: TextStyle(
-                                fontFamily: 'Courier',
-                                fontSize: 10.0,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 1.0,
-                                color: lineTheme.color,
+                              decoration: BoxDecoration(
+                                color: lineTheme.color.withValues(alpha: 0.15),
+                                border: Border.all(
+                                  color: lineTheme.color,
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Text(
+                                lineTheme.lineNameEn,
+                                style: TextStyle(
+                                  fontFamily: 'Courier',
+                                  fontSize: 10.0,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.0,
+                                  color: lineTheme.color,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ),
+                        const SizedBox(width: 8.0),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8.0,
@@ -212,6 +217,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                               fontWeight: FontWeight.w900,
                               color: colors.amberAccent,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -256,10 +263,14 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                   padding: const EdgeInsets.all(20.0),
                   children: [
                     // Timer & Cadence Strip
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 12.0,
+                      runSpacing: 6.0,
                       children: [
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
                               Icons.timer_outlined,

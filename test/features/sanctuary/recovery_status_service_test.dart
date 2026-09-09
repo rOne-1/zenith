@@ -254,5 +254,57 @@ void main() {
       expect(find.text('48H LOCK // 26H REMAINING'), findsOneWidget);
       expect(find.text('FRESH // 回復済'), findsNWidgets(4));
     });
+
+    testWidgets(
+      'renders without RenderFlex overflow at a narrow mobile viewport',
+      (tester) async {
+        tester.view.physicalSize = const Size(375, 812);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        // Longest line name ("BEND & LIFT LINE"/"SINGLE LEG LINE") paired
+        // with the longest realistic status chip text, at the narrowest
+        // supported width — the exact combination that risks overflow.
+        final statuses = {
+          MovementPattern.pushing: const PatternRecoveryStatus(
+            pattern: MovementPattern.pushing,
+            isFresh: true,
+            remainingLockDuration: Duration.zero,
+          ),
+          MovementPattern.pulling: const PatternRecoveryStatus(
+            pattern: MovementPattern.pulling,
+            isFresh: true,
+            remainingLockDuration: Duration.zero,
+          ),
+          MovementPattern.bendAndLift: const PatternRecoveryStatus(
+            pattern: MovementPattern.bendAndLift,
+            isFresh: false,
+            remainingLockDuration: Duration(hours: 47, minutes: 59),
+          ),
+          MovementPattern.singleLeg: const PatternRecoveryStatus(
+            pattern: MovementPattern.singleLeg,
+            isFresh: false,
+            remainingLockDuration: Duration(hours: 47, minutes: 59),
+          ),
+          MovementPattern.rotation: const PatternRecoveryStatus(
+            pattern: MovementPattern.rotation,
+            isFresh: true,
+            remainingLockDuration: Duration.zero,
+          ),
+        };
+
+        await tester.pumpWidget(
+          createTestWidget(
+            overrides: [
+              recoveryStatusProvider.overrideWith((ref) => statuses),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }

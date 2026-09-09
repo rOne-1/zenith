@@ -65,14 +65,18 @@ class ArmoryScreen extends ConsumerWidget {
                         children: [
                           Row(
                             children: [
-                              Text(
-                                'THE ARMORY // 装備庫',
-                                style: TextStyle(
-                                  fontFamily: 'Courier',
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.5,
-                                  color: colors.amberAccent,
+                              Flexible(
+                                child: Text(
+                                  'THE ARMORY // 装備庫',
+                                  style: TextStyle(
+                                    fontFamily: 'Courier',
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1.5,
+                                    color: colors.amberAccent,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               const SizedBox(width: 8.0),
@@ -162,7 +166,11 @@ class ArmoryScreen extends ConsumerWidget {
                               crossAxisCount: 2,
                               crossAxisSpacing: 12.0,
                               mainAxisSpacing: 12.0,
-                              childAspectRatio: 1.35,
+                              // A fixed extent (rather than an aspect ratio)
+                              // guarantees enough height for GearTile's
+                              // content regardless of how narrow the
+                              // available width is.
+                              mainAxisExtent: 140.0,
                             ),
                         itemBuilder: (context, index) {
                           final equipment = kArmoryEquipmentGrid[index];

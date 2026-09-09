@@ -102,4 +102,31 @@ void main() {
       expect(find.textContaining('cycle autoreg ON'), findsOneWidget);
     },
   );
+
+  testWidgets(
+    'ArmoryScreen renders without RenderFlex overflow at a narrow mobile viewport',
+    (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+          child: MaterialApp(
+            theme: zenithThemeRegistry.defaultTheme.themeData,
+            home: const ArmoryScreen(),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

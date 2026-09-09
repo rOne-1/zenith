@@ -71,26 +71,33 @@ class MacrocycleProgressCard extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.auto_mode_outlined,
-                  color: colors.amberAccent,
-                  size: 18.0,
-                ),
-                const SizedBox(width: 8.0),
-                Text(
-                  'DELOAD MACROCYCLE TRACKER // 周期管理',
-                  style: TextStyle(
-                    fontFamily: 'Courier',
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.0,
+            Expanded(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.auto_mode_outlined,
                     color: colors.amberAccent,
+                    size: 18.0,
                   ),
-                ),
-              ],
+                  const SizedBox(width: 8.0),
+                  Expanded(
+                    child: Text(
+                      'DELOAD MACROCYCLE TRACKER // 周期管理',
+                      style: TextStyle(
+                        fontFamily: 'Courier',
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.0,
+                        color: colors.amberAccent,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(width: 8.0),
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 8.0,
@@ -111,6 +118,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
                   fontWeight: FontWeight.w800,
                   color: colors.textMuted,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -140,8 +149,11 @@ class MacrocycleProgressCard extends ConsumerWidget {
         const SizedBox(height: 10.0),
 
         // Stepped text meter and Phase Chip
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 8.0,
+          runSpacing: 6.0,
           children: [
             Text(
               state.steppedMeterText,
@@ -194,8 +206,11 @@ class MacrocycleProgressCard extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 8.0,
+                runSpacing: 4.0,
                 children: [
                   Text(
                     '>> RESTORATIVE GUIDANCE // 指針',
