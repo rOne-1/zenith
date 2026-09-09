@@ -10,7 +10,6 @@ void main() {
     test('matches canonical hex tokens from visual_identity_anchor.md', () {
       expect(railsideOutskirtsPalette.id, 'railside_outskirts');
       expect(railsideOutskirtsPalette.nameEn, 'Railside Outskirts');
-      expect(railsideOutskirtsPalette.nameJp, '郊外の線路');
 
       // Surfaces
       expect(railsideOutskirtsPalette.backgroundVoid, const Color(0xFF070E10));
@@ -47,7 +46,7 @@ void main() {
       expect(zenithThemeRegistry.defaultTheme.id, 'railside_outskirts');
       expect(
         zenithThemeRegistry.defaultTheme.displayName,
-        'Railside Outskirts (郊外の線路)',
+        'Railside Outskirts',
       );
     });
 

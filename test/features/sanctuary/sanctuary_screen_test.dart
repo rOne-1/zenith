@@ -94,24 +94,24 @@ void main() {
       await tester.pumpAndSettle();
 
       // 1. Header & Supercompensation Banner
-      expect(find.text('SANCTUARY // 聖域'), findsOneWidget);
+      expect(find.text('SANCTUARY'), findsOneWidget);
       expect(find.text('REST & PHYSIOLOGICAL ADAPTATION CHAMBER'), findsOneWidget);
       expect(find.text('STATUS: NOMINAL'), findsOneWidget);
-      expect(find.text('NEUROMUSCULAR SUPERCOMPENSATION // 超回復'), findsOneWidget);
+      expect(find.text('NEUROMUSCULAR SUPERCOMPENSATION'), findsOneWidget);
 
       // 2. Pattern Recovery Radar
-      expect(find.text('NEUROMUSCULAR RECOVERY RADAR // 回復状況'), findsOneWidget);
+      expect(find.text('NEUROMUSCULAR RECOVERY RADAR'), findsOneWidget);
       expect(find.text('48H PROTOCOL'), findsOneWidget);
 
       // 3. Deload Macrocycle Tracker
-      expect(find.text('DELOAD MACROCYCLE TRACKER // 周期管理'), findsOneWidget);
-      expect(find.text('>> RESTORATIVE GUIDANCE // 指針'), findsOneWidget);
+      expect(find.text('DELOAD MACROCYCLE TRACKER'), findsOneWidget);
+      expect(find.text('>> RESTORATIVE GUIDANCE'), findsOneWidget);
 
       // 4. Kenneth Miller Adaptation Ledger
-      expect(find.text('KENNETH MILLER ADAPTATION LEDGER // 変数進捗'), findsOneWidget);
+      expect(find.text('KENNETH MILLER ADAPTATION LEDGER'), findsOneWidget);
 
       // 5. District Environment Telemetry
-      expect(find.text('DISTRICT ATMOSPHERE // 地区環境テレメトリー'), findsOneWidget);
+      expect(find.text('DISTRICT ATMOSPHERE'), findsOneWidget);
     });
 
     testWidgets(

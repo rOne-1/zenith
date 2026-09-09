@@ -44,7 +44,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'EXPEDITION CONCLUDED // 任務完了',
+                      'EXPEDITION CONCLUDED',
                       style: TextStyle(
                         fontFamily: 'Courier',
                         fontSize: 20.0,
@@ -230,7 +230,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                               ),
                               const SizedBox(width: 8.0),
                               Text(
-                                'KENNETH MILLER ADAPTATIONS // 適応結果',
+                                'KENNETH MILLER ADAPTATIONS',
                                 style: TextStyle(
                                   fontFamily: 'Courier',
                                   fontSize: 11.0,

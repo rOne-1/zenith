@@ -82,7 +82,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(
-                      'KENNETH MILLER ADAPTATION LEDGER // 変数進捗',
+                      'KENNETH MILLER ADAPTATION LEDGER',
                       style: TextStyle(
                         fontFamily: 'Courier',
                         fontSize: 12.0,
@@ -142,7 +142,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '>> RECENT AUTOREGULATION PROMOTIONS // 直近の昇格',
+                  '>> RECENT AUTOREGULATION PROMOTIONS',
                   style: TextStyle(
                     fontFamily: 'Courier',
                     fontSize: 9.5,
@@ -229,7 +229,6 @@ class AdaptationLedgerCard extends ConsumerWidget {
                     ),
                     const SizedBox(width: 8.0),
                     Flexible(
-                      flex: 3,
                       child: Text(
                         item.exerciseName.toUpperCase(),
                         style: TextStyle(
@@ -243,21 +242,6 @@ class AdaptationLedgerCard extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (item.japaneseName != null) ...[
-                      const SizedBox(width: 6.0),
-                      Flexible(
-                        child: Text(
-                          '// ${item.japaneseName}',
-                          style: TextStyle(
-                            fontFamily: 'Courier',
-                            fontSize: 9.5,
-                            color: colors.textMuted,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
                   ],
                 ),
               ),
@@ -275,7 +259,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
                   ),
                 ),
                 child: Text(
-                  '${item.tierLabel} // ${item.masteryTitle.split(' // ').first}',
+                  '${item.tierLabel} // ${item.masteryTitle}',
                   style: TextStyle(
                     fontFamily: 'Courier',
                     fontSize: 9.0,

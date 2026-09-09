@@ -31,7 +31,7 @@ class ActiveExpeditionScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'ABORT EXPEDITION // 任務中止',
+                'ABORT EXPEDITION',
                 style: TextStyle(
                   fontFamily: 'Courier',
                   fontSize: 14.0,
@@ -115,7 +115,7 @@ class ActiveExpeditionScreen extends ConsumerWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          'ACTIVE EXPEDITION // 進行中',
+          'ACTIVE EXPEDITION',
           style: TextStyle(
             fontFamily: 'Courier',
             fontSize: 12.0,
@@ -154,7 +154,7 @@ class _WarmUpView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'WARM-UP MOBILIZATION // 準備運動',
+                'WARM-UP MOBILIZATION',
                 style: TextStyle(
                   fontFamily: 'Courier',
                   fontSize: 20.0,
@@ -265,7 +265,7 @@ class _CoolDownView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'COOL-DOWN DOWNSHIFT // 整理運動',
+                'COOL-DOWN DOWNSHIFT',
                 style: TextStyle(
                   fontFamily: 'Courier',
                   fontSize: 20.0,

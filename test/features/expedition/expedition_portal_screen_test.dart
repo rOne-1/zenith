@@ -45,7 +45,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Station HUD header
-      expect(find.text('ZENITH // 頂点'), findsOneWidget);
+      expect(find.text('ZENITH'), findsOneWidget);
       expect(find.textContaining('PLATFORM 01'), findsOneWidget);
       expect(find.text('SECTOR 01'), findsOneWidget);
 
@@ -54,7 +54,7 @@ void main() {
       expect(find.textContaining('TARGET RPE:'), findsOneWidget);
 
       // Itinerary section title
-      expect(find.text('EXPEDITION ITINERARY // 運行表'), findsOneWidget);
+      expect(find.text('EXPEDITION ITINERARY'), findsOneWidget);
 
       // Hero action button
       expect(find.text('▶ INITIATE EXPEDITION'), findsOneWidget);
@@ -77,7 +77,7 @@ void main() {
       // Station inspector pass sheet should be displayed
       expect(find.byType(StationInspectorSheet), findsOneWidget);
       expect(
-        find.textContaining('STATION INSPECTION PASS // 乗車券'),
+        find.textContaining('STATION INSPECTION PASS'),
         findsOneWidget,
       );
     });
@@ -167,7 +167,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Crash alert card should appear
-      expect(find.text('UNFINISHED EXPEDITION // 未完了の遠征'), findsOneWidget);
+      expect(find.text('UNFINISHED EXPEDITION'), findsOneWidget);
       expect(find.text('DISCARD'), findsOneWidget);
       expect(find.text('RESUME'), findsOneWidget);
 

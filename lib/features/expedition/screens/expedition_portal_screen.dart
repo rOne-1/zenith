@@ -94,7 +94,7 @@ class _ExpeditionPortalScreenState
           if (mounted) {
             setState(() {
               _isInitiating = false;
-              _statusFeedback = 'EXPEDITION ABORTED BY OPERATOR // 待機';
+              _statusFeedback = 'EXPEDITION ABORTED BY OPERATOR';
             });
           }
           return;
@@ -109,7 +109,7 @@ class _ExpeditionPortalScreenState
         setState(() {
           _isInitiating = false;
           _statusFeedback =
-              'EXPEDITION DISPATCHED // 遠征開始 (${session.sets.length} SETS)';
+              'EXPEDITION DISPATCHED (${session.sets.length} SETS)';
         });
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -133,7 +133,7 @@ class _ExpeditionPortalScreenState
     ref.read(workoutPreviewProvider.notifier).invalidate();
     if (mounted) {
       setState(() {
-        _statusFeedback = 'INTERRUPTED SESSION DISCARDED // 破棄完了';
+        _statusFeedback = 'INTERRUPTED SESSION DISCARDED';
       });
     }
   }
@@ -168,7 +168,7 @@ class _ExpeditionPortalScreenState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'ZENITH // 頂点',
+                            'ZENITH',
                             style: TextStyle(
                               fontFamily: 'Courier',
                               fontSize: 22.0,
@@ -250,7 +250,7 @@ class _ExpeditionPortalScreenState
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'SYNCHRONIZING TIMETABLE // ダイヤ策定中...',
+                          'SYNCHRONIZING TIMETABLE...',
                           style: TextStyle(
                             fontFamily: 'Courier',
                             fontSize: 12.0,
@@ -368,7 +368,7 @@ class _ExpeditionPortalScreenState
                                         const SizedBox(width: 8.0),
                                         Expanded(
                                           child: Text(
-                                            'UNFINISHED EXPEDITION // 未完了の遠征',
+                                            'UNFINISHED EXPEDITION',
                                             style: TextStyle(
                                               fontFamily: 'Courier',
                                               fontSize: 12.0,
@@ -581,7 +581,7 @@ class _ExpeditionPortalScreenState
                             children: [
                               Flexible(
                                 child: Text(
-                                  'EXPEDITION ITINERARY // 運行表',
+                                  'EXPEDITION ITINERARY',
                                   style: TextStyle(
                                     fontFamily: 'Courier',
                                     fontSize: 11.0,
@@ -691,14 +691,6 @@ class _ExpeditionPortalScreenState
                                       fontWeight: FontWeight.w900,
                                       letterSpacing: 1.0,
                                       color: colors.textPrimary,
-                                    ),
-                                  ),
-                                  Text(
-                                    meta.japaneseName,
-                                    style: TextStyle(
-                                      fontFamily: 'Courier',
-                                      fontSize: 11.0,
-                                      color: colors.textMuted,
                                     ),
                                   ),
                                   const SizedBox(height: 10.0),

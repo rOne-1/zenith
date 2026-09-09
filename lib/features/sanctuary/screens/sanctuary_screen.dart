@@ -41,7 +41,7 @@ class SanctuaryScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'SANCTUARY // 聖域',
+                          'SANCTUARY',
                           style: TextStyle(
                             fontFamily: 'Courier',
                             fontSize: 22.0,
@@ -117,7 +117,7 @@ class SanctuaryScreen extends ConsumerWidget {
                         const SizedBox(width: 8.0),
                         Expanded(
                           child: Text(
-                            'NEUROMUSCULAR SUPERCOMPENSATION // 超回復',
+                            'NEUROMUSCULAR SUPERCOMPENSATION',
                             style: TextStyle(
                               fontFamily: 'Courier',
                               fontSize: 11.0,
@@ -167,7 +167,7 @@ class SanctuaryScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'DISTRICT ATMOSPHERE // 地区環境テレメトリー',
+                      'DISTRICT ATMOSPHERE',
                       style: TextStyle(
                         fontFamily: 'Courier',
                         fontSize: 10.0,

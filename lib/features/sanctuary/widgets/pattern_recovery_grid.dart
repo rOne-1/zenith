@@ -39,7 +39,7 @@ class PatternRecoveryGrid extends ConsumerWidget {
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
-                        'NEUROMUSCULAR RECOVERY RADAR // 回復状況',
+                        'NEUROMUSCULAR RECOVERY RADAR',
                         style: TextStyle(
                           fontFamily: 'Courier',
                           fontSize: 12.0,
@@ -202,32 +202,17 @@ class _PatternRecoveryRow extends StatelessWidget {
                     ),
                     const SizedBox(width: 8.0),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            lineTheme.lineNameEn,
-                            style: TextStyle(
-                              fontFamily: 'Courier',
-                              fontSize: 11.0,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 0.8,
-                              color: colors.textPrimary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            lineTheme.lineNameJp,
-                            style: TextStyle(
-                              fontFamily: 'Courier',
-                              fontSize: 9.0,
-                              color: colors.textMuted,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                      child: Text(
+                        lineTheme.lineNameEn,
+                        style: TextStyle(
+                          fontFamily: 'Courier',
+                          fontSize: 11.0,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.8,
+                          color: colors.textPrimary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

@@ -99,7 +99,7 @@ void main() {
       expect(find.textContaining('PUSH LINE'), findsWidgets);
 
       // Cues card verification
-      expect(find.text('FORM CUES // 動作要点'), findsOneWidget);
+      expect(find.text('FORM CUES'), findsOneWidget);
 
       // Kenneth Miller badges verification (LOAD, POS, ROM, ELEV, TEMPO)
       expect(find.text('LOAD: '), findsOneWidget);
@@ -230,7 +230,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Dialog should be visible
-      expect(find.text('SKIP SET // スキップ確認'), findsOneWidget);
+      expect(find.text('SKIP SET'), findsOneWidget);
       expect(find.text('CANCEL'), findsOneWidget);
 
       // Tap Cancel

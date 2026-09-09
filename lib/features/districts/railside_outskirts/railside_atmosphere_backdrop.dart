@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
-/// The atmospheric background scene for District 01: "Railside Outskirts" (郊外の線路).
+/// The atmospheric background scene for District 01: "Railside Outskirts".
 ///
 /// Evokes suburban Japanese rail corridors at midnight: quiet dark skies, distant
 /// misty cityscape silhouettes, overhead catenary wire silhouettes, warm amber

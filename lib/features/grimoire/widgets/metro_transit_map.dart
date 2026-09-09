@@ -8,13 +8,11 @@ import '../../../engine/expanded_catalog.dart';
 /// Metro transit line visual styling configuration for each movement pattern.
 class MetroLineTheme {
   final String lineNameEn;
-  final String lineNameJp;
   final String codePrefix;
   final Color color;
 
   const MetroLineTheme({
     required this.lineNameEn,
-    required this.lineNameJp,
     required this.codePrefix,
     required this.color,
   });
@@ -22,31 +20,26 @@ class MetroLineTheme {
   static const Map<MovementPattern, MetroLineTheme> configs = {
     MovementPattern.pushing: MetroLineTheme(
       lineNameEn: 'PUSH LINE',
-      lineNameJp: '押力系統',
       codePrefix: 'P',
       color: Color(0xFFFFAE34),
     ),
     MovementPattern.pulling: MetroLineTheme(
       lineNameEn: 'PULL LINE',
-      lineNameJp: '引力系統',
       codePrefix: 'L',
       color: Color(0xFF2EE6D6),
     ),
     MovementPattern.bendAndLift: MetroLineTheme(
       lineNameEn: 'BEND & LIFT LINE',
-      lineNameJp: '屈伸系統',
       codePrefix: 'B',
       color: Color(0xFFFF493A),
     ),
     MovementPattern.singleLeg: MetroLineTheme(
       lineNameEn: 'SINGLE LEG LINE',
-      lineNameJp: '片脚系統',
       codePrefix: 'S',
       color: Color(0xFF4B8E62),
     ),
     MovementPattern.rotation: MetroLineTheme(
       lineNameEn: 'ROTATION LINE',
-      lineNameJp: '回旋系統',
       codePrefix: 'R',
       color: Color(0xFFD154EC),
     ),
@@ -56,7 +49,6 @@ class MetroLineTheme {
     return configs[pattern] ??
         MetroLineTheme(
           lineNameEn: pattern.name.toUpperCase(),
-          lineNameJp: '系統',
           codePrefix: pattern.name.substring(0, 1).toUpperCase(),
           color: const Color(0xFFFFAE34),
         );
@@ -133,7 +125,7 @@ class _MetroLineSection extends StatelessWidget {
               const SizedBox(width: 8.0),
               Expanded(
                 child: Text(
-                  '${lineTheme.lineNameEn} // ${lineTheme.lineNameJp}',
+                  lineTheme.lineNameEn,
                   style: TextStyle(
                     fontFamily: 'Courier',
                     fontSize: 13.0,
@@ -309,34 +301,20 @@ class _MetroStationNode extends StatelessWidget {
                       ),
                       const SizedBox(width: 10.0),
 
-                      // Name & Japanese Label
+                      // Exercise Name
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              exercise.name,
-                              style: TextStyle(
-                                fontFamily: 'Courier',
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
-                                color: isLocked
-                                    ? colors.textMuted
-                                    : colors.textPrimary,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 2.0),
-                            Text(
-                              meta.japaneseName,
-                              style: TextStyle(
-                                fontSize: 9.0,
-                                letterSpacing: 0.5,
-                                color: colors.textMuted,
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          exercise.name,
+                          style: TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                            color: isLocked
+                                ? colors.textMuted
+                                : colors.textPrimary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
 

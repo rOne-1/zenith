@@ -82,7 +82,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(
-                      'DELOAD MACROCYCLE TRACKER // 周期管理',
+                      'DELOAD MACROCYCLE TRACKER',
                       style: TextStyle(
                         fontFamily: 'Courier',
                         fontSize: 12.0,
@@ -178,7 +178,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 ),
               ),
               child: Text(
-                '${state.phaseName} // ${state.phaseKanji}',
+                state.phaseName,
                 style: TextStyle(
                   fontFamily: 'Courier',
                   fontSize: 10.0,
@@ -213,7 +213,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 runSpacing: 4.0,
                 children: [
                   Text(
-                    '>> RESTORATIVE GUIDANCE // 指針',
+                    '>> RESTORATIVE GUIDANCE',
                     style: TextStyle(
                       fontFamily: 'Courier',
                       fontSize: 10.0,

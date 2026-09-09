@@ -142,7 +142,7 @@ void main() {
       await tester.pump();
 
       // Header verification
-      expect(find.text('EXPEDITION CONCLUDED // 任務完了'), findsOneWidget);
+      expect(find.text('EXPEDITION CONCLUDED'), findsOneWidget);
       expect(find.text('SESSION DEBRIEF & NEUROMUSCULAR TELEMETRY'), findsOneWidget);
 
       // Telemetry cards
@@ -155,7 +155,7 @@ void main() {
       expect(find.text('DURATION'), findsOneWidget);
 
       // Adaptations card
-      expect(find.text('KENNETH MILLER ADAPTATIONS // 適応結果'), findsOneWidget);
+      expect(find.text('KENNETH MILLER ADAPTATIONS'), findsOneWidget);
       expect(find.text('STANDARD PUSH-UP'), findsOneWidget);
       expect(find.textContaining('RPE 7 (TARGET 8)'), findsOneWidget);
       expect(

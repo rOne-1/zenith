@@ -17,7 +17,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // 1. Header and Subtitle
-      expect(find.text('THE GRIMOIRE // 運動系統樹'), findsOneWidget);
+      expect(find.text('THE GRIMOIRE'), findsOneWidget);
       expect(
         find.text('METRO TRANSIT MAP OF MOVEMENT PROGRESSIONS'),
         findsOneWidget,
@@ -60,27 +60,20 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify Inspector Sheet contents
-      expect(find.text('STATION INSPECTION PASS // 乗車券'), findsOneWidget);
-      expect(
-        find.descendant(
-          of: find.byType(StationInspectorSheet),
-          matching: find.text('壁腕立て伏せ'),
-        ),
-        findsOneWidget,
-      );
+      expect(find.text('STATION INSPECTION PASS'), findsOneWidget);
       expect(find.text('BIOMECHANICAL FORM SPECIFICATIONS'), findsOneWidget);
       expect(find.text('KENNETH MILLER PROGRESSION GAUGES'), findsOneWidget);
       expect(find.text('LOAD VECTOR'), findsOneWidget);
       expect(find.text('RANGE OF MOTION'), findsOneWidget);
-      expect(find.text('CLOSE INSPECTOR // 閉じる'), findsOneWidget);
+      expect(find.text('CLOSE INSPECTOR'), findsOneWidget);
 
       // 8. Close Inspector Sheet
-      await tester.tap(find.text('CLOSE INSPECTOR // 閉じる'));
+      await tester.tap(find.text('CLOSE INSPECTOR'));
       await tester.pumpAndSettle();
 
       // Sheet dismissed, GrimoireScreen visible
-      expect(find.text('THE GRIMOIRE // 運動系統樹'), findsOneWidget);
-      expect(find.text('STATION INSPECTION PASS // 乗車券'), findsNothing);
+      expect(find.text('THE GRIMOIRE'), findsOneWidget);
+      expect(find.text('STATION INSPECTION PASS'), findsNothing);
     },
   );
 

@@ -75,18 +75,6 @@ class MacrocycleState {
     }
   }
 
-  /// Japanese typography kanji for the active phase.
-  String get phaseKanji {
-    switch (phase) {
-      case MacrocyclePhase.accumulation:
-        return '蓄積期';
-      case MacrocyclePhase.overload:
-        return '頂点期';
-      case MacrocyclePhase.deload:
-        return '積極的休養期';
-    }
-  }
-
   /// Recommended exertion RPE target for the current periodization phase.
   String get targetRpeGuidance {
     switch (phase) {

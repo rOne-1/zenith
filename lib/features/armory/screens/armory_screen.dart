@@ -19,7 +19,7 @@ const List<Equipment> kArmoryEquipmentGrid = [
   Equipment.towel,
 ];
 
-/// The Armory (装備庫): Equipment inventory and physiological configuration screen.
+/// The Armory: Equipment inventory and physiological configuration screen.
 class ArmoryScreen extends ConsumerWidget {
   const ArmoryScreen({super.key});
 
@@ -67,7 +67,7 @@ class ArmoryScreen extends ConsumerWidget {
                             children: [
                               Flexible(
                                 child: Text(
-                                  'THE ARMORY // 装備庫',
+                                  'THE ARMORY',
                                   style: TextStyle(
                                     fontFamily: 'Courier',
                                     fontSize: 16.0,

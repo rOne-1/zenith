@@ -125,7 +125,7 @@ class RestScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'REST & RECOVERY // 休息中',
+                            'REST & RECOVERY',
                             style: TextStyle(
                               fontFamily: 'Courier',
                               fontSize: 16.0,
@@ -398,7 +398,7 @@ class RestScreen extends ConsumerWidget {
                                   MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'NEXT STATION // 次の種目',
+                                  'NEXT STATION',
                                   style: TextStyle(
                                     fontFamily: 'Courier',
                                     fontSize: 9.0,
@@ -427,14 +427,6 @@ class RestScreen extends ConsumerWidget {
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.w900,
                                 color: colors.textPrimary,
-                              ),
-                            ),
-                            Text(
-                              nextMeta.japaneseName,
-                              style: TextStyle(
-                                fontFamily: 'Courier',
-                                fontSize: 10.0,
-                                color: colors.textMuted,
                               ),
                             ),
                             const SizedBox(height: 8.0),

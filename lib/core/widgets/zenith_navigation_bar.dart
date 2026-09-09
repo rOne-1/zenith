@@ -8,18 +8,16 @@ import '../theme/theme.dart';
 class ZenithNavigationTabItem {
   final String indexLabel;
   final String title;
-  final String kanji;
   final IconData icon;
 
   const ZenithNavigationTabItem({
     required this.indexLabel,
     required this.title,
-    required this.kanji,
     required this.icon,
   });
 }
 
-/// A retro 16-bit Japanese railway ticket navigation bar.
+/// A retro 16-bit railway ticket navigation bar.
 ///
 /// Features authentic ticket-punch tab styling, high contrast active highlights,
 /// and tactile micro-haptic selection feedback.
@@ -37,25 +35,21 @@ class ZenithNavigationBar extends StatelessWidget {
     ZenithNavigationTabItem(
       indexLabel: '01',
       title: 'EXPEDITION',
-      kanji: '遠征',
       icon: Icons.explore_outlined,
     ),
     ZenithNavigationTabItem(
       indexLabel: '02',
       title: 'GRIMOIRE',
-      kanji: '魔導書',
       icon: Icons.map_outlined,
     ),
     ZenithNavigationTabItem(
       indexLabel: '03',
       title: 'ARMORY',
-      kanji: '兵装',
       icon: Icons.fitness_center_outlined,
     ),
     ZenithNavigationTabItem(
       indexLabel: '04',
       title: 'SANCTUARY',
-      kanji: '聖域',
       icon: Icons.nightlight_round_outlined,
     ),
   ];
@@ -200,15 +194,6 @@ class _TicketTabItemState extends State<_TicketTabItem> {
                   fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
                   letterSpacing: 0.8,
                   color: isSelected ? activeTextColor : inactiveTextColor,
-                ),
-              ),
-              Text(
-                item.kanji,
-                maxLines: 1,
-                style: TextStyle(
-                  fontFamily: 'Courier',
-                  fontSize: 8.0,
-                  color: isSelected ? colors.amberGlow : colors.borderMuted,
                 ),
               ),
             ],

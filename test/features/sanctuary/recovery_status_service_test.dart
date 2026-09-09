@@ -32,7 +32,7 @@ void main() {
         expect(statuses[pattern]?.isFresh, isTrue);
         expect(statuses[pattern]?.remainingLockDuration, equals(Duration.zero));
         expect(statuses[pattern]?.recoveryProgress, equals(1.0));
-        expect(statuses[pattern]?.statusChipLabel, equals('FRESH // 回復済'));
+        expect(statuses[pattern]?.statusChipLabel, equals('FRESH'));
       }
     });
 
@@ -195,7 +195,7 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      expect(find.text('NEUROMUSCULAR RECOVERY RADAR // 回復状況'), findsOneWidget);
+      expect(find.text('NEUROMUSCULAR RECOVERY RADAR'), findsOneWidget);
       expect(find.text('48H PROTOCOL'), findsOneWidget);
 
       // Verify all 5 pattern line names
@@ -206,7 +206,7 @@ void main() {
       expect(find.text('ROTATION LINE'), findsOneWidget);
 
       // 5 fresh chips
-      expect(find.text('FRESH // 回復済'), findsNWidgets(5));
+      expect(find.text('FRESH'), findsNWidgets(5));
     });
 
     testWidgets('renders 48H LOCK chip when a pattern is cooling down', (
@@ -252,7 +252,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('48H LOCK // 26H REMAINING'), findsOneWidget);
-      expect(find.text('FRESH // 回復済'), findsNWidgets(4));
+      expect(find.text('FRESH'), findsNWidgets(4));
     });
 
     testWidgets(

@@ -3,7 +3,7 @@ import 'package:sbee/sbee.dart';
 /// Comprehensive 31-exercise progression DAG spanning Tiers 1 through 6
 /// across all 5 ACE IFT movement patterns.
 ///
-/// **Metaphor**: Tokyo / Osaka Metro Transit Map (運動系統樹)
+/// **Metaphor**: Tokyo / Osaka Metro Transit Map
 /// - Pushing: Ginza Orange Line (#FFAE34)
 /// - Pulling: Tozai Teal Line (#2EE6D6)
 /// - Bend & Lift: Marunouchi Coral Line (#FF493A)
@@ -563,9 +563,8 @@ const List<Exercise> expandedExercises = [
   dragonFlag,
 ];
 
-/// Japanese metro transit station metadata for each exercise.
+/// Metro transit station metadata for each exercise.
 class MetroStationMeta {
-  final String japaneseName;
   final String stationCode;
   final String lineName;
   final int defaultLoadScore; // 1-5
@@ -575,7 +574,6 @@ class MetroStationMeta {
   final int defaultTempoScore; // 1-5
 
   const MetroStationMeta({
-    required this.japaneseName,
     required this.stationCode,
     required this.lineName,
     required this.defaultLoadScore,
@@ -588,7 +586,6 @@ class MetroStationMeta {
   static const Map<String, MetroStationMeta> registry = {
     // Pushing
     'wall_pushup': MetroStationMeta(
-      japaneseName: '壁腕立て伏せ',
       stationCode: 'P01',
       lineName: 'Push Line',
       defaultLoadScore: 1,
@@ -598,7 +595,6 @@ class MetroStationMeta {
       defaultTempoScore: 2,
     ),
     'knee_pushup': MetroStationMeta(
-      japaneseName: '膝つき腕立て伏せ',
       stationCode: 'P02',
       lineName: 'Push Line',
       defaultLoadScore: 2,
@@ -608,7 +604,6 @@ class MetroStationMeta {
       defaultTempoScore: 2,
     ),
     'standard_pushup': MetroStationMeta(
-      japaneseName: '標準腕立て伏せ',
       stationCode: 'P03',
       lineName: 'Push Line',
       defaultLoadScore: 3,
@@ -618,7 +613,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'feet_elevated_pushup': MetroStationMeta(
-      japaneseName: '足上げ腕立て伏せ',
       stationCode: 'P04',
       lineName: 'Push Line',
       defaultLoadScore: 3,
@@ -628,7 +622,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'chair_dip': MetroStationMeta(
-      japaneseName: '椅子ディップス',
       stationCode: 'P05',
       lineName: 'Push Line',
       defaultLoadScore: 4,
@@ -638,7 +631,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'band_resisted_pushup': MetroStationMeta(
-      japaneseName: 'バンド加重腕立て伏せ',
       stationCode: 'P06',
       lineName: 'Push Line',
       defaultLoadScore: 4,
@@ -648,7 +640,6 @@ class MetroStationMeta {
       defaultTempoScore: 4,
     ),
     'archer_pushup': MetroStationMeta(
-      japaneseName: 'アーチャー腕立て伏せ',
       stationCode: 'P07',
       lineName: 'Push Line',
       defaultLoadScore: 5,
@@ -658,7 +649,6 @@ class MetroStationMeta {
       defaultTempoScore: 4,
     ),
     'one_arm_pushup': MetroStationMeta(
-      japaneseName: '片手腕立て伏せ',
       stationCode: 'P08',
       lineName: 'Push Line',
       defaultLoadScore: 5,
@@ -670,7 +660,6 @@ class MetroStationMeta {
 
     // Pulling
     'doorframe_row': MetroStationMeta(
-      japaneseName: 'ドア枠ローイング',
       stationCode: 'L01',
       lineName: 'Pull Line',
       defaultLoadScore: 1,
@@ -680,7 +669,6 @@ class MetroStationMeta {
       defaultTempoScore: 2,
     ),
     'towel_row': MetroStationMeta(
-      japaneseName: 'タオル懸架ロー',
       stationCode: 'L02',
       lineName: 'Pull Line',
       defaultLoadScore: 2,
@@ -690,7 +678,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'inverted_row': MetroStationMeta(
-      japaneseName: '水平インバーテッドロー',
       stationCode: 'L03',
       lineName: 'Pull Line',
       defaultLoadScore: 3,
@@ -700,7 +687,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'standard_pullup': MetroStationMeta(
-      japaneseName: '標準懸垂',
       stationCode: 'L04',
       lineName: 'Pull Line',
       defaultLoadScore: 4,
@@ -710,7 +696,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'l_sit_pullup': MetroStationMeta(
-      japaneseName: 'Lシット厳格懸垂',
       stationCode: 'L05',
       lineName: 'Pull Line',
       defaultLoadScore: 4,
@@ -720,7 +705,6 @@ class MetroStationMeta {
       defaultTempoScore: 4,
     ),
     'archer_pullup': MetroStationMeta(
-      japaneseName: 'アーチャー懸垂',
       stationCode: 'L06',
       lineName: 'Pull Line',
       defaultLoadScore: 5,
@@ -730,7 +714,6 @@ class MetroStationMeta {
       defaultTempoScore: 4,
     ),
     'muscle_up': MetroStationMeta(
-      japaneseName: 'マッスルアップ',
       stationCode: 'L07',
       lineName: 'Pull Line',
       defaultLoadScore: 5,
@@ -742,7 +725,6 @@ class MetroStationMeta {
 
     // Bend & Lift
     'hip_hinge': MetroStationMeta(
-      japaneseName: '股関節ヒンジ',
       stationCode: 'B01',
       lineName: 'Bend Line',
       defaultLoadScore: 1,
@@ -752,7 +734,6 @@ class MetroStationMeta {
       defaultTempoScore: 2,
     ),
     'good_morning': MetroStationMeta(
-      japaneseName: 'グッドモーニング',
       stationCode: 'B02',
       lineName: 'Bend Line',
       defaultLoadScore: 2,
@@ -762,7 +743,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'single_leg_deadlift': MetroStationMeta(
-      japaneseName: '片脚デッドリフト',
       stationCode: 'B03',
       lineName: 'Bend Line',
       defaultLoadScore: 3,
@@ -772,7 +752,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'towel_hamstring_curl': MetroStationMeta(
-      japaneseName: 'タオルハムストリングカール',
       stationCode: 'B04',
       lineName: 'Bend Line',
       defaultLoadScore: 4,
@@ -782,7 +761,6 @@ class MetroStationMeta {
       defaultTempoScore: 4,
     ),
     'nordic_curl': MetroStationMeta(
-      japaneseName: 'ノルディックカール',
       stationCode: 'B05',
       lineName: 'Bend Line',
       defaultLoadScore: 5,
@@ -794,7 +772,6 @@ class MetroStationMeta {
 
     // Single Leg
     'air_squat': MetroStationMeta(
-      japaneseName: '自重スクワット',
       stationCode: 'S01',
       lineName: 'Legs Line',
       defaultLoadScore: 1,
@@ -804,7 +781,6 @@ class MetroStationMeta {
       defaultTempoScore: 2,
     ),
     'reverse_lunge': MetroStationMeta(
-      japaneseName: '後退ランジ',
       stationCode: 'S02',
       lineName: 'Legs Line',
       defaultLoadScore: 2,
@@ -814,7 +790,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'bulgarian_split_squat': MetroStationMeta(
-      japaneseName: 'ブルガリアンスプリット',
       stationCode: 'S03',
       lineName: 'Legs Line',
       defaultLoadScore: 3,
@@ -824,7 +799,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'skater_squat': MetroStationMeta(
-      japaneseName: 'スケータースクワット',
       stationCode: 'S04',
       lineName: 'Legs Line',
       defaultLoadScore: 4,
@@ -834,7 +808,6 @@ class MetroStationMeta {
       defaultTempoScore: 4,
     ),
     'assisted_pistol_squat': MetroStationMeta(
-      japaneseName: '補助付き片脚屈伸',
       stationCode: 'S05',
       lineName: 'Legs Line',
       defaultLoadScore: 4,
@@ -844,7 +817,6 @@ class MetroStationMeta {
       defaultTempoScore: 4,
     ),
     'full_pistol_squat': MetroStationMeta(
-      japaneseName: '完全片脚屈伸',
       stationCode: 'S06',
       lineName: 'Legs Line',
       defaultLoadScore: 5,
@@ -856,7 +828,6 @@ class MetroStationMeta {
 
     // Rotation
     'dead_bug': MetroStationMeta(
-      japaneseName: 'デッドバグ',
       stationCode: 'R01',
       lineName: 'Rotation Line',
       defaultLoadScore: 1,
@@ -866,7 +837,6 @@ class MetroStationMeta {
       defaultTempoScore: 2,
     ),
     'side_plank': MetroStationMeta(
-      japaneseName: '前腕サイドプランク',
       stationCode: 'R02',
       lineName: 'Rotation Line',
       defaultLoadScore: 2,
@@ -876,7 +846,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'banded_pallof_press': MetroStationMeta(
-      japaneseName: 'パロフプレス',
       stationCode: 'R03',
       lineName: 'Rotation Line',
       defaultLoadScore: 3,
@@ -886,7 +855,6 @@ class MetroStationMeta {
       defaultTempoScore: 3,
     ),
     'windshield_wipers': MetroStationMeta(
-      japaneseName: 'ワイパー旋回',
       stationCode: 'R04',
       lineName: 'Rotation Line',
       defaultLoadScore: 4,
@@ -896,7 +864,6 @@ class MetroStationMeta {
       defaultTempoScore: 4,
     ),
     'dragon_flag': MetroStationMeta(
-      japaneseName: 'ドラゴンフラッグ',
       stationCode: 'R05',
       lineName: 'Rotation Line',
       defaultLoadScore: 5,
@@ -910,7 +877,6 @@ class MetroStationMeta {
   static MetroStationMeta forExercise(Exercise exercise) {
     return registry[exercise.id] ??
         MetroStationMeta(
-          japaneseName: exercise.name,
           stationCode: exercise.id.substring(0, 3).toUpperCase(),
           lineName: exercise.movementPattern.name.toUpperCase(),
           defaultLoadScore: exercise.difficultyTier.clamp(1, 5),

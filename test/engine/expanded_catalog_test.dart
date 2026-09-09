@@ -64,7 +64,7 @@ void main() {
     });
 
     test(
-      'Every exercise has non-empty default cues and valid Japanese metro metadata',
+      'Every exercise has non-empty default cues and valid metro metadata',
       () {
         for (final ex in expandedExercises) {
           expect(
@@ -74,7 +74,6 @@ void main() {
           );
 
           final meta = MetroStationMeta.forExercise(ex);
-          expect(meta.japaneseName, isNotEmpty);
           expect(meta.stationCode, isNotEmpty);
           expect(meta.defaultLoadScore, inInclusiveRange(1, 5));
           expect(meta.defaultPositionScore, inInclusiveRange(1, 5));

@@ -272,7 +272,7 @@ class ZenithPixelThemeBuilder {
 
     return AppTheme<ZenithDistrictColors>(
       id: palette.id,
-      displayName: '${palette.nameEn} (${palette.nameJp})',
+      displayName: palette.nameEn,
       description: palette.description,
       isDark: true,
       colors: colors,

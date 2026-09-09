@@ -5,7 +5,7 @@ import 'package:zenith/features/districts/railside_outskirts/railside_outskirts_
 
 void main() {
   group('ZenithNavigationBar Widget Tests', () {
-    testWidgets('renders all 4 railway ticket tabs with bilingual labels', (
+    testWidgets('renders all 4 railway ticket tabs with tab numbers and labels', (
       tester,
     ) async {
       int selectedIndex = 0;
@@ -33,12 +33,6 @@ void main() {
       expect(find.text('GRIMOIRE'), findsOneWidget);
       expect(find.text('ARMORY'), findsOneWidget);
       expect(find.text('SANCTUARY'), findsOneWidget);
-
-      // Verify Japanese railway markings
-      expect(find.text('遠征'), findsOneWidget);
-      expect(find.text('魔導書'), findsOneWidget);
-      expect(find.text('兵装'), findsOneWidget);
-      expect(find.text('聖域'), findsOneWidget);
     });
 
     testWidgets('triggers onDestinationSelected when non-selected tab is tapped', (

@@ -137,7 +137,6 @@ void main() {
     final testPalette = ZenithDistrictPalette(
       id: 'test_district',
       nameEn: 'Test District',
-      nameJp: 'テスト地区',
       description: 'A test district for verification',
       backgroundVoid: const Color(0xFF010101),
       surfaceDark: const Color(0xFF020202),
@@ -163,7 +162,7 @@ void main() {
       );
 
       expect(appTheme.id, 'test_district');
-      expect(appTheme.displayName, 'Test District (テスト地区)');
+      expect(appTheme.displayName, 'Test District');
       expect(appTheme.description, 'A test district for verification');
       expect(appTheme.isDark, isTrue);
       expect(appTheme.signatureMotif, isNotNull);
@@ -220,7 +219,6 @@ void main() {
       final customPalette = ZenithDistrictPalette(
         id: 'custom',
         nameEn: 'Custom',
-        nameJp: 'カスタム',
         description: 'Custom palette',
         backgroundVoid: const Color(0xFF111111),
         surfaceDark: const Color(0xFF222222),

@@ -8,7 +8,6 @@ import '../../../engine/engine.dart';
 class MillerAdaptationItem {
   final String exerciseId;
   final String exerciseName;
-  final String? japaneseName;
   final MovementPattern pattern;
   final MillerVariables variables;
   final int competencyLevel;
@@ -17,7 +16,6 @@ class MillerAdaptationItem {
   const MillerAdaptationItem({
     required this.exerciseId,
     required this.exerciseName,
-    this.japaneseName,
     required this.pattern,
     required this.variables,
     required this.competencyLevel,
@@ -31,18 +29,18 @@ class MillerAdaptationItem {
   String get masteryTitle {
     switch (competencyLevel) {
       case 1:
-        return 'NOVICE // 初心';
+        return 'NOVICE';
       case 2:
-        return 'PROFICIENT // 熟練';
+        return 'PROFICIENT';
       case 3:
-        return 'ADVANCED // 上級';
+        return 'ADVANCED';
       case 4:
-        return 'EXPERT // 達人';
+        return 'EXPERT';
       case 5:
-        return 'MASTER // 範士';
+        return 'MASTER';
       case 6:
       default:
-        return 'ZENITH // 極致';
+        return 'ZENITH';
     }
   }
 
@@ -117,8 +115,6 @@ class AdaptationLedgerService {
                 .map((w) =>
                     w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}')
                 .join(' ');
-        final meta = MetroStationMeta.registry[prog.exerciseId];
-        final japaneseName = meta?.japaneseName;
         final pattern = exercise?.movementPattern ?? MovementPattern.pushing;
 
         if (prog.competencyLevel > maxTier) {
@@ -136,7 +132,6 @@ class AdaptationLedgerService {
           MillerAdaptationItem(
             exerciseId: prog.exerciseId,
             exerciseName: name,
-            japaneseName: japaneseName,
             pattern: pattern,
             variables: prog.variables,
             competencyLevel: prog.competencyLevel,
@@ -157,13 +152,11 @@ class AdaptationLedgerService {
       for (final id in baselineExercises) {
         final exercise = expandedExerciseGraph.findById(id) ??
             baselineExerciseGraph.findById(id);
-        final meta = MetroStationMeta.registry[id];
         if (exercise != null) {
           items.add(
             MillerAdaptationItem(
               exerciseId: exercise.id,
               exerciseName: exercise.name,
-              japaneseName: meta?.japaneseName,
               pattern: exercise.movementPattern,
               variables: const MillerVariables(),
               competencyLevel: 1,

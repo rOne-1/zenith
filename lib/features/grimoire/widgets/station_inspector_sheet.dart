@@ -108,7 +108,7 @@ class StationInspectorSheet extends StatelessWidget {
                       ),
                       const SizedBox(width: 8.0),
                       Text(
-                        'STATION INSPECTION PASS // 乗車券',
+                        'STATION INSPECTION PASS',
                         style: TextStyle(
                           fontFamily: 'Courier',
                           fontSize: 10.0,
@@ -142,7 +142,7 @@ class StationInspectorSheet extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
 
-              // Title and Japanese Subtitle
+              // Exercise Title
               Text(
                 exercise.name,
                 style: TextStyle(
@@ -150,16 +150,6 @@ class StationInspectorSheet extends StatelessWidget {
                   fontSize: 18.0,
                   fontWeight: FontWeight.w900,
                   color: colors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 2.0),
-              Text(
-                meta.japaneseName,
-                style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 2.0,
-                  color: colors.amberAccent,
                 ),
               ),
               const SizedBox(height: 12.0),
@@ -291,7 +281,7 @@ class StationInspectorSheet extends StatelessWidget {
 
               // Close Button
               PixelButton(
-                label: 'CLOSE INSPECTOR // 閉じる',
+                label: 'CLOSE INSPECTOR',
                 variant: PixelButtonVariant.secondary,
                 onPressed: () => Navigator.of(context).pop(),
               ),

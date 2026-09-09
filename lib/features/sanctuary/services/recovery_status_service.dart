@@ -39,7 +39,7 @@ class PatternRecoveryStatus {
   /// Compact operator string (e.g., "26H REMAINING" or "FRESH").
   String get statusChipLabel {
     if (isFresh) {
-      return 'FRESH // 回復済';
+      return 'FRESH';
     }
     final hours = remainingLockDuration.inHours;
     final minutes = remainingLockDuration.inMinutes % 60;

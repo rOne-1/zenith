@@ -32,7 +32,6 @@ void main() {
       expect(status.phase, equals(MacrocyclePhase.accumulation));
       expect(status.isDeload, isFalse);
       expect(status.phaseName, equals('ACCUMULATION'));
-      expect(status.phaseKanji, equals('蓄積期'));
       expect(status.steppedMeterText, equals('[ █ ░ ░ ░ ░ ] WEEK 1/5'));
       expect(status.completedSessionsInWeek, equals(0));
       expect(status.totalRepsInWeek, equals(0));
@@ -67,7 +66,6 @@ void main() {
       expect(statusW4.weekInCycle, equals(4));
       expect(statusW4.phase, equals(MacrocyclePhase.overload));
       expect(statusW4.phaseName, equals('PEAK OVERLOAD'));
-      expect(statusW4.phaseKanji, equals('頂点期'));
       expect(statusW4.steppedMeterText, equals('[ █ █ █ █ ░ ] WEEK 4/5'));
 
       // 28 days later: Week 5 (Rest & Deload)
@@ -79,7 +77,6 @@ void main() {
       expect(statusW5.phase, equals(MacrocyclePhase.deload));
       expect(statusW5.isDeload, isTrue);
       expect(statusW5.phaseName, equals('REST & DELOAD'));
-      expect(statusW5.phaseKanji, equals('積極的休養期'));
       expect(statusW5.steppedMeterText, equals('[ █ █ █ █ █ ] WEEK 5/5'));
       expect(statusW5.cycleProgress, equals(1.0));
 
@@ -272,7 +269,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify header and cycle indicator
-      expect(find.text('DELOAD MACROCYCLE TRACKER // 周期管理'), findsOneWidget);
+      expect(find.text('DELOAD MACROCYCLE TRACKER'), findsOneWidget);
       expect(find.text('CYCLE 01'), findsOneWidget);
 
       // Verify 5 step tags
@@ -283,10 +280,10 @@ void main() {
       expect(find.text('DELOAD'), findsOneWidget);
 
       // Verify phase chip
-      expect(find.text('PEAK OVERLOAD // 頂点期'), findsOneWidget);
+      expect(find.text('PEAK OVERLOAD'), findsOneWidget);
 
       // Verify guidance header
-      expect(find.text('>> RESTORATIVE GUIDANCE // 指針'), findsOneWidget);
+      expect(find.text('>> RESTORATIVE GUIDANCE'), findsOneWidget);
 
       // Verify telemetry grid labels
       expect(find.text('WEEK SESSIONS'), findsOneWidget);

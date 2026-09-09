@@ -116,7 +116,7 @@ void main() {
       await tester.pump();
 
       // 1. Warm-Up Phase
-      expect(find.text('WARM-UP MOBILIZATION // 準備運動'), findsOneWidget);
+      expect(find.text('WARM-UP MOBILIZATION'), findsOneWidget);
       expect(find.text('▶ COMMENCE WORKING SETS'), findsOneWidget);
 
       // Tap commence working sets
@@ -132,7 +132,7 @@ void main() {
       await tester.pump();
 
       // 3. Rest Screen
-      expect(find.text('REST & RECOVERY // 休息中'), findsOneWidget);
+      expect(find.text('REST & RECOVERY'), findsOneWidget);
       expect(find.text('SKIP REST & START NEXT SET'), findsOneWidget);
 
       // Log RPE 8
@@ -156,7 +156,7 @@ void main() {
       await tester.pump();
 
       // 5. Cool-Down Phase
-      expect(find.text('COOL-DOWN DOWNSHIFT // 整理運動'), findsOneWidget);
+      expect(find.text('COOL-DOWN DOWNSHIFT'), findsOneWidget);
       expect(find.text('CONCLUDE & VIEW DEBRIEF ➔'), findsOneWidget);
 
       // Finish cool-down
@@ -164,7 +164,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // 6. Debrief Screen
-      expect(find.text('EXPEDITION CONCLUDED // 任務完了'), findsOneWidget);
+      expect(find.text('EXPEDITION CONCLUDED'), findsOneWidget);
       expect(find.text('◀ RETURN TO TERMINAL'), findsOneWidget);
 
       // Cleanup
@@ -201,7 +201,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Abort Dialog displayed
-      expect(find.text('ABORT EXPEDITION // 任務中止'), findsOneWidget);
+      expect(find.text('ABORT EXPEDITION'), findsOneWidget);
       expect(find.text('CONTINUE'), findsOneWidget);
       expect(find.text('ABORT'), findsOneWidget);
 

@@ -45,7 +45,7 @@ class WarningTranslator {
       'Welcome back. Tempo adjusted to 4-2-1 with joint stabilization focus for safe re-acclimation.';
 
   /// Same-day second session advisory header and copy.
-  static const String sameDayAdvisoryTitle = 'EXPEDITION ADVISORY // 同日出撃';
+  static const String sameDayAdvisoryTitle = 'EXPEDITION ADVISORY';
   static const String sameDayAdvisoryMessage =
       'You have already completed an expedition today. Another session in the same day compounds neuromuscular fatigue. Listen to your body and prioritize restorative recovery, or proceed mindfully with light volume.';
 
@@ -100,7 +100,7 @@ class WarningTranslator {
     if (detrained) {
       notices.add(
         const CoachingNotice(
-          title: 'ACCLIMATION PROTOCOL // 適応',
+          title: 'ACCLIMATION PROTOCOL',
           message: detrainingMessage,
           type: CoachingNoticeType.detraining,
         ),
@@ -112,7 +112,7 @@ class WarningTranslator {
     if (recoveryText != null) {
       notices.add(
         CoachingNotice(
-          title: 'ACTIVE RECOVERY // 回復',
+          title: 'ACTIVE RECOVERY',
           message: recoveryText,
           type: CoachingNoticeType.recovery,
         ),
@@ -124,7 +124,7 @@ class WarningTranslator {
     if (posturalText != null) {
       notices.add(
         CoachingNotice(
-          title: 'POSTURAL HARMONY // 姿勢調和',
+          title: 'POSTURAL HARMONY',
           message: posturalText,
           type: CoachingNoticeType.postural,
         ),

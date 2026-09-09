@@ -25,7 +25,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // 1. Verify Header & Title
-      expect(find.text('THE ARMORY // 装備庫'), findsOneWidget);
+      expect(find.text('THE ARMORY'), findsOneWidget);
       expect(find.text('SAVED ✓'), findsOneWidget);
       expect(find.text('EQUIPMENT INVENTORY'), findsOneWidget);
       expect(find.text('PHYSIOLOGY ACCOMMODATIONS'), findsOneWidget);

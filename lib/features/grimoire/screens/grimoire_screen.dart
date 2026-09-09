@@ -7,7 +7,7 @@ import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../widgets/metro_transit_map.dart';
 import '../widgets/station_inspector_sheet.dart';
 
-/// The Grimoire (運動系統樹): Visual Metro Transit Map of Movement Progressions.
+/// The Grimoire: Visual Metro Transit Map of Movement Progressions.
 class GrimoireScreen extends StatefulWidget {
   final bool isIntermediateUser;
 
@@ -62,7 +62,7 @@ class _GrimoireScreenState extends State<GrimoireScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'THE GRIMOIRE // 運動系統樹',
+                            'THE GRIMOIRE',
                             style: TextStyle(
                               fontFamily: 'Courier',
                               fontSize: 16.0,

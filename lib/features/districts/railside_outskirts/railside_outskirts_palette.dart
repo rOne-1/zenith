@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/theme.dart';
 import 'railside_atmosphere_backdrop.dart';
 
-/// Canonical palette definition for District 01: "Railside Outskirts" (郊外の線路).
+/// Canonical palette definition for District 01: "Railside Outskirts".
 ///
 /// Ground truth defined in `local-notes/visual_identity/visual_identity_anchor.md`.
 const railsideOutskirtsPalette = ZenithDistrictPalette(
   id: 'railside_outskirts',
   nameEn: 'Railside Outskirts',
-  nameJp: '郊外の線路',
   description:
       'Suburban train tracks at night, flickering streetlights, and windblown weeds.',
   backgroundVoid: Color(0xFF070E10),

@@ -61,7 +61,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'SKIP SET // スキップ確認',
+                'SKIP SET',
                 style: TextStyle(
                   fontFamily: 'Courier',
                   fontSize: 14.0,
@@ -234,15 +234,6 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                         color: colors.textPrimary,
                       ),
                     ),
-                    if (meta != null)
-                      Text(
-                        meta.japaneseName,
-                        style: TextStyle(
-                          fontFamily: 'Courier',
-                          fontSize: 12.0,
-                          color: colors.textMuted,
-                        ),
-                      ),
                     const SizedBox(height: 6.0),
                     Text(
                       targetRepsText,
@@ -359,7 +350,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                               ),
                               const SizedBox(width: 8.0),
                               Text(
-                                'FORM CUES // 動作要点',
+                                'FORM CUES',
                                 style: TextStyle(
                                   fontFamily: 'Courier',
                                   fontSize: 12.0,
@@ -415,7 +406,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                       child: Column(
                         children: [
                           Text(
-                            'REPS COMPLETED // 実施回数',
+                            'REPS COMPLETED',
                             style: TextStyle(
                               fontFamily: 'Courier',
                               fontSize: 11.0,

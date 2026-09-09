@@ -40,7 +40,7 @@ void main() {
       expect(pushup.variables.height, equals(1));
       expect(pushup.variables.tempo, equals(1));
       expect(pushup.tierLabel, equals('TIER 01'));
-      expect(pushup.masteryTitle, equals('NOVICE // 初心'));
+      expect(pushup.masteryTitle, equals('NOVICE'));
     });
 
     test('reads stored progressions, calculates upgraded variables and highest tier', () async {
@@ -88,7 +88,7 @@ void main() {
       final squatItem = state.adaptations.firstWhere((a) => a.exerciseId == 'squat');
       expect(squatItem.competencyLevel, equals(3));
       expect(squatItem.tierLabel, equals('TIER 03'));
-      expect(squatItem.masteryTitle, equals('ADVANCED // 上級'));
+      expect(squatItem.masteryTitle, equals('ADVANCED'));
       expect(squatItem.hasAdvancedVariables, isTrue);
     });
 
@@ -134,7 +134,6 @@ void main() {
           MillerAdaptationItem(
             exerciseId: 'standard_pushup',
             exerciseName: 'Standard Pushup',
-            japaneseName: '腕立て伏せ',
             pattern: MovementPattern.pushing,
             variables: const MillerVariables(load: 2, rom: 3),
             competencyLevel: 2,
@@ -177,16 +176,15 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify header and tier badge
-      expect(find.text('KENNETH MILLER ADAPTATION LEDGER // 変数進捗'), findsOneWidget);
+      expect(find.text('KENNETH MILLER ADAPTATION LEDGER'), findsOneWidget);
       expect(find.text('MAX TIER 02'), findsOneWidget);
 
       // Verify recent promotions callout
-      expect(find.text('>> RECENT AUTOREGULATION PROMOTIONS // 直近の昇格'), findsOneWidget);
+      expect(find.text('>> RECENT AUTOREGULATION PROMOTIONS'), findsOneWidget);
       expect(find.text('LOAD L2 // RPE 5'), findsOneWidget);
 
       // Verify exercise card (appears in both promotion feed and adaptation tile)
       expect(find.text('STANDARD PUSHUP'), findsNWidgets(2));
-      expect(find.text('// 腕立て伏せ'), findsOneWidget);
       expect(find.text('TIER 02 // PROFICIENT'), findsOneWidget);
 
       // Verify 5 variable meters
@@ -210,7 +208,6 @@ void main() {
               exerciseId: 'assisted_single_leg_romanian_deadlift',
               exerciseName:
                   'Assisted Single-Leg Romanian Deadlift With Band Anchor',
-              japaneseName: '片脚ルーマニアンデッドリフト',
               pattern: MovementPattern.bendAndLift,
               variables: const MillerVariables(load: 4, rom: 5, tempo: 2),
               competencyLevel: 3,

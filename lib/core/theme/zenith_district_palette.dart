@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Lightweight data contract for defining Japanese city district themes.
+/// Lightweight data contract for defining city district themes.
 class ZenithDistrictPalette {
   final String id;
   final String nameEn;
-  final String nameJp;
   final String description;
 
   final Color backgroundVoid;
@@ -26,7 +25,6 @@ class ZenithDistrictPalette {
   const ZenithDistrictPalette({
     required this.id,
     required this.nameEn,
-    required this.nameJp,
     required this.description,
     required this.backgroundVoid,
     required this.surfaceDark,

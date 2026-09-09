@@ -113,7 +113,7 @@ void main() {
       await tester.pump();
 
       // Header verification
-      expect(find.text('REST & RECOVERY // 休息中'), findsOneWidget);
+      expect(find.text('REST & RECOVERY'), findsOneWidget);
       expect(find.text('REST TIME REMAINING'), findsOneWidget);
       expect(find.text('+30s'), findsOneWidget);
 
@@ -125,7 +125,7 @@ void main() {
       expect(find.text('TARGET: 8 RPE'), findsOneWidget);
 
       // Next station ticket
-      expect(find.text('NEXT STATION // 次の種目'), findsOneWidget);
+      expect(find.text('NEXT STATION'), findsOneWidget);
 
       // Action footer
       expect(find.text('SKIP REST & START NEXT SET'), findsOneWidget);
