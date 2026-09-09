@@ -72,7 +72,7 @@ class _GrimoireScreenState extends State<GrimoireScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'THE GRIMOIRE',
+                            'THE ATLAS',
                             style: TextStyle(
                               fontFamily: 'Silkscreen',
                               fontFamilyFallback: const ['monospace'],

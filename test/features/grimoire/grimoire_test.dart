@@ -17,7 +17,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // 1. Header and Subtitle
-      expect(find.text('THE GRIMOIRE'), findsOneWidget);
+      expect(find.text('THE ATLAS'), findsOneWidget);
       expect(
         find.text('METRO TRANSIT MAP OF MOVEMENT PROGRESSIONS'),
         findsOneWidget,
@@ -72,7 +72,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Sheet dismissed, GrimoireScreen visible
-      expect(find.text('THE GRIMOIRE'), findsOneWidget);
+      expect(find.text('THE ATLAS'), findsOneWidget);
       expect(find.text('STATION INSPECTION PASS'), findsNothing);
     },
   );

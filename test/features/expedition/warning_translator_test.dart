@@ -13,7 +13,7 @@ void main() {
           PosturalWarningReason.noPullingAvailable,
         ),
         equals(
-          'Focusing on pushing movements today. Consider adding pulling gear (bands/bar) to your Armory for balanced posture.',
+          'Focusing on pushing movements today. Consider adding pulling gear (bands/bar) to your Depot for balanced posture.',
         ),
       );
 

@@ -30,8 +30,8 @@ void main() {
 
       // Verify all 4 English tab names
       expect(find.text('EXPEDITION'), findsOneWidget);
-      expect(find.text('GRIMOIRE'), findsOneWidget);
-      expect(find.text('ARMORY'), findsOneWidget);
+      expect(find.text('ATLAS'), findsOneWidget);
+      expect(find.text('DEPOT'), findsOneWidget);
       expect(find.text('SANCTUARY'), findsOneWidget);
     });
 
@@ -59,7 +59,7 @@ void main() {
       );
 
       // Tap Armory tab (index 2)
-      await tester.tap(find.text('ARMORY'));
+      await tester.tap(find.text('DEPOT'));
       await tester.pumpAndSettle();
 
       expect(selectedIndex, equals(2));
@@ -90,9 +90,9 @@ void main() {
         // GestureDetector with no visual feedback.
         expect(find.byType(AnimatedScale), findsNWidgets(4));
 
-        final armoryFinder = find.text('ARMORY');
+        final depotFinder = find.text('DEPOT');
         final gesture = await tester.startGesture(
-          tester.getCenter(armoryFinder),
+          tester.getCenter(depotFinder),
         );
         await tester.pump(const Duration(milliseconds: 16));
 

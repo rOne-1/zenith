@@ -79,7 +79,7 @@ class ArmoryScreen extends ConsumerWidget {
                               children: [
                                 Flexible(
                                   child: Text(
-                                    'THE ARMORY',
+                                    'THE DEPOT',
                                     style: TextStyle(
                                       fontFamily: 'Silkscreen',
                                       fontFamilyFallback: const ['monospace'],

@@ -40,8 +40,8 @@ void main() {
 
         // Verify navigation tabs
         expect(find.text('EXPEDITION'), findsOneWidget);
-        expect(find.text('GRIMOIRE'), findsOneWidget);
-        expect(find.text('ARMORY'), findsOneWidget);
+        expect(find.text('ATLAS'), findsOneWidget);
+        expect(find.text('DEPOT'), findsOneWidget);
         expect(find.text('SANCTUARY'), findsOneWidget);
 
         // Verify itinerary and initiate button
@@ -63,16 +63,16 @@ void main() {
         await tester.pumpAndSettle();
 
         // Test tab switching to Armory
-        await tester.tap(find.text('ARMORY'));
+        await tester.tap(find.text('DEPOT'));
         await tester.pumpAndSettle();
 
         expect(find.text('EQUIPMENT INVENTORY'), findsOneWidget);
 
         // Test tab switching to Grimoire
-        await tester.tap(find.text('GRIMOIRE'));
+        await tester.tap(find.text('ATLAS'));
         await tester.pumpAndSettle();
 
-        expect(find.text('THE GRIMOIRE'), findsOneWidget);
+        expect(find.text('THE ATLAS'), findsOneWidget);
 
         // Test tab switching to Sanctuary
         await tester.tap(

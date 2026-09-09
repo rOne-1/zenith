@@ -45,12 +45,12 @@ class ZenithNavigationBar extends StatelessWidget {
     ),
     ZenithNavigationTabItem(
       indexLabel: '02',
-      title: 'GRIMOIRE',
+      title: 'ATLAS',
       glyph: '◈', // ◈ diamond-in-diamond
     ),
     ZenithNavigationTabItem(
       indexLabel: '03',
-      title: 'ARMORY',
+      title: 'DEPOT',
       glyph: '▣', // ▣ square-in-square
     ),
     ZenithNavigationTabItem(

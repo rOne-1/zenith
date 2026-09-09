@@ -30,7 +30,7 @@ class CoachingNotice {
 class WarningTranslator {
   /// Calm coaching translation for [PosturalWarningReason.noPullingAvailable].
   static const String noPullingAvailableMessage =
-      'Focusing on pushing movements today. Consider adding pulling gear (bands/bar) to your Armory for balanced posture.';
+      'Focusing on pushing movements today. Consider adding pulling gear (bands/bar) to your Depot for balanced posture.';
 
   /// Calm coaching translation for [PosturalWarningReason.historicalDeficit].
   static const String historicalDeficitMessage =
