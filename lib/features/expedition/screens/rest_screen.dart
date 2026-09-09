@@ -215,9 +215,7 @@ class RestScreen extends ConsumerWidget {
                           const SizedBox(height: 10.0),
                           Text(
                             _formatRestTime(state.restRemaining),
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: pixelHudNumeral(
                               fontSize: 52.0,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 2.0,

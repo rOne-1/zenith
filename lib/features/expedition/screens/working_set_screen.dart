@@ -451,9 +451,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                               const SizedBox(width: 24.0),
                               Text(
                                 '${state.currentRepsInput}',
-                                style: TextStyle(
-                                  fontFamily: 'Silkscreen',
-                                  fontFamilyFallback: const ['monospace'],
+                                style: pixelHudNumeral(
                                   fontSize: 44.0,
                                   fontWeight: FontWeight.w900,
                                   color: colors.amberAccent,
