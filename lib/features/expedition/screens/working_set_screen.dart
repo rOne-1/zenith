@@ -175,11 +175,14 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                                 horizontal: 8.0,
                                 vertical: 3.0,
                               ),
-                              decoration: BoxDecoration(
+                              decoration: ShapeDecoration(
                                 color: lineTheme.color.withValues(alpha: 0.15),
-                                border: Border.all(
-                                  color: lineTheme.color,
-                                  width: 1.5,
+                                shape: SteppedPixelBorder(
+                                  side: BorderSide(
+                                    color: lineTheme.color,
+                                    width: 1.5,
+                                  ),
+                                  stepSize: context.pixelMetrics.cornerStepSize,
                                 ),
                               ),
                               child: Text(
@@ -202,11 +205,14 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                             horizontal: 8.0,
                             vertical: 3.0,
                           ),
-                          decoration: BoxDecoration(
+                          decoration: ShapeDecoration(
                             color: colors.backgroundVoid,
-                            border: Border.all(
-                              color: colors.amberAccent,
-                              width: 1.0,
+                            shape: SteppedPixelBorder(
+                              side: BorderSide(
+                                color: colors.amberAccent,
+                                width: 1.0,
+                              ),
+                              stepSize: context.pixelMetrics.cornerStepSize,
                             ),
                           ),
                           child: Text(

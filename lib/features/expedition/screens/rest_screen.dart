@@ -282,11 +282,14 @@ class RestScreen extends ConsumerWidget {
                                   horizontal: 6.0,
                                   vertical: 2.0,
                                 ),
-                                decoration: BoxDecoration(
+                                decoration: ShapeDecoration(
                                   color: colors.backgroundVoid,
-                                  border: Border.all(
-                                    color: const Color(0xFF2EE6D6),
-                                    width: 1.0,
+                                  shape: SteppedPixelBorder(
+                                    side: const BorderSide(
+                                      color: Color(0xFF2EE6D6),
+                                      width: 1.0,
+                                    ),
+                                    stepSize: context.pixelMetrics.cornerStepSize,
                                   ),
                                 ),
                                 child: Text(
@@ -507,6 +510,7 @@ class _RpeButtonState extends State<_RpeButton> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final metrics = context.pixelMetrics;
     final score = widget.score;
     final isSelected = widget.isSelected;
     final isTarget = widget.isTarget;
@@ -534,11 +538,14 @@ class _RpeButtonState extends State<_RpeButton> {
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 2.0),
           height: 38.0,
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
             color: bgColor,
-            border: Border.all(
-              color: borderColor,
-              width: isTarget || isSelected ? 1.5 : 1.0,
+            shape: SteppedPixelBorder(
+              side: BorderSide(
+                color: borderColor,
+                width: isTarget || isSelected ? 1.5 : 1.0,
+              ),
+              stepSize: metrics.cornerStepSize,
             ),
           ),
           child: Center(

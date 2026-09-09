@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
 import '../theme/theme.dart';
+import 'stepped_pixel_border.dart';
 
 /// Specification for an individual ticket tab in [ZenithNavigationBar].
 class ZenithNavigationTabItem {
@@ -133,6 +134,7 @@ class _TicketTabItemState extends State<_TicketTabItem> {
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    final metrics = context.pixelMetrics;
     final item = widget.item;
     final isSelected = widget.isSelected;
 
@@ -153,11 +155,14 @@ class _TicketTabItemState extends State<_TicketTabItem> {
         curve: HouseSpring.curve,
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 2.0),
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
             color: isSelected ? colors.surfaceDark : Colors.transparent,
-            border: Border.all(
-              color: isSelected ? activeBorderColor : Colors.transparent,
-              width: 1.5,
+            shape: SteppedPixelBorder(
+              side: BorderSide(
+                color: isSelected ? activeBorderColor : Colors.transparent,
+                width: 1.5,
+              ),
+              stepSize: metrics.cornerStepSize,
             ),
           ),
           child: Column(

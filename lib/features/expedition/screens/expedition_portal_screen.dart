@@ -220,11 +220,14 @@ class _ExpeditionPortalScreenState
                             horizontal: 8.0,
                             vertical: 3.0,
                           ),
-                          decoration: BoxDecoration(
+                          decoration: ShapeDecoration(
                             color: colors.surfaceDark,
-                            border: Border.all(
-                              color: colors.amberAccent,
-                              width: 1.5,
+                            shape: SteppedPixelBorder(
+                              side: BorderSide(
+                                color: colors.amberAccent,
+                                width: 1.5,
+                              ),
+                              stepSize: context.pixelMetrics.cornerStepSize,
                             ),
                           ),
                           child: Text(
@@ -500,11 +503,15 @@ class _ExpeditionPortalScreenState
                                       horizontal: 8.0,
                                       vertical: 2.0,
                                     ),
-                                    decoration: BoxDecoration(
+                                    decoration: ShapeDecoration(
                                       color: colors.backgroundVoid,
-                                      border: Border.all(
-                                        color: colors.amberGlow,
-                                        width: 1.0,
+                                      shape: SteppedPixelBorder(
+                                        side: BorderSide(
+                                          color: colors.amberGlow,
+                                          width: 1.0,
+                                        ),
+                                        stepSize:
+                                            context.pixelMetrics.cornerStepSize,
                                       ),
                                     ),
                                     child: Text(
