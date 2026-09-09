@@ -119,7 +119,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
     final set = state.currentSet;
     if (set == null) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: PixelLoadingIndicator()),
       );
     }
 

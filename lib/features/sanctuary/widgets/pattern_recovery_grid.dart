@@ -131,7 +131,7 @@ class PatternRecoveryGrid extends ConsumerWidget {
             loading: () => const Center(
               child: Padding(
                 padding: EdgeInsets.all(24.0),
-                child: CircularProgressIndicator(),
+                child: PixelLoadingIndicator(),
               ),
             ),
             error: (err, _) => Padding(

@@ -97,42 +97,71 @@ class ActiveExpeditionScreen extends ConsumerWidget {
     // Active workout screens
     final Widget currentPhaseWidget = switch (state.fsmState) {
       SessionState.warmUp => _WarmUpView(
-          onStart: () => controller.completeWarmUp(),
-        ),
+        onStart: () => controller.completeWarmUp(),
+      ),
       SessionState.activeSet => const WorkingSetScreen(),
       SessionState.rest => const RestScreen(),
       SessionState.coolDown => _CoolDownView(
-          isFinalizing: state.isFinalizing,
-          onFinish: () => controller.completeCoolDown(),
-        ),
+        isFinalizing: state.isFinalizing,
+        onFinish: () => controller.completeCoolDown(),
+      ),
       SessionState.completed => const ExpeditionDebriefScreen(),
     };
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      appBar: AppBar(
-        backgroundColor: colors.surfaceDark,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'ACTIVE EXPEDITION',
-          style: TextStyle(
-            fontFamily: 'Courier',
-            fontSize: 12.0,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.2,
-            color: colors.amberAccent,
-          ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Station Sign Header — matches the bespoke header pattern used
+            // by every other screen (Portal/Working Set/Rest), rather than
+            // a stock Material AppBar.
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 10.0,
+              ),
+              decoration: BoxDecoration(
+                color: colors.surfaceDark,
+                border: Border(
+                  bottom: BorderSide(color: colors.borderBright, width: 2.0),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      'ACTIVE EXPEDITION',
+                      style: TextStyle(
+                        fontFamily: 'Courier',
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                        color: colors.amberAccent,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8.0),
+                  PixelButton(
+                    variant: PixelButtonVariant.secondary,
+                    padding: const EdgeInsets.all(8.0),
+                    onPressed: () => _handleAbort(context, ref),
+                    child: Icon(
+                      Icons.close,
+                      color: colors.signalRed,
+                      size: 18.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(child: currentPhaseWidget),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.close, color: colors.signalRed, size: 20.0),
-            tooltip: 'Abort Expedition',
-            onPressed: () => _handleAbort(context, ref),
-          ),
-        ],
       ),
-      body: currentPhaseWidget,
     );
   }
 }
@@ -191,10 +220,22 @@ class _WarmUpView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 14.0),
-                      _checklistRow(colors, '2-3 min dynamic joint rotations (wrists, shoulders, hips)'),
-                      _checklistRow(colors, '10 bodyweight hinges or cat-cow spinal unloads'),
-                      _checklistRow(colors, 'Core bracing test: draw in transverse abdominis'),
-                      _checklistRow(colors, 'Gear check: clear perimeter and secure floor anchor'),
+                      _checklistRow(
+                        colors,
+                        '2-3 min dynamic joint rotations (wrists, shoulders, hips)',
+                      ),
+                      _checklistRow(
+                        colors,
+                        '10 bodyweight hinges or cat-cow spinal unloads',
+                      ),
+                      _checklistRow(
+                        colors,
+                        'Core bracing test: draw in transverse abdominis',
+                      ),
+                      _checklistRow(
+                        colors,
+                        'Gear check: clear perimeter and secure floor anchor',
+                      ),
                     ],
                   ),
                 ),
@@ -248,10 +289,7 @@ class _CoolDownView extends StatelessWidget {
   final bool isFinalizing;
   final VoidCallback onFinish;
 
-  const _CoolDownView({
-    required this.isFinalizing,
-    required this.onFinish,
-  });
+  const _CoolDownView({required this.isFinalizing, required this.onFinish});
 
   @override
   Widget build(BuildContext context) {

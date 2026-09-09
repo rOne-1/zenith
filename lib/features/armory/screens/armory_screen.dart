@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbee/sbee.dart';
 
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/pixel_button.dart';
 import '../../../core/widgets/pixel_toast.dart';
 import '../../../core/widgets/stepped_pixel_border.dart';
 import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
@@ -51,16 +52,21 @@ class ArmoryScreen extends ConsumerWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back, size: 20.0),
-                        color: colors.amberAccent,
-                        tooltip: 'Back to Dispatch',
+                      PixelButton(
+                        variant: PixelButtonVariant.secondary,
+                        padding: const EdgeInsets.all(8.0),
                         onPressed: () {
                           if (Navigator.canPop(context)) {
                             Navigator.pop(context);
                           }
                         },
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: colors.amberAccent,
+                          size: 18.0,
+                        ),
                       ),
+                      const SizedBox(width: 10.0),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
