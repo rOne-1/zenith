@@ -12,9 +12,9 @@ import 'metro_transit_map.dart';
 /// Exercise ids with sourced illustrations at
 /// `assets/exercises/<id>_frame_{1,2,3}.svg` (from bryllim/workout-guide,
 /// CC BY-SA 4.0 -- see assets/exercises/ATTRIBUTION.md and the in-app
-/// credits section). Every exercise in this set has exactly 3 frames; that
-/// invariant is what lets this be a plain id set rather than a
-/// per-exercise frame-count map.
+/// credits section). Every one of these ids has all 3 numbered frame files
+/// on disk, even though [_svgFrameOverrides] below means not every id
+/// necessarily *displays* all 3.
 const Set<String> _svgSourcedExerciseIds = {
   // Pushing
   'wall_pushup',
@@ -30,7 +30,6 @@ const Set<String> _svgSourcedExerciseIds = {
   'standard_pullup',
   'l_sit_pullup',
   // Bend & Lift
-  'good_morning',
   'towel_hamstring_curl',
   'nordic_curl',
   // Single Leg
@@ -46,6 +45,27 @@ const Set<String> _svgSourcedExerciseIds = {
   'banded_pallof_press',
   'dragon_flag',
 };
+
+/// Per-exercise override of which numbered source frames to actually
+/// display, for exercises where two of the workout-guide set's three
+/// frames depict essentially the same position (verified by eye, see
+/// local-notes/architecture/exercise_illustration_rig.md) -- showing all
+/// 3 there added a redundant repeated frame instead of a third distinct
+/// position. Exercise ids not listed here use all three frames in order.
+const Map<String, List<int>> _svgFrameOverrides = {
+  'chair_dip': [1, 3],
+  'feet_elevated_pushup': [1, 3],
+  'doorframe_row': [1, 3],
+  'side_plank': [1, 2],
+  'knee_pushup': [1, 3],
+  'bulgarian_split_squat': [1, 3],
+  'full_pistol_squat': [1, 3],
+  'reverse_lunge': [1, 3],
+  'banded_pallof_press': [1, 2],
+};
+
+List<int> _svgFramesFor(String exerciseId) =>
+    _svgFrameOverrides[exerciseId] ?? const [1, 2, 3];
 
 /// True if [exerciseId] has an illustration -- sourced or custom-rig --
 /// available. Exposed so callers/tests can check coverage without
@@ -111,11 +131,12 @@ class _SvgFrameStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final frameNumbers = _svgFramesFor(exerciseId);
     return _FrameRow(
-      frameCount: 3,
+      frameCount: frameNumbers.length,
       accentColor: accentColor,
       frameBuilder: (i) => SvgPicture.asset(
-        'assets/exercises/${exerciseId}_frame_${i + 1}.svg',
+        'assets/exercises/${exerciseId}_frame_${frameNumbers[i]}.svg',
         colorFilter: ColorFilter.mode(accentColor, BlendMode.srcIn),
         fit: BoxFit.contain,
       ),
@@ -163,9 +184,24 @@ class _FrameRow extends StatelessWidget {
     // own padding is accounted for -- scrolling horizontally instead of
     // shrinking the frames (or risking overflow) keeps every illustration
     // at a consistent, legible size regardless of screen width.
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Center(child: _row(context)),
+    //
+    // SingleChildScrollView gives its child unbounded width, so a bare
+    // Center() can't actually center anything -- it just shrink-wraps,
+    // leaving the row stuck at scroll offset 0 (flush left) with empty
+    // space to the right whenever the content is narrower than the card.
+    // Forcing the child's minWidth up to the available width first gives
+    // Center something to center within when the row fits, while still
+    // scrolling normally (Center just shrink-wraps again) when it doesn't.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: constraints.maxWidth),
+            child: Center(child: _row(context)),
+          ),
+        );
+      },
     );
   }
 

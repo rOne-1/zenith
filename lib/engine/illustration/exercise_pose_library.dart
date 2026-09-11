@@ -127,6 +127,34 @@ const Map<String, List<FigurePose>> customPoseLibrary = {
     ),
   ],
 
+  // Prisoner Good Morning -- no bodyweight variant exists in
+  // bryllim/workout-guide (only a barbell-loaded good-morning, which
+  // would misleadingly show equipment this exercise doesn't use), so this
+  // uses the rig instead. Anatomically a shallower forward hip hinge than
+  // hip_hinge above (about halfway down, not a full hinge). The rig has
+  // no way to draw "fingertips behind head" distinctly from any other
+  // bent-arm position, so the arms are just held moderately bent
+  // throughout as a neutral approximation -- the FORM CUES text carries
+  // the actual hand placement.
+  'good_morning': [
+    FigurePose(
+      anchor: FigureAnchor.standing,
+      kneeFlexion: 8,
+      shoulderFlexion: 20,
+      elbowFlexion: 110,
+      cueRef: 'cue[0]', // fingertips behind head, elbows wide
+    ),
+    FigurePose(
+      anchor: FigureAnchor.standing,
+      torsoLean: 45,
+      hipFlexion: 10,
+      kneeFlexion: 12,
+      shoulderFlexion: 20,
+      elbowFlexion: 110,
+      cueRef: 'cue[1]', // hinge forward about halfway, hamstrings stretch
+    ),
+  ],
+
   // Single-Leg Bodyweight RDL -- standing leg stays near-vertical (same
   // principle as the hip hinge above); the trailing leg extends backward
   // in roughly a straight line with the torso, which is what the rear-leg

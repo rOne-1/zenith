@@ -19,7 +19,6 @@ const _svgSourcedExerciseIds = {
   'inverted_row',
   'standard_pullup',
   'l_sit_pullup',
-  'good_morning',
   'towel_hamstring_curl',
   'nordic_curl',
   'air_squat',

@@ -26,8 +26,6 @@ BY-SA 4.0 terms as the originals.
 - **dragon_flag** (`Dragon Flag`, workout-guide slug `dragon-flag`)
 - **feet_elevated_pushup** (`Decline Push-up`, workout-guide slug `decline-push-up`)
 - **full_pistol_squat** (`Pistol Squat`, workout-guide slug `pistol-squat`)
-- **good_morning** (`Good Morning`, workout-guide slug `good-morning`)
-  - includes frames sourced from Everkinetic (https://github.com/everkinetic/data/blob/main/dist/svg/0101-tension.svg)
 - **inverted_row** (`Inverted Row`, workout-guide slug `inverted-row`)
   - includes frames sourced from Everkinetic (https://github.com/everkinetic/data/blob/main/dist/svg/0086-tension.svg)
 - **knee_pushup** (`Knee Push-up`, workout-guide slug `knee-push-up`)

@@ -25,8 +25,6 @@ const String kIllustrationLicenseUrl =
 /// CC BY-SA 4.0), mapped to the specific upstream SVG. A subset of the
 /// SVG-sourced set (see [isSvgSourcedExercise] in `exercise_illustration.dart`).
 const Map<String, String> kEverkineticSources = {
-  'good_morning':
-      'https://github.com/everkinetic/data/blob/main/dist/svg/0101-tension.svg',
   'inverted_row':
       'https://github.com/everkinetic/data/blob/main/dist/svg/0086-tension.svg',
   'reverse_lunge':
