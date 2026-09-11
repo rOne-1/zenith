@@ -16,6 +16,19 @@ final sbeeEngineProvider = Provider<SbeeEngine>((ref) {
   );
 });
 
+/// Whole-account "Intermediate" status, mirroring the same gate SBEE's own
+/// engine uses to unlock specialty/higher-difficulty exercises during
+/// workout generation (see `SbeeEngine.beginnerMaxDifficultyTier`) --
+/// so the Grimoire's tier-lock display always agrees with what the engine
+/// will actually let the athlete train.
+final isIntermediateStatusProvider = FutureProvider<bool>((ref) async {
+  final progressionRepo = ref.watch(progressionRepositoryProvider);
+  final achievedDate = await progressionRepo.getStatusAchievedDate(
+    'Intermediate',
+  );
+  return achievedDate != null;
+});
+
 /// Startup probe provider that inspects persistence for any active,
 /// incomplete session left over from a previous run or unexpected termination.
 final activeSessionResumeProvider = FutureProvider<SessionStreamManager?>((

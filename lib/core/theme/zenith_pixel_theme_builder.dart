@@ -35,6 +35,84 @@ class HouseSpringPageTransitionsBuilder extends PageTransitionsBuilder {
   }
 }
 
+/// Builds a [FontBuilder] for [family] (with [fallback] as its fallback
+/// family name): a plain [TextStyle] under test (avoiding network font
+/// loading), or [safeGoogleFont] otherwise. Every font the theme needs is
+/// produced by this one function instead of separately hand-written
+/// ~90-line closures repeating the same 19-parameter signature per
+/// family/environment combination.
+FontBuilder _buildFont({required String family, required String fallback}) {
+  return ({
+    TextStyle? textStyle,
+    Color? color,
+    Color? backgroundColor,
+    double? fontSize,
+    FontWeight? fontWeight,
+    FontStyle? fontStyle,
+    double? letterSpacing,
+    double? wordSpacing,
+    TextBaseline? textBaseline,
+    double? height,
+    Locale? locale,
+    Paint? foreground,
+    Paint? background,
+    List<Shadow>? shadows,
+    List<FontFeature>? fontFeatures,
+    TextDecoration? decoration,
+    Color? decorationColor,
+    TextDecorationStyle? decorationStyle,
+    double? decorationThickness,
+  }) {
+    if (isTestEnvironment) {
+      return TextStyle(
+        fontFamily: family,
+        fontFamilyFallback: [fallback],
+        color: color,
+        backgroundColor: backgroundColor,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        fontStyle: fontStyle,
+        letterSpacing: letterSpacing,
+        wordSpacing: wordSpacing,
+        textBaseline: textBaseline,
+        height: height,
+        locale: locale,
+        foreground: foreground,
+        background: background,
+        shadows: shadows,
+        fontFeatures: fontFeatures,
+        decoration: decoration,
+        decorationColor: decorationColor,
+        decorationStyle: decorationStyle,
+        decorationThickness: decorationThickness,
+      );
+    }
+    return safeGoogleFont(
+      family: family,
+      fallbackFamily: fallback,
+      textStyle: textStyle,
+      color: color,
+      backgroundColor: backgroundColor,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      fontStyle: fontStyle,
+      letterSpacing: letterSpacing,
+      wordSpacing: wordSpacing,
+      textBaseline: textBaseline,
+      height: height,
+      locale: locale,
+      foreground: foreground,
+      background: background,
+      shadows: shadows,
+      fontFeatures: fontFeatures,
+      decoration: decoration,
+      decorationColor: decorationColor,
+      decorationStyle: decorationStyle,
+      decorationThickness: decorationThickness,
+    );
+  };
+}
+
 /// Factory that consumes a [ZenithDistrictPalette] and returns a fully-configured
 /// [AppTheme<ZenithDistrictColors>] wired with pixel metrics, typography, and physics.
 class ZenithPixelThemeBuilder {
@@ -62,193 +140,10 @@ class ZenithPixelThemeBuilder {
 
     const pixelMetrics = ZenithPixelMetrics();
 
-    final FontBuilder effectiveDisplayFont;
-    if (displayFont != null) {
-      effectiveDisplayFont = displayFont;
-    } else if (isTestEnvironment) {
-      effectiveDisplayFont =
-          ({
-            TextStyle? textStyle,
-            Color? color,
-            Color? backgroundColor,
-            double? fontSize,
-            FontWeight? fontWeight,
-            FontStyle? fontStyle,
-            double? letterSpacing,
-            double? wordSpacing,
-            TextBaseline? textBaseline,
-            double? height,
-            Locale? locale,
-            Paint? foreground,
-            Paint? background,
-            List<Shadow>? shadows,
-            List<FontFeature>? fontFeatures,
-            TextDecoration? decoration,
-            Color? decorationColor,
-            TextDecorationStyle? decorationStyle,
-            double? decorationThickness,
-          }) => TextStyle(
-            fontFamily: 'Silkscreen',
-            fontFamilyFallback: const ['monospace'],
-            color: color,
-            backgroundColor: backgroundColor,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            fontStyle: fontStyle,
-            letterSpacing: letterSpacing,
-            wordSpacing: wordSpacing,
-            textBaseline: textBaseline,
-            height: height,
-            locale: locale,
-            foreground: foreground,
-            background: background,
-            shadows: shadows,
-            fontFeatures: fontFeatures,
-            decoration: decoration,
-            decorationColor: decorationColor,
-            decorationStyle: decorationStyle,
-            decorationThickness: decorationThickness,
-          );
-    } else {
-      effectiveDisplayFont =
-          ({
-            TextStyle? textStyle,
-            Color? color,
-            Color? backgroundColor,
-            double? fontSize,
-            FontWeight? fontWeight,
-            FontStyle? fontStyle,
-            double? letterSpacing,
-            double? wordSpacing,
-            TextBaseline? textBaseline,
-            double? height,
-            Locale? locale,
-            Paint? foreground,
-            Paint? background,
-            List<Shadow>? shadows,
-            List<FontFeature>? fontFeatures,
-            TextDecoration? decoration,
-            Color? decorationColor,
-            TextDecorationStyle? decorationStyle,
-            double? decorationThickness,
-          }) => safeGoogleFont(
-            family: 'Silkscreen',
-            fallbackFamily: 'monospace',
-            textStyle: textStyle,
-            color: color,
-            backgroundColor: backgroundColor,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            fontStyle: fontStyle,
-            letterSpacing: letterSpacing,
-            wordSpacing: wordSpacing,
-            textBaseline: textBaseline,
-            height: height,
-            locale: locale,
-            foreground: foreground,
-            background: background,
-            shadows: shadows,
-            fontFeatures: fontFeatures,
-            decoration: decoration,
-            decorationColor: decorationColor,
-            decorationStyle: decorationStyle,
-            decorationThickness: decorationThickness,
-          );
-    }
-
-    final FontBuilder effectiveBodyFont;
-    if (bodyFont != null) {
-      effectiveBodyFont = bodyFont;
-    } else if (isTestEnvironment) {
-      effectiveBodyFont =
-          ({
-            TextStyle? textStyle,
-            Color? color,
-            Color? backgroundColor,
-            double? fontSize,
-            FontWeight? fontWeight,
-            FontStyle? fontStyle,
-            double? letterSpacing,
-            double? wordSpacing,
-            TextBaseline? textBaseline,
-            double? height,
-            Locale? locale,
-            Paint? foreground,
-            Paint? background,
-            List<Shadow>? shadows,
-            List<FontFeature>? fontFeatures,
-            TextDecoration? decoration,
-            Color? decorationColor,
-            TextDecorationStyle? decorationStyle,
-            double? decorationThickness,
-          }) => TextStyle(
-            fontFamily: 'Inter',
-            fontFamilyFallback: const ['sans-serif'],
-            color: color,
-            backgroundColor: backgroundColor,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            fontStyle: fontStyle,
-            letterSpacing: letterSpacing,
-            wordSpacing: wordSpacing,
-            textBaseline: textBaseline,
-            height: height,
-            locale: locale,
-            foreground: foreground,
-            background: background,
-            shadows: shadows,
-            fontFeatures: fontFeatures,
-            decoration: decoration,
-            decorationColor: decorationColor,
-            decorationStyle: decorationStyle,
-            decorationThickness: decorationThickness,
-          );
-    } else {
-      effectiveBodyFont =
-          ({
-            TextStyle? textStyle,
-            Color? color,
-            Color? backgroundColor,
-            double? fontSize,
-            FontWeight? fontWeight,
-            FontStyle? fontStyle,
-            double? letterSpacing,
-            double? wordSpacing,
-            TextBaseline? textBaseline,
-            double? height,
-            Locale? locale,
-            Paint? foreground,
-            Paint? background,
-            List<Shadow>? shadows,
-            List<FontFeature>? fontFeatures,
-            TextDecoration? decoration,
-            Color? decorationColor,
-            TextDecorationStyle? decorationStyle,
-            double? decorationThickness,
-          }) => safeGoogleFont(
-            family: 'Inter',
-            fallbackFamily: 'sans-serif',
-            textStyle: textStyle,
-            color: color,
-            backgroundColor: backgroundColor,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            fontStyle: fontStyle,
-            letterSpacing: letterSpacing,
-            wordSpacing: wordSpacing,
-            textBaseline: textBaseline,
-            height: height,
-            locale: locale,
-            foreground: foreground,
-            background: background,
-            shadows: shadows,
-            fontFeatures: fontFeatures,
-            decoration: decoration,
-            decorationColor: decorationColor,
-            decorationStyle: decorationStyle,
-            decorationThickness: decorationThickness,
-          );
-    }
+    final FontBuilder effectiveDisplayFont = displayFont ??
+        _buildFont(family: 'Silkscreen', fallback: 'monospace');
+    final FontBuilder effectiveBodyFont =
+        bodyFont ?? _buildFont(family: 'Inter', fallback: 'sans-serif');
 
     final themeData = ThemeData(
       brightness: Brightness.dark,

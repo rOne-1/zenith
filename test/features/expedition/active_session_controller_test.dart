@@ -216,6 +216,41 @@ void main() {
     );
 
     test(
+      'completeCoolDown and abortSession both dispose the SessionStreamManager',
+      () async {
+        // Regression coverage: the manager (and its underlying RxDart
+        // subject) used to never be disposed anywhere, leaking a stream on
+        // every session lifecycle transition.
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final session1 = createTestSession(setCount: 1);
+        await controller.startSession(session1);
+        controller.completeWarmUp();
+        controller.completeCurrentSet(actualReps: 10);
+        await controller.logRpe(8);
+        await controller.completeCoolDown();
+
+        expect(
+          controller.currentManager,
+          isNull,
+          reason: 'manager must be disposed and cleared once a session completes',
+        );
+
+        final session2 = createTestSession(setCount: 1);
+        await controller.startSession(session2);
+        expect(controller.currentManager, isNotNull);
+
+        await controller.abortSession();
+        expect(
+          controller.currentManager,
+          isNull,
+          reason: 'manager must be disposed and cleared once a session is aborted',
+        );
+      },
+    );
+
+    test(
       'finalizeSession reflects SBEE\'s female-adjusted decision, not a raw RPE comparison',
       () async {
         // Untrained_Female, cycle day 1-3 -> SBEE internally adjusts the

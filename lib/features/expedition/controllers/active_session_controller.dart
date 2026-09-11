@@ -6,7 +6,9 @@ import 'package:sbee/sbee.dart';
 import '../../../engine/engine.dart';
 import '../../armory/providers/user_profile_provider.dart';
 import '../../outpost/services/streak_service.dart';
+import '../../sanctuary/services/adaptation_ledger_service.dart';
 import '../../sanctuary/services/macrocycle_service.dart';
+import '../../sanctuary/services/recovery_status_service.dart';
 import '../services/workout_preview_service.dart';
 
 /// Decision output of the Kenneth Miller autoregulation evaluation.
@@ -175,6 +177,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   Future<void> startSession(WorkoutSession session) async {
     _cancelTimer();
     await _progressSubscription?.cancel();
+    _disposeManager();
 
     final sessionRepo = _ref.read(sessionRepositoryProvider);
     final manager = SessionStreamManager(sessionRepository: sessionRepo);
@@ -188,6 +191,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   void resumeSession(SessionStreamManager existingManager) {
     _cancelTimer();
     _progressSubscription?.cancel();
+    _disposeManager();
 
     _manager = existingManager;
     final progress = existingManager.currentState;
@@ -195,6 +199,15 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
     if (session != null) {
       _attachManager(existingManager, session, initialProgress: progress);
     }
+  }
+
+  /// Disposes the current [SessionStreamManager], if any, releasing its
+  /// underlying RxDart subject. Every place `_manager` is replaced or
+  /// dropped must go through this rather than reassigning/nulling it
+  /// directly, or the previous instance's stream never closes.
+  void _disposeManager() {
+    _manager?.dispose();
+    _manager = null;
   }
 
   void _attachManager(
@@ -463,6 +476,12 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       _ref.invalidate(activeSessionResumeProvider);
       _ref.invalidate(currentStreakProvider);
       _ref.invalidate(macrocycleProvider);
+      _ref.invalidate(recoveryStatusProvider);
+      _ref.invalidate(adaptationLedgerProvider);
+
+      // The manager's job ends here -- nothing after this point reads
+      // _manager (the debrief screen that follows doesn't reference it).
+      _disposeManager();
 
       state = state.copyWith(
         session: completedSession,
@@ -481,7 +500,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   /// Discards the active workout attempt and resets state.
   Future<void> abortSession() async {
     _cancelTimer();
-    _manager = null;
+    _disposeManager();
     state = ActiveSessionState.initial;
 
     final sub = _progressSubscription;
@@ -510,6 +529,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   void dispose() {
     _cancelTimer();
     _progressSubscription?.cancel();
+    _disposeManager();
     super.dispose();
   }
 }

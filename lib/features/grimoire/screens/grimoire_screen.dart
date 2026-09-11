@@ -1,37 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbee/sbee.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/pixel_button.dart';
+import '../../../engine/engine.dart';
 import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../widgets/metro_transit_map.dart';
 import '../widgets/station_inspector_sheet.dart';
 
 /// The Grimoire: Visual Metro Transit Map of Movement Progressions.
-class GrimoireScreen extends StatefulWidget {
-  final bool isIntermediateUser;
-
-  const GrimoireScreen({super.key, this.isIntermediateUser = false});
+class GrimoireScreen extends ConsumerStatefulWidget {
+  const GrimoireScreen({super.key});
 
   @override
-  State<GrimoireScreen> createState() => _GrimoireScreenState();
+  ConsumerState<GrimoireScreen> createState() => _GrimoireScreenState();
 }
 
-class _GrimoireScreenState extends State<GrimoireScreen> {
+class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
   MovementPattern? _selectedPattern;
 
-  void _handleSelectStation(Exercise exercise) {
+  void _handleSelectStation(Exercise exercise, bool isIntermediateUser) {
     StationInspectorSheet.show(
       context,
       exercise: exercise,
-      isIntermediateUser: widget.isIntermediateUser,
+      isIntermediateUser: isIntermediateUser,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
+    // Defaults to locked (false) while the status is still resolving or on
+    // error -- the same safe default the old hardcoded value always was.
+    final isIntermediateUser =
+        ref.watch(isIntermediateStatusProvider).valueOrNull ?? false;
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
@@ -201,8 +205,9 @@ class _GrimoireScreenState extends State<GrimoireScreen> {
               Expanded(
                 child: MetroTransitMap(
                   activePatternFilter: _selectedPattern,
-                  onStationSelected: _handleSelectStation,
-                  isIntermediateUser: widget.isIntermediateUser,
+                  onStationSelected: (exercise) =>
+                      _handleSelectStation(exercise, isIntermediateUser),
+                  isIntermediateUser: isIntermediateUser,
                 ),
               ),
             ],

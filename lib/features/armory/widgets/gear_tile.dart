@@ -173,13 +173,16 @@ class _GearTileState extends State<GearTile>
       statusLabel = 'LOCKED ○';
     }
 
-    final double dropOffset = _isPressed
-        ? 2.0
-        : (1.0 - _springAnimation.value) * 1.5;
-
     return AnimatedBuilder(
       animation: _springAnimation,
       builder: (context, child) {
+        // Must read _springAnimation.value inside the builder, not before
+        // it, so the transform actually updates on every animation tick
+        // instead of being frozen at whatever value it had during the last
+        // full build().
+        final dropOffset = _isPressed
+            ? 2.0
+            : (1.0 - _springAnimation.value) * 1.5;
         return Transform.translate(offset: Offset(0, dropOffset), child: child);
       },
       child: GestureDetector(

@@ -52,6 +52,48 @@ void main() {
     });
 
     test(
+      'cache stays valid for a structurally-identical but differently-constructed femaleProfile',
+      () async {
+        // Regression coverage: isCacheValid used to compare FemaleProfile by
+        // identity (it has no == of its own), so two instances with equal
+        // field values but different identity -- e.g. one round-tripped
+        // through UserProfile.fromJson -- would wrongly invalidate the
+        // cache and force an unnecessary regeneration.
+        final service = container.read(workoutPreviewServiceProvider);
+        final now = DateTime(2026, 9, 8, 10, 0);
+
+        final profileA = UserProfile(
+          availableEquipment: const {Equipment.bodyweight},
+          femaleProfile: const FemaleProfile(
+            userStatus: 'Untrained_Female',
+            cycleDay: 2,
+            hasKneeDiscomfort: false,
+            age: 25,
+            hasJointPain: false,
+          ),
+        );
+        await service.getOrGeneratePreview(profile: profileA, currentTime: now);
+
+        // Round-tripping through JSON (as persistence does) constructs a
+        // genuinely distinct, non-const FemaleProfile instance at runtime --
+        // unlike two `const FemaleProfile(...)` literals, which Dart
+        // canonicalizes to the same object and would pass `identical` even
+        // with the bug present, defeating the point of this regression test.
+        final profileB = UserProfile.fromJson(profileA.toJson());
+
+        expect(
+          identical(profileA.femaleProfile, profileB.femaleProfile),
+          isFalse,
+          reason: 'the two FemaleProfile instances must be distinct objects',
+        );
+        expect(
+          service.isCacheValid(profile: profileB, currentTime: now),
+          isTrue,
+        );
+      },
+    );
+
+    test(
       'returns identical cached session on subsequent calls within same calendar day',
       () async {
         final service = container.read(workoutPreviewServiceProvider);

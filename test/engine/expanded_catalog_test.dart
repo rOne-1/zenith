@@ -64,6 +64,39 @@ void main() {
     });
 
     test(
+      'Single Leg and Rotation lines have a clean, gap-free tier sequence',
+      () {
+        // Regression coverage: assistedPistolSquat previously duplicated
+        // skaterSquat's tier 4 (skipping tier 5) on the Single Leg line,
+        // and dragonFlag previously sat at tier 6 (skipping tier 5) on the
+        // Rotation line, both misrepresenting the intended 1..N progression
+        // in the Grimoire's Metro Transit Map UI. Scoped to the lines whose
+        // exercise count matches their tier span (Bend & Lift, Single Leg,
+        // Rotation) -- Pushing (8 exercises across 6 tiers) and Pulling (7
+        // across 6) intentionally repeat tiers by design, so a universal
+        // no-duplicates rule across all 5 lines would be a false invariant.
+        for (final pattern in [
+          MovementPattern.bendAndLift,
+          MovementPattern.singleLeg,
+          MovementPattern.rotation,
+        ]) {
+          final tiers = expandedExercises
+              .where((e) => e.movementPattern == pattern)
+              .map((e) => e.difficultyTier)
+              .toList()
+            ..sort();
+          final expected = List<int>.generate(tiers.length, (i) => i + 1);
+          expect(
+            tiers,
+            equals(expected),
+            reason:
+                '$pattern line has tiers $tiers, expected a clean 1..${tiers.length} sequence with no gaps or duplicates',
+          );
+        }
+      },
+    );
+
+    test(
       'Every exercise has non-empty default cues and valid metro metadata',
       () {
         for (final ex in expandedExercises) {

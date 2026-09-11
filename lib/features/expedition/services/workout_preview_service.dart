@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbee/sbee.dart';
 
@@ -27,9 +26,7 @@ class WorkoutPreviewService {
 
   WorkoutSession? _cachedSession;
   DateTime? _cachedDay;
-  Set<Equipment>? _cachedEquipment;
-  bool? _cachedJointPain;
-  FemaleProfile? _cachedFemaleProfile;
+  UserProfile? _cachedProfile;
 
   WorkoutPreviewService(this._sbeeService);
 
@@ -47,9 +44,12 @@ class WorkoutPreviewService {
     final targetDay = DateTime(targetTime.year, targetTime.month, targetTime.day);
 
     if (!_cachedDay!.isAtSameMomentAs(targetDay)) return false;
-    if (!setEquals(_cachedEquipment, profile.availableEquipment)) return false;
-    if (_cachedJointPain != profile.hasJointPain) return false;
-    if (_cachedFemaleProfile != profile.femaleProfile) return false;
+    // UserProfile's own == already does structural equipment/joint-pain/
+    // femaleProfile comparison (including FemaleProfile field-by-field,
+    // since that SBEE class has no == of its own) -- comparing the whole
+    // profile here instead of three separately-cached fields means this
+    // can't drift out of sync with what UserProfile itself considers equal.
+    if (_cachedProfile != profile) return false;
 
     return true;
   }
@@ -76,9 +76,7 @@ class WorkoutPreviewService {
 
     _cachedSession = session;
     _cachedDay = today;
-    _cachedEquipment = Set<Equipment>.from(profile.availableEquipment);
-    _cachedJointPain = profile.hasJointPain;
-    _cachedFemaleProfile = profile.femaleProfile;
+    _cachedProfile = profile;
 
     return session;
   }
@@ -87,9 +85,7 @@ class WorkoutPreviewService {
   void invalidateCache() {
     _cachedSession = null;
     _cachedDay = null;
-    _cachedEquipment = null;
-    _cachedJointPain = null;
-    _cachedFemaleProfile = null;
+    _cachedProfile = null;
   }
 }
 

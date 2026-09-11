@@ -404,7 +404,7 @@ const assistedPistolSquat = Exercise(
   id: 'assisted_pistol_squat',
   name: 'Assisted Pistol Squat',
   movementPattern: MovementPattern.singleLeg,
-  difficultyTier: 4,
+  difficultyTier: 5,
   equipmentRequirements: {Equipment.benchOrChair},
   defaultCues: [
     'Sit down to bench on single working foot, opposite leg extended out.',
@@ -431,7 +431,7 @@ const fullPistolSquat = Exercise(
 );
 
 // ============================================================================
-// 5. ROTATION LINE (5 Exercises, T1 - T6)
+// 5. ROTATION LINE (5 Exercises, T1 - T5)
 // ============================================================================
 
 const deadBug = Exercise(
@@ -503,7 +503,7 @@ const dragonFlag = Exercise(
   id: 'dragon_flag',
   name: 'Dragon Flag Core Extension',
   movementPattern: MovementPattern.rotation,
-  difficultyTier: 6,
+  difficultyTier: 5,
   equipmentRequirements: {Equipment.benchOrChair},
   defaultCues: [
     'Lie on bench gripping top edges firmly behind head.',

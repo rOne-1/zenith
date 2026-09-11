@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/features/grimoire/grimoire.dart';
@@ -8,9 +9,11 @@ void main() {
     'GrimoireScreen renders metro transit map, filters lines, and inspects station',
     (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          theme: zenithThemeRegistry.defaultTheme.themeData,
-          home: const GrimoireScreen(),
+        ProviderScope(
+          child: MaterialApp(
+            theme: zenithThemeRegistry.defaultTheme.themeData,
+            home: const GrimoireScreen(),
+          ),
         ),
       );
 
@@ -86,9 +89,11 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        MaterialApp(
-          theme: zenithThemeRegistry.defaultTheme.themeData,
-          home: const GrimoireScreen(),
+        ProviderScope(
+          child: MaterialApp(
+            theme: zenithThemeRegistry.defaultTheme.themeData,
+            home: const GrimoireScreen(),
+          ),
         ),
       );
 
