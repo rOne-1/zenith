@@ -6,6 +6,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../grimoire/widgets/metro_transit_map.dart';
 import '../services/recovery_status_service.dart';
+import 'sanctuary_card_chrome.dart';
 
 /// Section widget rendering the 48-hour recovery cooldown clocks across all
 /// 5 ACE IFT movement patterns.
@@ -25,80 +26,21 @@ class PatternRecoveryGrid extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.radar_outlined,
-                      color: colors.amberAccent,
-                      size: 18.0,
-                    ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'RECOVERY STATUS',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1.0,
-                              color: colors.amberAccent,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            'NEUROMUSCULAR RECOVERY RADAR',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
-                              fontSize: 8.0,
-                              letterSpacing: 0.5,
-                              color: colors.textMuted,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+          SanctuaryCardHeader(
+            icon: Icons.radar_outlined,
+            title: 'RECOVERY STATUS',
+            subtitle: 'NEUROMUSCULAR RECOVERY RADAR',
+            trailing: PixelBadge(
+              text: '48H PROTOCOL',
+              textColor: colors.textMuted,
+              borderColor: colors.borderMuted,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 6.0,
+                vertical: 2.0,
               ),
-              const SizedBox(width: 8.0),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 6.0,
-                  vertical: 2.0,
-                ),
-                decoration: BoxDecoration(
-                  color: colors.backgroundVoid,
-                  border: Border.all(
-                    color: colors.borderMuted,
-                    width: 1.0,
-                  ),
-                ),
-                child: Text(
-                  '48H PROTOCOL',
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
-                    fontSize: 8.0,
-                    fontWeight: FontWeight.w700,
-                    color: colors.textMuted,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
+              fontSize: 8.0,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           const SizedBox(height: 6.0),
           Text(
@@ -117,7 +59,8 @@ class PatternRecoveryGrid extends ConsumerWidget {
             data: (statuses) {
               return Column(
                 children: MovementPattern.values.map((pattern) {
-                  final status = statuses[pattern] ??
+                  final status =
+                      statuses[pattern] ??
                       PatternRecoveryStatus(
                         pattern: pattern,
                         isFresh: true,
@@ -177,8 +120,8 @@ class _PatternRecoveryRow extends StatelessWidget {
     final Color statusColor = isFresh
         ? const Color(0xFF2EE6D6)
         : (status.remainingLockDuration.inHours > 24
-            ? colors.signalRed
-            : colors.amberAccent);
+              ? colors.signalRed
+              : colors.amberAccent);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0),
@@ -186,7 +129,9 @@ class _PatternRecoveryRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.backgroundVoid,
         border: Border.all(
-          color: isFresh ? colors.borderMuted : statusColor.withValues(alpha: 0.6),
+          color: isFresh
+              ? colors.borderMuted
+              : statusColor.withValues(alpha: 0.6),
           width: 1.0,
         ),
       ),
@@ -206,10 +151,7 @@ class _PatternRecoveryRow extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: lineTheme.color.withValues(alpha: 0.2),
-                        border: Border.all(
-                          color: lineTheme.color,
-                          width: 1.5,
-                        ),
+                        border: Border.all(color: lineTheme.color, width: 1.5),
                       ),
                       child: Text(
                         lineTheme.codePrefix,
@@ -251,10 +193,7 @@ class _PatternRecoveryRow extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: statusColor.withValues(alpha: 0.12),
-                  border: Border.all(
-                    color: statusColor,
-                    width: 1.0,
-                  ),
+                  border: Border.all(color: statusColor, width: 1.0),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -270,10 +209,9 @@ class _PatternRecoveryRow extends StatelessWidget {
                         period: status.remainingLockDuration.inHours > 24
                             ? const Duration(milliseconds: 1400)
                             : const Duration(milliseconds: 2200),
-                        minOpacity:
-                            status.remainingLockDuration.inHours > 24
-                                ? 0.15
-                                : 0.35,
+                        minOpacity: status.remainingLockDuration.inHours > 24
+                            ? 0.15
+                            : 0.35,
                       ),
                       const SizedBox(width: 5.0),
                     ],

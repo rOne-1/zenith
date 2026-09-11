@@ -70,17 +70,36 @@ class PromotionEvent {
 class AdaptationLedgerState {
   final List<MillerAdaptationItem> adaptations;
   final List<PromotionEvent> recentPromotions;
-  final int totalVariablesUpgraded;
-  final int highestCompetencyTier;
 
   const AdaptationLedgerState({
     required this.adaptations,
     required this.recentPromotions,
-    required this.totalVariablesUpgraded,
-    required this.highestCompetencyTier,
   });
 
   bool get isEmpty => adaptations.isEmpty;
+
+  /// Total Miller-variable upgrades across every tracked exercise (each
+  /// level above baseline counts as one upgrade). Derived from
+  /// [adaptations] rather than stored separately, so it can never drift
+  /// from the items it summarizes.
+  int get totalVariablesUpgraded => adaptations.fold(
+    0,
+    (sum, item) =>
+        sum +
+        (item.variables.load - 1) +
+        (item.variables.bodyPosition - 1) +
+        (item.variables.rom - 1) +
+        (item.variables.height - 1) +
+        (item.variables.tempo - 1),
+  );
+
+  /// The highest competency tier among all tracked exercises, or 1 (the
+  /// baseline tier) if there are none.
+  int get highestCompetencyTier => adaptations.isEmpty
+      ? 1
+      : adaptations
+            .map((a) => a.competencyLevel)
+            .reduce((a, b) => a > b ? a : b);
 }
 
 /// Service that coordinates with [ProgressionRepository] and [SessionRepository]
@@ -96,35 +115,42 @@ class AdaptationLedgerService {
 
   /// Resolves the comprehensive adaptation state across all tracked exercises.
   Future<AdaptationLedgerState> getLedgerState({DateTime? currentTime}) async {
-    final progressions = await _progressionRepository.getAllProgressions();
+    final now = currentTime ?? DateTime.now();
+    final lookbackStart = now.subtract(const Duration(days: 30));
+
+    // Independent reads -- run concurrently rather than one after the other.
+    final results = await Future.wait([
+      _progressionRepository.getAllProgressions(),
+      _sessionRepository.getSessionsInDateRange(lookbackStart, now),
+    ]);
+    final progressions = results[0] as List<ExerciseProgression>;
+    final recentSessions = results[1] as List<WorkoutSession>;
+
+    // Built once and reused for every lookup below, instead of re-scanning
+    // both catalogs (ExerciseGraph.findById is a linear scan) per item.
+    final exerciseById = <String, Exercise>{
+      for (final e in baselineExerciseGraph.exercises) e.id: e,
+      for (final e in expandedExerciseGraph.exercises) e.id: e,
+    };
 
     final List<MillerAdaptationItem> items = [];
-    int totalUpgrades = 0;
-    int maxTier = 1;
 
     if (progressions.isNotEmpty) {
       for (final prog in progressions) {
-        final exercise = expandedExerciseGraph.findById(prog.exerciseId) ??
-            baselineExerciseGraph.findById(prog.exerciseId);
+        final exercise = exerciseById[prog.exerciseId];
 
-        final name = exercise?.name ??
-            prog.exerciseId
-                .split('_')
-                .map((w) =>
-                    w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}')
-                .join(' ');
+        // An unresolvable id means the progression repository and the
+        // current catalog have drifted (e.g. a removed/renamed exercise) --
+        // a data-integrity mismatch, not a display nicety. Fall back to the
+        // raw id verbatim (as `active_session_controller.dart`'s own
+        // exercise-name fallback already does), rather than fabricating a
+        // plausible-looking title-cased name that would hide the mismatch.
+        // `movementPattern` has no "unknown" value to fall back to instead
+        // (SBEE's own closed enum), so this entry unavoidably renders under
+        // an arbitrary pattern -- the visibly-raw id is what actually
+        // surfaces the mismatch.
+        final name = exercise?.name ?? prog.exerciseId;
         final pattern = exercise?.movementPattern ?? MovementPattern.pushing;
-
-        if (prog.competencyLevel > maxTier) {
-          maxTier = prog.competencyLevel;
-        }
-
-        // Count non-baseline variables (each level above 1 is an upgrade)
-        totalUpgrades += (prog.variables.load - 1);
-        totalUpgrades += (prog.variables.bodyPosition - 1);
-        totalUpgrades += (prog.variables.rom - 1);
-        totalUpgrades += (prog.variables.height - 1);
-        totalUpgrades += (prog.variables.tempo - 1);
 
         items.add(
           MillerAdaptationItem(
@@ -138,30 +164,28 @@ class AdaptationLedgerService {
         );
       }
     } else {
-      // Provide standard baseline entries for initial discovery
-      final baselineExercises = [
-        'standard_pushup',
-        'bodyweight_squat',
-        'inverted_row',
-        'plank',
-        'glute_bridge',
+      // Provide one starter entry per movement pattern for initial discovery
+      // -- the same tier-1 roots `baselineExerciseGraph` itself starts each
+      // pattern's progression chain from (see bootstrap_catalog.dart).
+      const discoveryExercises = [
+        standardPushup,
+        doorframeRow,
+        hipHinge,
+        airSquat,
+        deadBug,
       ];
 
-      for (final id in baselineExercises) {
-        final exercise = expandedExerciseGraph.findById(id) ??
-            baselineExerciseGraph.findById(id);
-        if (exercise != null) {
-          items.add(
-            MillerAdaptationItem(
-              exerciseId: exercise.id,
-              exerciseName: exercise.name,
-              pattern: exercise.movementPattern,
-              variables: const MillerVariables(),
-              competencyLevel: 1,
-              lastPerformed: DateTime.now(),
-            ),
-          );
-        }
+      for (final exercise in discoveryExercises) {
+        items.add(
+          MillerAdaptationItem(
+            exerciseId: exercise.id,
+            exerciseName: exercise.name,
+            pattern: exercise.movementPattern,
+            variables: const MillerVariables(),
+            competencyLevel: 1,
+            lastPerformed: DateTime.now(),
+          ),
+        );
       }
     }
 
@@ -185,15 +209,9 @@ class AdaptationLedgerService {
     // missed. Accepted for this history ledger rather than adding
     // per-exercise boundary queries.
     final recentPromotions = <PromotionEvent>[];
-    final now = currentTime ?? DateTime.now();
-    final lookbackStart = now.subtract(const Duration(days: 30));
-    final recentSessions = await _sessionRepository.getSessionsInDateRange(
-      lookbackStart,
-      now,
-    );
 
     final Map<String, List<MapEntry<DateTime, MillerVariables>>>
-        exerciseSnapshots = {};
+    exerciseSnapshots = {};
     for (final session in recentSessions.where((s) => s.isCompleted)) {
       final seenExercises = <String>{};
       for (final set in session.sets) {
@@ -211,9 +229,7 @@ class AdaptationLedgerService {
         final before = snapshots[i - 1].value;
         final after = snapshots[i].value;
         if (millerVariablesIncreased(before, after)) {
-          final ex = expandedExerciseGraph.findById(entry.key) ??
-              baselineExerciseGraph.findById(entry.key);
-          final exName = ex?.name ?? entry.key;
+          final exName = exerciseById[entry.key]?.name ?? entry.key;
           recentPromotions.add(
             PromotionEvent(
               exerciseName: exName,
@@ -234,14 +250,15 @@ class AdaptationLedgerService {
     return AdaptationLedgerState(
       adaptations: items,
       recentPromotions: recentPromotions.take(5).toList(),
-      totalVariablesUpgraded: totalUpgrades,
-      highestCompetencyTier: maxTier,
     );
   }
 }
 
 /// Names the specific Miller variable(s) that increased, e.g. "LOAD L1→L2".
-String _describeVariableIncrease(MillerVariables before, MillerVariables after) {
+String _describeVariableIncrease(
+  MillerVariables before,
+  MillerVariables after,
+) {
   final parts = <String>[];
   if (after.load > before.load) {
     parts.add('LOAD L${before.load}→L${after.load}');
@@ -262,16 +279,18 @@ String _describeVariableIncrease(MillerVariables before, MillerVariables after) 
 }
 
 /// Provider for [AdaptationLedgerService].
-final adaptationLedgerServiceProvider =
-    Provider<AdaptationLedgerService>((ref) {
+final adaptationLedgerServiceProvider = Provider<AdaptationLedgerService>((
+  ref,
+) {
   final progressionRepo = ref.watch(progressionRepositoryProvider);
   final sessionRepo = ref.watch(sessionRepositoryProvider);
   return AdaptationLedgerService(progressionRepo, sessionRepo);
 });
 
 /// Async provider yielding the latest [AdaptationLedgerState].
-final adaptationLedgerProvider =
-    FutureProvider<AdaptationLedgerState>((ref) async {
+final adaptationLedgerProvider = FutureProvider<AdaptationLedgerState>((
+  ref,
+) async {
   final service = ref.watch(adaptationLedgerServiceProvider);
   return service.getLedgerState();
 });

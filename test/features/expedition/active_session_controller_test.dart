@@ -35,22 +35,24 @@ class _DelayedSaveSessionRepository implements SessionRepository {
 
   @override
   Future<List<WorkoutSession>> getSessionsInDateRange(
-          DateTime start, DateTime end) =>
-      _inner.getSessionsInDateRange(start, end);
+    DateTime start,
+    DateTime end,
+  ) => _inner.getSessionsInDateRange(start, end);
 
   @override
   Future<List<WorkoutSet>> getSetsForMovementPattern(
-          MovementPattern pattern, DateTime since) =>
-      _inner.getSetsForMovementPattern(pattern, since);
+    MovementPattern pattern,
+    DateTime since,
+  ) => _inner.getSetsForMovementPattern(pattern, since);
 
   @override
   Future<List<WorkoutSet>> getSetsInDateRange(DateTime start, DateTime end) =>
       _inner.getSetsInDateRange(start, end);
 
   @override
-  Future<WorkoutSession?> getMostRecentCompletedSession(
-          {bool requireDayType = false}) =>
-      _inner.getMostRecentCompletedSession(requireDayType: requireDayType);
+  Future<WorkoutSession?> getMostRecentCompletedSession({
+    bool requireDayType = false,
+  }) => _inner.getMostRecentCompletedSession(requireDayType: requireDayType);
 
   @override
   Future<DateTime?> getEarliestCompletedSessionStart() =>
@@ -247,7 +249,8 @@ void main() {
               .sets[0]
               .reportedRpe,
           equals(6),
-          reason: 'set 0\'s corrected RPE must not revert once the FSM advances past it',
+          reason:
+              'set 0\'s corrected RPE must not revert once the FSM advances past it',
         );
       },
     );
@@ -312,7 +315,9 @@ void main() {
           .restRemaining;
       controller.addRestTime(const Duration(seconds: 30));
 
-      final after = container.read(activeSessionControllerProvider).restRemaining;
+      final after = container
+          .read(activeSessionControllerProvider)
+          .restRemaining;
       expect(after.inSeconds, equals(before.inSeconds + 30));
     });
 
@@ -388,7 +393,8 @@ void main() {
         expect(
           controller.currentManager,
           isNull,
-          reason: 'manager must be disposed and cleared once a session completes',
+          reason:
+              'manager must be disposed and cleared once a session completes',
         );
 
         final session2 = createTestSession(setCount: 1);
@@ -399,7 +405,8 @@ void main() {
         expect(
           controller.currentManager,
           isNull,
-          reason: 'manager must be disposed and cleared once a session is aborted',
+          reason:
+              'manager must be disposed and cleared once a session is aborted',
         );
       },
     );
@@ -504,7 +511,8 @@ void main() {
         expect(
           identical(macrocycleBefore, macrocycleAfter),
           isFalse,
-          reason: 'macrocycleProvider must be invalidated on session completion',
+          reason:
+              'macrocycleProvider must be invalidated on session completion',
         );
 
         // Both must still resolve cleanly after invalidation.

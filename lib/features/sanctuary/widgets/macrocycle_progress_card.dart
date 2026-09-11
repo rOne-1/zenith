@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../services/macrocycle_service.dart';
+import 'sanctuary_card_chrome.dart';
 
 /// Card widget visualizing the 5-week block periodization macrocycle (Accumulation,
 /// Overload, Deload), stepped pixel meter, and restorative volume guidance.
@@ -22,41 +23,11 @@ class MacrocycleProgressCard extends ConsumerWidget {
       padding: const EdgeInsets.all(16.0),
       child: macrocycleAsync.when(
         data: (state) => _buildContent(context, state),
-        loading: () => _buildLoading(colors),
-        error: (error, _) => _buildError(colors, error.toString()),
-      ),
-    );
-  }
-
-  Widget _buildLoading(ZenithDistrictColors colors) {
-    return SizedBox(
-      height: 160.0,
-      child: Center(
-        child: Text(
-          'CALCULATING MACROCYCLE TELEMETRY...',
-          style: TextStyle(
-            fontFamily: 'Silkscreen',
-            fontFamilyFallback: const ['monospace'],
-            fontSize: 11.0,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.2,
-            color: colors.textMuted,
-          ),
+        loading: () => const SanctuaryCardLoadingMessage(
+          message: 'CALCULATING MACROCYCLE TELEMETRY...',
         ),
-      ),
-    );
-  }
-
-  Widget _buildError(ZenithDistrictColors colors, String message) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Text(
-        'ERROR RESOLVING MACROCYCLE: $message',
-        style: TextStyle(
-          fontFamily: 'Silkscreen',
-          fontFamilyFallback: const ['monospace'],
-          fontSize: 11.0,
-          color: colors.signalRed,
+        error: (error, _) => SanctuaryCardErrorMessage(
+          message: 'ERROR RESOLVING MACROCYCLE: $error',
         ),
       ),
     );
@@ -70,80 +41,15 @@ class MacrocycleProgressCard extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Header Row: Title and Cycle Badge
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.auto_mode_outlined,
-                    color: colors.amberAccent,
-                    size: 18.0,
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'TRAINING CYCLE PROGRESS',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.0,
-                            color: colors.amberAccent,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          'DELOAD MACROCYCLE TRACKER',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
-                            fontSize: 8.0,
-                            letterSpacing: 0.5,
-                            color: colors.textMuted,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8.0),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-                vertical: 2.0,
-              ),
-              decoration: BoxDecoration(
-                color: colors.backgroundVoid,
-                border: Border.all(
-                  color: colors.borderMuted,
-                  width: 1.0,
-                ),
-              ),
-              child: Text(
-                'CYCLE ${state.cycleNumber.toString().padLeft(2, '0')}',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.w800,
-                  color: colors.textMuted,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
+        SanctuaryCardHeader(
+          icon: Icons.auto_mode_outlined,
+          title: 'TRAINING CYCLE PROGRESS',
+          subtitle: 'DELOAD MACROCYCLE TRACKER',
+          trailing: PixelBadge(
+            text: 'CYCLE ${state.cycleNumber.toString().padLeft(2, '0')}',
+            textColor: colors.textMuted,
+            borderColor: colors.borderMuted,
+          ),
         ),
         const SizedBox(height: 14.0),
 
@@ -187,29 +93,13 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 color: colors.textPrimary,
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-                vertical: 2.0,
-              ),
-              decoration: BoxDecoration(
-                color: phaseColor.withAlpha(30),
-                border: Border.all(
-                  color: phaseColor,
-                  width: 1.0,
-                ),
-              ),
-              child: Text(
-                state.phaseName,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.8,
-                  color: phaseColor,
-                ),
-              ),
+            PixelBadge(
+              text: state.phaseName,
+              textColor: phaseColor,
+              borderColor: phaseColor,
+              backgroundColor: phaseColor.withAlpha(30),
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.8,
             ),
           ],
         ),
@@ -221,10 +111,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
           padding: const EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             color: colors.backgroundVoid,
-            border: Border.all(
-              color: colors.borderMuted,
-              width: 1.0,
-            ),
+            border: Border.all(color: colors.borderMuted, width: 1.0),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -347,10 +234,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       decoration: BoxDecoration(
         color: bgColor,
-        border: Border.all(
-          color: borderColor,
-          width: isCurrent ? 2.0 : 1.0,
-        ),
+        border: Border.all(color: borderColor, width: isCurrent ? 2.0 : 1.0),
       ),
       child: Column(
         children: [
@@ -368,10 +252,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
           const SizedBox(height: 2.0),
           Text(
             isPast ? '✓' : (isCurrent ? '●' : '○'),
-            style: TextStyle(
-              fontSize: 8.0,
-              color: textColor,
-            ),
+            style: TextStyle(fontSize: 8.0, color: textColor),
           ),
         ],
       ),
@@ -388,10 +269,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       decoration: BoxDecoration(
         color: colors.surfaceElevated,
-        border: Border.all(
-          color: colors.borderMuted,
-          width: 1.0,
-        ),
+        border: Border.all(color: colors.borderMuted, width: 1.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

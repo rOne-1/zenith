@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sbee/sbee.dart';
 import 'package:zenith/core/theme/theme.dart';
+import 'package:zenith/features/grimoire/widgets/metro_transit_map.dart';
 import 'package:zenith/features/sanctuary/services/adaptation_ledger_service.dart';
 import 'package:zenith/features/sanctuary/widgets/adaptation_ledger_card.dart';
 
@@ -25,72 +26,127 @@ void main() {
       await database.close();
     });
 
-    test('provides baseline exercises when no user progressions are recorded', () async {
-      final state = await service.getLedgerState();
+    test(
+      'provides baseline exercises when no user progressions are recorded',
+      () async {
+        final state = await service.getLedgerState();
 
-      expect(state.adaptations.isNotEmpty, isTrue);
-      expect(state.highestCompetencyTier, equals(1));
-      expect(state.totalVariablesUpgraded, equals(0));
+        // Regression coverage: the empty-state fallback used to hardcode
+        // exercise ids that didn't exist in either catalog (`bodyweight_squat`,
+        // `plank`, `glute_bridge`), silently dropping 3 of the intended 5
+        // baseline discovery tiles. Every id here must resolve to a real
+        // catalog entry, one per movement pattern.
+        expect(state.adaptations, hasLength(5));
+        expect(
+          state.adaptations.map((a) => a.exerciseId).toSet(),
+          equals({
+            'standard_pushup',
+            'doorframe_row',
+            'hip_hinge',
+            'air_squat',
+            'dead_bug',
+          }),
+        );
+        expect(
+          state.adaptations.map((a) => a.pattern).toSet(),
+          equals(MovementPattern.values.toSet()),
+        );
+        expect(state.highestCompetencyTier, equals(1));
+        expect(state.totalVariablesUpgraded, equals(0));
 
-      final pushup = state.adaptations.firstWhere((a) => a.exerciseId == 'standard_pushup');
-      expect(pushup.competencyLevel, equals(1));
-      expect(pushup.variables.load, equals(1));
-      expect(pushup.variables.bodyPosition, equals(1));
-      expect(pushup.variables.rom, equals(1));
-      expect(pushup.variables.height, equals(1));
-      expect(pushup.variables.tempo, equals(1));
-      expect(pushup.tierLabel, equals('TIER 01'));
-      expect(pushup.masteryTitle, equals('NOVICE'));
-    });
+        final pushup = state.adaptations.firstWhere(
+          (a) => a.exerciseId == 'standard_pushup',
+        );
+        expect(pushup.competencyLevel, equals(1));
+        expect(pushup.variables.load, equals(1));
+        expect(pushup.variables.bodyPosition, equals(1));
+        expect(pushup.variables.rom, equals(1));
+        expect(pushup.variables.height, equals(1));
+        expect(pushup.variables.tempo, equals(1));
+        expect(pushup.tierLabel, equals('TIER 01'));
+        expect(pushup.masteryTitle, equals('NOVICE'));
+      },
+    );
 
-    test('reads stored progressions, calculates upgraded variables and highest tier', () async {
-      final now = DateTime(2026, 9, 8, 14, 0);
+    test(
+      'reads stored progressions, calculates upgraded variables and highest tier',
+      () async {
+        final now = DateTime(2026, 9, 8, 14, 0);
 
-      await progressionRepo.saveProgression(
-        ExerciseProgression(
-          exerciseId: 'standard_pushup',
-          variables: const MillerVariables(
-            load: 3,
-            bodyPosition: 2,
-            rom: 1,
-            height: 1,
-            tempo: 1,
+        await progressionRepo.saveProgression(
+          ExerciseProgression(
+            exerciseId: 'standard_pushup',
+            variables: const MillerVariables(
+              load: 3,
+              bodyPosition: 2,
+              rom: 1,
+              height: 1,
+              tempo: 1,
+            ),
+            competencyLevel: 2,
+            lastPerformed: now,
           ),
-          competencyLevel: 2,
-          lastPerformed: now,
-        ),
-      );
+        );
 
-      await progressionRepo.saveProgression(
-        ExerciseProgression(
-          exerciseId: 'squat',
-          variables: const MillerVariables(
-            load: 4,
-            bodyPosition: 1,
-            rom: 3,
-            height: 1,
-            tempo: 2,
+        await progressionRepo.saveProgression(
+          ExerciseProgression(
+            exerciseId: 'squat',
+            variables: const MillerVariables(
+              load: 4,
+              bodyPosition: 1,
+              rom: 3,
+              height: 1,
+              tempo: 2,
+            ),
+            competencyLevel: 3,
+            lastPerformed: now,
           ),
-          competencyLevel: 3,
-          lastPerformed: now,
-        ),
-      );
+        );
 
-      final state = await service.getLedgerState(currentTime: now);
+        final state = await service.getLedgerState(currentTime: now);
 
-      expect(state.highestCompetencyTier, equals(3));
-      // Upgrades:
-      // standard_pushup: (3-1) + (2-1) = 3
-      // squat: (4-1) + (3-1) + (2-1) = 3 + 2 + 1 = 6
-      // Total: 9
-      expect(state.totalVariablesUpgraded, equals(9));
+        expect(state.highestCompetencyTier, equals(3));
+        // Upgrades:
+        // standard_pushup: (3-1) + (2-1) = 3
+        // squat: (4-1) + (3-1) + (2-1) = 3 + 2 + 1 = 6
+        // Total: 9
+        expect(state.totalVariablesUpgraded, equals(9));
 
-      final squatItem = state.adaptations.firstWhere((a) => a.exerciseId == 'squat');
-      expect(squatItem.competencyLevel, equals(3));
-      expect(squatItem.tierLabel, equals('TIER 03'));
-      expect(squatItem.masteryTitle, equals('ADVANCED'));
-      expect(squatItem.hasAdvancedVariables, isTrue);
-    });
+        final squatItem = state.adaptations.firstWhere(
+          (a) => a.exerciseId == 'squat',
+        );
+        expect(squatItem.competencyLevel, equals(3));
+        expect(squatItem.tierLabel, equals('TIER 03'));
+        expect(squatItem.masteryTitle, equals('ADVANCED'));
+        expect(squatItem.hasAdvancedVariables, isTrue);
+      },
+    );
+
+    test(
+      'an unresolvable exercise id surfaces its raw id rather than a fabricated name',
+      () async {
+        // Regression coverage: an id that doesn't resolve in either catalog
+        // (a progression/catalog data-integrity mismatch) used to be
+        // title-cased into a name that looked like a real catalog entry,
+        // hiding the mismatch. It must now surface the raw id verbatim.
+        final now = DateTime(2026, 9, 8, 14, 0);
+        await progressionRepo.saveProgression(
+          ExerciseProgression(
+            exerciseId: 'removed_legacy_exercise_v1',
+            variables: const MillerVariables(),
+            competencyLevel: 1,
+            lastPerformed: now,
+          ),
+        );
+
+        final state = await service.getLedgerState(currentTime: now);
+
+        final item = state.adaptations.firstWhere(
+          (a) => a.exerciseId == 'removed_legacy_exercise_v1',
+        );
+        expect(item.exerciseName, equals('removed_legacy_exercise_v1'));
+      },
+    );
 
     test(
       'detects a promotion from a real variable increase between two sessions',
@@ -104,45 +160,49 @@ void main() {
         final earlierSession = now.subtract(const Duration(days: 5));
         final laterSession = now.subtract(const Duration(days: 2));
 
-        await sessionRepo.saveSession(WorkoutSession(
-          id: 'session_before',
-          startTime: earlierSession,
-          isCompleted: true,
-          sets: [
-            WorkoutSet(
-              id: 'set_before',
-              sessionId: 'session_before',
-              exerciseId: 'standard_pushup',
-              movementPattern: MovementPattern.pushing,
-              setNumber: 1,
-              reps: 12,
-              targetRpe: 7,
-              reportedRpe: 6,
-              variables: const MillerVariables(load: 1),
-              timestamp: earlierSession,
-            ),
-          ],
-        ));
+        await sessionRepo.saveSession(
+          WorkoutSession(
+            id: 'session_before',
+            startTime: earlierSession,
+            isCompleted: true,
+            sets: [
+              WorkoutSet(
+                id: 'set_before',
+                sessionId: 'session_before',
+                exerciseId: 'standard_pushup',
+                movementPattern: MovementPattern.pushing,
+                setNumber: 1,
+                reps: 12,
+                targetRpe: 7,
+                reportedRpe: 6,
+                variables: const MillerVariables(load: 1),
+                timestamp: earlierSession,
+              ),
+            ],
+          ),
+        );
 
-        await sessionRepo.saveSession(WorkoutSession(
-          id: 'session_after',
-          startTime: laterSession,
-          isCompleted: true,
-          sets: [
-            WorkoutSet(
-              id: 'set_after',
-              sessionId: 'session_after',
-              exerciseId: 'standard_pushup',
-              movementPattern: MovementPattern.pushing,
-              setNumber: 1,
-              reps: 12,
-              targetRpe: 7,
-              reportedRpe: 7,
-              variables: const MillerVariables(load: 2),
-              timestamp: laterSession,
-            ),
-          ],
-        ));
+        await sessionRepo.saveSession(
+          WorkoutSession(
+            id: 'session_after',
+            startTime: laterSession,
+            isCompleted: true,
+            sets: [
+              WorkoutSet(
+                id: 'set_after',
+                sessionId: 'session_after',
+                exerciseId: 'standard_pushup',
+                movementPattern: MovementPattern.pushing,
+                setNumber: 1,
+                reps: 12,
+                targetRpe: 7,
+                reportedRpe: 7,
+                variables: const MillerVariables(load: 2),
+                timestamp: laterSession,
+              ),
+            ],
+          ),
+        );
 
         final state = await service.getLedgerState(currentTime: now);
 
@@ -156,15 +216,14 @@ void main() {
       },
     );
 
-    test(
-      'a single session alone never registers as a promotion',
-      () async {
-        // Regression coverage: the old RPE<=6-per-set heuristic would have
-        // wrongly flagged this as a promotion. With no earlier session to
-        // compare against, there is nothing to diff.
-        final now = DateTime(2026, 9, 8, 14, 0);
+    test('a single session alone never registers as a promotion', () async {
+      // Regression coverage: the old RPE<=6-per-set heuristic would have
+      // wrongly flagged this as a promotion. With no earlier session to
+      // compare against, there is nothing to diff.
+      final now = DateTime(2026, 9, 8, 14, 0);
 
-        await sessionRepo.saveSession(WorkoutSession(
+      await sessionRepo.saveSession(
+        WorkoutSession(
           id: 'lone_session',
           startTime: now.subtract(const Duration(days: 1)),
           isCompleted: true,
@@ -182,18 +241,19 @@ void main() {
               timestamp: now.subtract(const Duration(days: 1)),
             ),
           ],
-        ));
+        ),
+      );
 
-        final state = await service.getLedgerState(currentTime: now);
+      final state = await service.getLedgerState(currentTime: now);
 
-        expect(state.recentPromotions, isEmpty);
-      },
-    );
+      expect(state.recentPromotions, isEmpty);
+    });
   });
 
   group('AdaptationLedgerCard Widget Tests', () {
-    testWidgets('renders ledger title, variable meters, and promotions callout',
-        (tester) async {
+    testWidgets('renders ledger title, variable meters, and promotions callout', (
+      tester,
+    ) async {
       final now = DateTime(2026, 9, 8, 14, 0);
 
       final testState = AdaptationLedgerState(
@@ -215,14 +275,14 @@ void main() {
             timestamp: now,
           ),
         ],
-        totalVariablesUpgraded: 3,
-        highestCompetencyTier: 2,
       );
 
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            adaptationLedgerProvider.overrideWith((ref) => Future.value(testState)),
+            adaptationLedgerProvider.overrideWith(
+              (ref) => Future.value(testState),
+            ),
           ],
           child: MaterialApp(
             theme: ThemeData.dark().copyWith(
@@ -263,6 +323,70 @@ void main() {
     });
 
     testWidgets(
+      'pattern indicator color matches MetroLineTheme, the shared source of truth',
+      (tester) async {
+        // Regression coverage: the ledger card used to hardcode its own
+        // MovementPattern->Color map with different hex values than
+        // MetroLineTheme.forPattern (already used by pattern_recovery_grid.dart
+        // on the same screen), so the same pattern rendered in two different
+        // colors depending which Sanctuary card you looked at.
+        final now = DateTime(2026, 9, 8, 14, 0);
+        final testState = AdaptationLedgerState(
+          adaptations: [
+            MillerAdaptationItem(
+              exerciseId: 'standard_pushup',
+              exerciseName: 'Standard Pushup',
+              pattern: MovementPattern.pushing,
+              variables: const MillerVariables(),
+              competencyLevel: 1,
+              lastPerformed: now,
+            ),
+          ],
+          recentPromotions: const [],
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              adaptationLedgerProvider.overrideWith(
+                (ref) => Future.value(testState),
+              ),
+            ],
+            child: MaterialApp(
+              theme: ThemeData.dark().copyWith(
+                extensions: const [ZenithDistrictColors.fallback],
+              ),
+              home: const Scaffold(
+                body: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: AdaptationLedgerCard(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        final dot = tester.widget<Container>(
+          find.byWidgetPredicate(
+            (w) =>
+                w is Container &&
+                (w.decoration as BoxDecoration?)?.shape == BoxShape.circle,
+          ),
+        );
+        final dotColor = (dot.decoration as BoxDecoration).color;
+
+        expect(
+          dotColor,
+          equals(MetroLineTheme.forPattern(MovementPattern.pushing).color),
+        );
+      },
+    );
+
+    testWidgets(
       'renders without RenderFlex overflow at a narrow mobile viewport with a long exercise name',
       (tester) async {
         final now = DateTime(2026, 9, 8, 14, 0);
@@ -282,8 +406,6 @@ void main() {
             ),
           ],
           recentPromotions: const [],
-          totalVariablesUpgraded: 8,
-          highestCompetencyTier: 3,
         );
 
         tester.view.physicalSize = const Size(375, 812);

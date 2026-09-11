@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sbee/sbee.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../grimoire/widgets/metro_transit_map.dart';
 import '../services/adaptation_ledger_service.dart';
+import 'sanctuary_card_chrome.dart';
 
 /// Card widget presenting the Kenneth Miller Adaptation History Ledger, displaying
 /// current 5-variable progression status, competency tiers, and autoregulation promotions.
@@ -23,41 +24,11 @@ class AdaptationLedgerCard extends ConsumerWidget {
       padding: const EdgeInsets.all(16.0),
       child: ledgerAsync.when(
         data: (state) => _buildContent(context, state),
-        loading: () => _buildLoading(colors),
-        error: (error, _) => _buildError(colors, error.toString()),
-      ),
-    );
-  }
-
-  Widget _buildLoading(ZenithDistrictColors colors) {
-    return SizedBox(
-      height: 160.0,
-      child: Center(
-        child: Text(
-          'LOADING ADAPTATION LEDGER...',
-          style: TextStyle(
-            fontFamily: 'Silkscreen',
-            fontFamilyFallback: const ['monospace'],
-            fontSize: 11.0,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.2,
-            color: colors.textMuted,
-          ),
+        loading: () => const SanctuaryCardLoadingMessage(
+          message: 'LOADING ADAPTATION LEDGER...',
         ),
-      ),
-    );
-  }
-
-  Widget _buildError(ZenithDistrictColors colors, String message) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Text(
-        'ERROR READING ADAPTATION LEDGER: $message',
-        style: TextStyle(
-          fontFamily: 'Silkscreen',
-          fontFamilyFallback: const ['monospace'],
-          fontSize: 11.0,
-          color: colors.signalRed,
+        error: (error, _) => SanctuaryCardErrorMessage(
+          message: 'ERROR READING ADAPTATION LEDGER: $error',
         ),
       ),
     );
@@ -70,80 +41,15 @@ class AdaptationLedgerCard extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Header Row
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.military_tech_outlined,
-                    color: colors.amberAccent,
-                    size: 18.0,
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'YOUR PROGRESS LOG',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.0,
-                            color: colors.amberAccent,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          'KENNETH MILLER ADAPTATION LEDGER',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
-                            fontSize: 8.0,
-                            letterSpacing: 0.5,
-                            color: colors.textMuted,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8.0),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-                vertical: 2.0,
-              ),
-              decoration: BoxDecoration(
-                color: colors.backgroundVoid,
-                border: Border.all(
-                  color: colors.borderMuted,
-                  width: 1.0,
-                ),
-              ),
-              child: Text(
-                'MAX TIER 0${state.highestCompetencyTier}',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.w800,
-                  color: colors.textMuted,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
+        SanctuaryCardHeader(
+          icon: Icons.military_tech_outlined,
+          title: 'YOUR PROGRESS LOG',
+          subtitle: 'KENNETH MILLER ADAPTATION LEDGER',
+          trailing: PixelBadge(
+            text: 'MAX TIER 0${state.highestCompetencyTier}',
+            textColor: colors.textMuted,
+            borderColor: colors.borderMuted,
+          ),
         ),
         const SizedBox(height: 12.0),
 
@@ -154,10 +60,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               color: colors.backgroundVoid,
-              border: Border.all(
-                color: colors.borderBright,
-                width: 1.0,
-              ),
+              border: Border.all(color: colors.borderBright, width: 1.0),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,17 +124,14 @@ class AdaptationLedgerCard extends ConsumerWidget {
 
   Widget _buildAdaptationTile(BuildContext context, MillerAdaptationItem item) {
     final colors = context.colors;
-    final patternColor = _patternColor(item.pattern, colors);
+    final patternColor = MetroLineTheme.forPattern(item.pattern).color;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12.0),
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: colors.backgroundVoid,
-        border: Border.all(
-          color: colors.borderMuted,
-          width: 1.0,
-        ),
+        border: Border.all(color: colors.borderMuted, width: 1.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,31 +171,17 @@ class AdaptationLedgerCard extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 8.0),
-              Container(
+              PixelBadge(
+                text: '${item.tierLabel} // ${item.masteryTitle}',
+                textColor: patternColor,
+                borderColor: patternColor,
+                backgroundColor: patternColor.withAlpha(30),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 6.0,
                   vertical: 2.0,
                 ),
-                decoration: BoxDecoration(
-                  color: patternColor.withAlpha(30),
-                  border: Border.all(
-                    color: patternColor,
-                    width: 1.0,
-                  ),
-                ),
-                child: Text(
-                  '${item.tierLabel} // ${item.masteryTitle}',
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
-                    fontSize: 9.0,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.6,
-                    color: patternColor,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                fontSize: 9.0,
+                letterSpacing: 0.6,
               ),
             ],
           ),
@@ -363,10 +249,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
       decoration: BoxDecoration(
         color: colors.surfaceElevated,
-        border: Border.all(
-          color: colors.borderMuted,
-          width: 1.0,
-        ),
+        border: Border.all(color: colors.borderMuted, width: 1.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -410,10 +293,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
       decoration: BoxDecoration(
         color: colors.surfaceElevated,
-        border: Border.all(
-          color: colors.borderMuted,
-          width: 1.0,
-        ),
+        border: Border.all(color: colors.borderMuted, width: 1.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -442,20 +322,5 @@ class AdaptationLedgerCard extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  Color _patternColor(MovementPattern pattern, ZenithDistrictColors colors) {
-    switch (pattern) {
-      case MovementPattern.pushing:
-        return const Color(0xFFFF9500); // Ginza Orange
-      case MovementPattern.pulling:
-        return const Color(0xFF00BB85); // Chiyoda Green
-      case MovementPattern.bendAndLift:
-        return const Color(0xFFE60012); // Marunouchi Red
-      case MovementPattern.singleLeg:
-        return const Color(0xFF9B51E0); // Hanzomon Purple
-      case MovementPattern.rotation:
-        return const Color(0xFF00A7E1); // Tozai Blue
-    }
   }
 }
