@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +12,64 @@ import 'package:zenith/features/armory/models/user_profile.dart';
 import 'package:zenith/features/armory/providers/user_profile_provider.dart';
 import 'package:zenith/features/outpost/services/streak_service.dart';
 import 'package:zenith/features/sanctuary/services/macrocycle_service.dart';
+
+/// Delegates to a real [DriftSessionRepository] for every operation except
+/// [saveSession], which doesn't complete until [gate] does -- lets a test
+/// hold SBEE's fire-and-forget incremental persist open on demand.
+class _DelayedSaveSessionRepository implements SessionRepository {
+  final DriftSessionRepository _inner;
+  final Future<void> gate;
+  int saveCount = 0;
+
+  _DelayedSaveSessionRepository(this._inner, this.gate);
+
+  @override
+  Future<void> saveSession(WorkoutSession session) async {
+    saveCount++;
+    await gate;
+    await _inner.saveSession(session);
+  }
+
+  @override
+  Future<WorkoutSession?> getSession(String id) => _inner.getSession(id);
+
+  @override
+  Future<List<WorkoutSession>> getSessionsInDateRange(
+          DateTime start, DateTime end) =>
+      _inner.getSessionsInDateRange(start, end);
+
+  @override
+  Future<List<WorkoutSet>> getSetsForMovementPattern(
+          MovementPattern pattern, DateTime since) =>
+      _inner.getSetsForMovementPattern(pattern, since);
+
+  @override
+  Future<List<WorkoutSet>> getSetsInDateRange(DateTime start, DateTime end) =>
+      _inner.getSetsInDateRange(start, end);
+
+  @override
+  Future<WorkoutSession?> getMostRecentCompletedSession(
+          {bool requireDayType = false}) =>
+      _inner.getMostRecentCompletedSession(requireDayType: requireDayType);
+
+  @override
+  Future<DateTime?> getEarliestCompletedSessionStart() =>
+      _inner.getEarliestCompletedSessionStart();
+
+  @override
+  Future<int> getCompletedSessionCount() => _inner.getCompletedSessionCount();
+
+  @override
+  Future<int> getReportedSetCountForExercise(String exerciseId) =>
+      _inner.getReportedSetCountForExercise(exerciseId);
+
+  @override
+  Future<WorkoutSession?> getActiveIncompleteSession() =>
+      _inner.getActiveIncompleteSession();
+
+  @override
+  Future<void> deleteSession(String id) => _inner.deleteSession(id);
+}
 
 void main() {
   group('ActiveSessionController Unit Tests', () {
@@ -188,6 +248,51 @@ void main() {
               .reportedRpe,
           equals(6),
           reason: 'set 0\'s corrected RPE must not revert once the FSM advances past it',
+        );
+      },
+    );
+
+    test(
+      'a redundant double-call to an FSM-advancing method is a safe no-op',
+      () async {
+        // Regression coverage: neither completeCurrentSet nor completeRest
+        // guarded against being called again after the FSM had already
+        // moved on (e.g. a rapid double-tap firing the same button twice
+        // before the widget rebuilds away from it) -- the second call
+        // reached SBEE's own state-machine guard, which throws a
+        // synchronous, uncaught StateError for an out-of-state call.
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final session = createTestSession(setCount: 2);
+        await controller.startSession(session);
+        controller.completeWarmUp();
+
+        // First call is real (activeSet -> rest); the second must be a
+        // silent no-op rather than throwing.
+        controller.completeCurrentSet(actualReps: 10);
+        expect(
+          () => controller.completeCurrentSet(actualReps: 10),
+          returnsNormally,
+        );
+        expect(
+          container.read(activeSessionControllerProvider).fsmState,
+          equals(SessionState.rest),
+        );
+
+        controller.completeRest();
+        expect(() => controller.completeRest(), returnsNormally);
+        expect(
+          container.read(activeSessionControllerProvider).fsmState,
+          equals(SessionState.activeSet),
+        );
+
+        // A stale completeWarmUp() call after already advancing must also
+        // be a no-op, not revert the FSM backward.
+        expect(() => controller.completeWarmUp(), returnsNormally);
+        expect(
+          container.read(activeSessionControllerProvider).fsmState,
+          equals(SessionState.activeSet),
         );
       },
     );
@@ -420,5 +525,60 @@ void main() {
       final state = container.read(activeSessionControllerProvider);
       expect(state.hasActiveSession, isFalse);
     });
+
+    test(
+      'abortSession does not resurrect the session via a still-in-flight incremental persist',
+      () async {
+        // Regression coverage: SBEE's incremental persist (fired by
+        // startSession's initializeSession) is fire-and-forget. If
+        // abortSession's discardActiveSession() (read-then-delete) ran
+        // before that save landed, the save could complete afterward and
+        // resurrect the row the user just discarded.
+        final saveGate = Completer<void>();
+        final delayedRepo = _DelayedSaveSessionRepository(
+          DriftSessionRepository(database),
+          saveGate.future,
+        );
+
+        final raceContainer = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+            sessionRepositoryProvider.overrideWithValue(delayedRepo),
+          ],
+        );
+        addTearDown(raceContainer.dispose);
+
+        final controller = raceContainer.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final session = createTestSession();
+
+        await controller.startSession(session);
+        expect(delayedRepo.saveCount, equals(1));
+
+        final abortFuture = controller.abortSession();
+
+        // The initial save is still gated shut -- abortSession must be
+        // waiting on it, not racing ahead to discardActiveSession().
+        await Future<void>.delayed(Duration.zero);
+        expect(
+          raceContainer.read(activeSessionControllerProvider).hasActiveSession,
+          isTrue,
+          reason: 'abortSession must not proceed while a persist is in flight',
+        );
+
+        saveGate.complete();
+        await abortFuture;
+
+        final survivor = await delayedRepo.getActiveIncompleteSession();
+        expect(
+          survivor,
+          isNull,
+          reason:
+              'the delayed save must not resurrect the session after discardActiveSession deleted it',
+        );
+      },
+    );
   });
 }

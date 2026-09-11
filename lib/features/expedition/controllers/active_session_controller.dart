@@ -282,6 +282,11 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
 
   /// Transitions from [SessionState.warmUp] to [SessionState.activeSet].
   void completeWarmUp() {
+    // Guards every FSM-advancing method against a redundant call (e.g. a
+    // rapid double-tap firing the same button twice before the widget
+    // rebuilds away from it) reaching SBEE's own state-machine guard, which
+    // throws a synchronous, uncaught StateError for an out-of-state call.
+    if (state.fsmState != SessionState.warmUp) return;
     _ensureManager();
     _manager!.startWorkout();
     final curSet = state.currentSet;
@@ -299,6 +304,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
 
   /// Logs the active set and transitions to [SessionState.rest] (or [SessionState.coolDown]).
   void completeCurrentSet({int? actualReps}) {
+    if (state.fsmState != SessionState.activeSet) return;
     _ensureManager();
     final set = state.currentSet;
     if (set == null) return;
@@ -387,6 +393,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
 
   /// Concludes the rest phase and starts the next set.
   void completeRest() {
+    if (state.fsmState != SessionState.rest) return;
     _cancelTimer();
     _ensureManager();
 
@@ -530,6 +537,12 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   /// Discards the active workout attempt and resets state.
   Future<void> abortSession() async {
     _cancelTimer();
+    // SBEE's incremental mid-workout persistence is fire-and-forget: a set
+    // logged just before this abort can still have its save in flight. If
+    // discardActiveSession()'s delete ran first, that save could land
+    // afterward and resurrect the session being discarded. Awaiting it here
+    // closes that window (see SBEE's SessionStreamManager.awaitPendingPersistence).
+    await _manager?.awaitPendingPersistence();
     _disposeManager();
     state = ActiveSessionState.initial;
 
