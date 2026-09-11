@@ -239,20 +239,6 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
         // any set the user has since corrected via the Rest/Cool-Down RPE
         // selector. Merging only the current index here let an earlier
         // correction silently revert the moment the FSM advanced past it.
-        // Carry forward EVERY set's locally-logged RPE correction, not
-        // just the current index. logRpe() patches state.session directly
-        // without informing _manager, so the manager's own session can
-        // still hold the placeholder RPE from initial set-completion for
-        // any set the user has since corrected via the Rest/Cool-Down RPE
-        // selector. Merging only the current index here let an earlier
-        // correction silently revert the moment the FSM advanced past it.
-        // Carry forward EVERY set's locally-logged RPE correction, not
-        // just the current index. logRpe() patches state.session directly
-        // without informing _manager, so the manager's own session can
-        // still hold the placeholder RPE from initial set-completion for
-        // any set the user has since corrected via the Rest/Cool-Down RPE
-        // selector. Merging only the current index here let an earlier
-        // correction silently revert the moment the FSM advanced past it.
         final localSets = state.session!.sets;
         final incomingSets = sessionToUse.sets;
         if (localSets.length == incomingSets.length) {
