@@ -21,11 +21,13 @@ const wallPushup = Exercise(
   difficultyTier: 1,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Stand an arm-length from wall, palms flat at shoulder height.',
-    'Bend elbows to lower chest toward wall under control.',
-    'Press firmly through palms to return to standing plank.',
+    'Stand an arm\'s length from the wall. Place your palms flat at shoulder height.',
+    'Bend your elbows to slowly lower your chest toward the wall.',
+    'Push back through your palms until your arms are straight again.',
   ],
-  correctiveCues: {'shrugging': 'Keep shoulders packed away from ears.'},
+  correctiveCues: {
+    'shrugging': 'Keep your shoulders down, away from your ears.',
+  },
 );
 
 const kneePushup = Exercise(
@@ -35,12 +37,13 @@ const kneePushup = Exercise(
   difficultyTier: 1,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Rest knees on floor or mat, hips extended in straight line with torso.',
-    'Tuck elbows to 45 degrees, lowering chest toward deck.',
-    'Drive through full palm, bracing abdominal wall.',
+    'Rest your knees on the floor or a mat, keeping your body in a straight line from knees to head.',
+    'Bend your elbows close to your body and lower your chest toward the floor.',
+    'Push back up through your palms, keeping your stomach tight.',
   ],
   correctiveCues: {
-    'hip_flexion': 'Keep hips extended in line with shoulders and knees.',
+    'hip_flexion':
+        'Keep your hips in line with your shoulders and knees, not sagging or piked up.',
   },
 );
 
@@ -51,13 +54,15 @@ const standardPushup = Exercise(
   difficultyTier: 1,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Maintain a rigid plank from heels to crown.',
-    'Tuck elbows to roughly 45 degrees relative to ribs.',
-    'Descend until chest reaches one fist-distance from deck.',
+    'Keep your body in one straight line from head to heels.',
+    'Keep your elbows close to your sides as you lower down.',
+    'Lower until your chest is a fist\'s width from the floor.',
   ],
   correctiveCues: {
-    'flared_elbows': 'Draw elbows inward toward torso.',
-    'lumbar_sag': 'Engage glutes and brace transverse abdominis.',
+    'flared_elbows':
+        'Keep your elbows closer to your body, not pointing out to the sides.',
+    'lumbar_sag':
+        'Squeeze your butt and tighten your stomach so your hips don\'t sag.',
   },
 );
 
@@ -68,11 +73,14 @@ const feetElevatedPushup = Exercise(
   difficultyTier: 2,
   equipmentRequirements: {Equipment.benchOrChair},
   defaultCues: [
-    'Elevate toes on stable bench, chair, or curb.',
-    'Keep neck neutral with gaze down.',
-    'Drive through full palm including base of index finger.',
+    'Rest your toes on a sturdy bench, chair, or step.',
+    'Keep your neck relaxed and look down at the floor.',
+    'Push evenly through your whole hand as you push up.',
   ],
-  correctiveCues: {'lumbar_hyperextension': 'Maintain posterior pelvic tilt.'},
+  correctiveCues: {
+    'lumbar_hyperextension':
+        'Tuck your hips slightly so your lower back doesn\'t arch.',
+  },
 );
 
 const chairDip = Exercise(
@@ -82,13 +90,13 @@ const chairDip = Exercise(
   difficultyTier: 3,
   equipmentRequirements: {Equipment.benchOrChair},
   defaultCues: [
-    'Grip bench edge with palms down and knuckles forward.',
-    'Lower hips close to bench until upper arms reach parallel.',
-    'Drive through palms to full lockout without shrugging shoulders.',
+    'Grip the edge of the bench with your fingers pointing forward.',
+    'Lower your hips down until your upper arms are level with the floor.',
+    'Push back up until your arms are straight, without shrugging your shoulders up.',
   ],
   correctiveCues: {
     'shoulder_impingement':
-        'Depress scapulae and do not exceed 90-degree elbow flexion.',
+        'Keep your shoulders down and don\'t bend your elbows past a right angle.',
   },
 );
 
@@ -99,12 +107,13 @@ const bandResistedPushup = Exercise(
   difficultyTier: 4,
   equipmentRequirements: {Equipment.bands},
   defaultCues: [
-    'Loop band across upper back and anchor under palms.',
-    'Descend with strict 2-second tempo resisting band elasticity.',
-    'Lock out aggressively against peak band tension.',
+    'Loop the band across your upper back and hold the ends under your palms.',
+    'Lower yourself slowly, taking about 2 seconds, fighting the band\'s pull.',
+    'Push all the way back up to straight arms against the band.',
   ],
   correctiveCues: {
-    'incomplete_lockout': 'Press all the way into full scapular protraction.',
+    'incomplete_lockout':
+        'Push all the way until your arms are fully straight.',
   },
 );
 
@@ -115,11 +124,14 @@ const archerPushup = Exercise(
   difficultyTier: 5,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Wide hand placement with fingers pointed slightly outward.',
-    'Shift weight entirely to working side, extending trailing arm straight.',
-    'Press working side up explosively while trailing arm glides.',
+    'Place your hands wide apart, fingers pointing slightly outward.',
+    'Shift your weight onto one arm and keep the other arm straight out to the side.',
+    'Push back up mainly with the working arm, while the other arm slides along the floor.',
   ],
-  correctiveCues: {'weight_leak': 'Do not bend the trailing arm.'},
+  correctiveCues: {
+    'weight_leak':
+        'Keep the other arm straight — don\'t let it bend and help you push.',
+  },
 );
 
 const oneArmPushup = Exercise(
@@ -129,12 +141,13 @@ const oneArmPushup = Exercise(
   difficultyTier: 6,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Feet wide for tripod stability, single working hand centered under sternum.',
-    'Brace core and rotate shoulders minimally during descent.',
-    'Drive through palm to lockout maintaining level hips.',
+    'Stand your feet wide apart for balance, with one hand centered under your chest.',
+    'Tighten your core and try not to twist your body as you lower down.',
+    'Push back up to a straight arm, keeping your hips level.',
   ],
   correctiveCues: {
-    'excessive_rotation': 'Widen foot stance and brace opposite oblique.',
+    'excessive_rotation':
+        'Widen your feet and tighten your side muscles to stop your body from twisting.',
   },
 );
 
@@ -149,12 +162,13 @@ const doorframeRow = Exercise(
   difficultyTier: 1,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Grip doorframe securely with feet braced near threshold.',
-    'Retract scapulae before initiating elbow pull.',
-    'Control eccentric return with smooth 2-second tempo.',
+    'Hold onto the doorframe firmly with your feet braced near the bottom of the door.',
+    'Squeeze your shoulder blades together before you start pulling.',
+    'Lower back down slowly, taking about 2 seconds.',
   ],
   correctiveCues: {
-    'cervical_reach': 'Keep chin tucked and eyes focused on anchor.',
+    'cervical_reach':
+        'Keep your chin tucked and look at your hands, not up or forward.',
   },
 );
 
@@ -165,12 +179,13 @@ const towelRow = Exercise(
   difficultyTier: 1,
   equipmentRequirements: {Equipment.towel},
   defaultCues: [
-    'Knot towel securely behind closed door hinge.',
-    'Grip towel ends firmly, leaning torso back at steady angle.',
-    'Drive elbows back past ribcage.',
+    'Tie the towel tightly around the hinge side of a closed door.',
+    'Hold both ends of the towel and lean back, keeping your body straight.',
+    'Pull your elbows back past your ribs.',
   ],
   correctiveCues: {
-    'wrist_flexion': 'Keep wrists neutral and pull through elbows.',
+    'wrist_flexion':
+        'Keep your wrists straight and pull with your elbows, not your hands.',
   },
 );
 
@@ -181,11 +196,13 @@ const invertedRow = Exercise(
   difficultyTier: 2,
   equipmentRequirements: {Equipment.pullUpBar},
   defaultCues: [
-    'Hang beneath waist-height bar, heels on floor and body rigid.',
-    'Pull chest to bar by pinching shoulder blades together.',
-    'Pause briefly at apex before lowering with control.',
+    'Hang under a bar at waist height, heels on the floor and body straight.',
+    'Pull your chest up to the bar by squeezing your shoulder blades together.',
+    'Pause briefly at the top, then lower back down slowly.',
   ],
-  correctiveCues: {'hip_sag': 'Fire glutes to maintain straight plank line.'},
+  correctiveCues: {
+    'hip_sag': 'Squeeze your butt to keep your body in a straight line.',
+  },
 );
 
 const standardPullup = Exercise(
@@ -195,12 +212,13 @@ const standardPullup = Exercise(
   difficultyTier: 3,
   equipmentRequirements: {Equipment.pullUpBar},
   defaultCues: [
-    'Full pronated grip slightly wider than shoulder width.',
-    'Engage lats by depressing shoulders before bending arms.',
-    'Pull until clavicle or chin clears bar plane.',
+    'Grip the bar with palms facing away, hands slightly wider than your shoulders.',
+    'Pull your shoulders down before you start bending your arms.',
+    'Pull yourself up until your chin clears the bar.',
   ],
   correctiveCues: {
-    'kipping': 'Cross feet, squeeze glutes, and perform strict reps.',
+    'kipping':
+        'Stop swinging your legs — cross your feet and pull with your arms only.',
   },
 );
 
@@ -211,11 +229,14 @@ const lSitPullup = Exercise(
   difficultyTier: 4,
   equipmentRequirements: {Equipment.pullUpBar},
   defaultCues: [
-    'Hold legs horizontal in static L-sit throughout pull.',
-    'Initiate with scapular depression and maintain 90-degree hip angle.',
-    'Clear chin over bar without dropping feet.',
+    'Hold your legs straight out in front of you the whole time.',
+    'Pull your shoulders down first, keeping your hips bent at a right angle.',
+    'Pull up until your chin clears the bar, without dropping your legs.',
   ],
-  correctiveCues: {'drooping_legs': 'Engage hip flexors and point toes.'},
+  correctiveCues: {
+    'drooping_legs':
+        'Tighten your hips and point your toes to keep your legs up.',
+  },
 );
 
 const archerPullup = Exercise(
@@ -225,11 +246,13 @@ const archerPullup = Exercise(
   difficultyTier: 5,
   equipmentRequirements: {Equipment.pullUpBar},
   defaultCues: [
-    'Wide overhand grip on bar.',
-    'Pull body toward one hand while sliding other arm straight across bar.',
-    'Lower smoothly and alternate or complete reps per side.',
+    'Grip the bar with a wide overhand grip.',
+    'Pull yourself up toward one hand while the other arm stays straight and slides along the bar.',
+    'Lower down slowly, then switch sides or repeat.',
   ],
-  correctiveCues: {'bent_glide_arm': 'Keep non-working arm fully extended.'},
+  correctiveCues: {
+    'bent_glide_arm': 'Keep the sliding arm completely straight.',
+  },
 );
 
 const muscleUp = Exercise(
@@ -239,12 +262,13 @@ const muscleUp = Exercise(
   difficultyTier: 6,
   equipmentRequirements: {Equipment.pullUpBar},
   defaultCues: [
-    'Use false or aggressive overhand grip.',
-    'Pull explosively toward lower sternum.',
-    'Transition shoulders over bar and press out into straight-bar dip.',
+    'Grip the bar with your wrists rolled slightly over the top.',
+    'Pull yourself up fast and high, toward your lower chest.',
+    'Roll your shoulders over the bar, then push up until your arms are straight.',
   ],
   correctiveCues: {
-    'chicken_wing': 'Drive both elbows over the bar simultaneously.',
+    'chicken_wing':
+        'Bring both elbows over the bar at the same time, not one at a time.',
   },
 );
 
@@ -259,12 +283,13 @@ const hipHinge = Exercise(
   difficultyTier: 1,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Stand feet shoulder-width apart with soft knee bend.',
-    'Drive pelvis straight back as if closing door with hips.',
-    'Maintain flat lumbar spine throughout excursion.',
+    'Stand with feet shoulder-width apart, knees slightly bent.',
+    'Push your hips straight back, like closing a door with your butt.',
+    'Keep your back flat and straight the whole time.',
   ],
   correctiveCues: {
-    'squatting': 'Keep shins near vertical and prioritize hip displacement.',
+    'squatting':
+        'Keep your shins mostly upright — this move comes from your hips, not your knees.',
   },
 );
 
@@ -275,11 +300,13 @@ const goodMorning = Exercise(
   difficultyTier: 2,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Place fingertips lightly behind head, elbows flaring wide.',
-    'Hinge forward from hips until torso approaches 45 to 60 degrees.',
-    'Feel active hamstring tension, then fire glutes to stand tall.',
+    'Rest your fingertips lightly behind your head, elbows out wide.',
+    'Bend forward from your hips until your upper body is about halfway down.',
+    'Feel your hamstrings stretch, then squeeze your butt to stand back up.',
   ],
-  correctiveCues: {'neck_pull': 'Avoid pulling head forward with hands.'},
+  correctiveCues: {
+    'neck_pull': 'Don\'t pull your head forward with your hands.',
+  },
 );
 
 const singleLegDeadlift = Exercise(
@@ -289,13 +316,13 @@ const singleLegDeadlift = Exercise(
   difficultyTier: 3,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Balance on single working foot, micro-bending stance knee.',
-    'Extend trailing leg back in straight line with torso.',
-    'Hinge until torso is parallel to deck, hips square.',
+    'Balance on one foot with a slight bend in that knee.',
+    'Lift your other leg straight back behind you as your body tips forward.',
+    'Keep bending forward until your body is close to flat, facing the floor.',
   ],
   correctiveCues: {
     'hip_rotation':
-        'Point trailing toe straight toward deck to keep pelvis level.',
+        'Point your back toes at the floor to keep your hips level.',
   },
 );
 
@@ -306,12 +333,13 @@ const towelHamstringCurl = Exercise(
   difficultyTier: 4,
   equipmentRequirements: {Equipment.towel},
   defaultCues: [
-    'Lie supine on smooth floor with heels placed on folded towel.',
-    'Elevate hips into bridge position, glutes fully engaged.',
-    'Slide heels out under control, then curl back toward glutes.',
+    'Lie on your back on a smooth floor with your heels resting on a folded towel.',
+    'Lift your hips up into a bridge, squeezing your butt.',
+    'Slide your heels out slowly, then pull them back in toward your butt.',
   ],
   correctiveCues: {
-    'dropping_hips': 'Keep pelvis high and hips extended throughout curl.',
+    'dropping_hips':
+        'Keep your hips lifted up the whole time — don\'t let them drop.',
   },
 );
 
@@ -322,12 +350,13 @@ const nordicCurl = Exercise(
   difficultyTier: 5,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Anchor heels securely beneath sturdy furniture or partner.',
-    'Maintain rigid straight line from knees through hips to head.',
-    'Fall forward as slowly as possible resisting with eccentric hamstring tension.',
+    'Hook your heels under something sturdy, like a couch, or have a partner hold them.',
+    'Keep your body in one straight line from knees to head.',
+    'Lower your body forward as slowly as you can, using your hamstrings to control it.',
   ],
   correctiveCues: {
-    'broken_hip': 'Do not bend at waist; maintain rigid hip extension.',
+    'broken_hip':
+        'Don\'t bend at your hips — keep your body straight the whole way down.',
   },
 );
 
@@ -342,12 +371,12 @@ const airSquat = Exercise(
   difficultyTier: 1,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Stance shoulder-width with toes slightly turned out.',
-    'Initiate descent with simultaneous knee and hip flexion.',
-    'Descend until thighs are at least parallel to floor.',
+    'Stand with feet shoulder-width apart, toes turned out slightly.',
+    'Bend your knees and hips at the same time as you lower down.',
+    'Lower until your thighs are at least level with the floor.',
   ],
   correctiveCues: {
-    'knee_valgus': 'Actively drive knees outward tracking in line with toes.',
+    'knee_valgus': 'Push your knees out so they stay in line with your toes.',
   },
 );
 
@@ -358,12 +387,12 @@ const reverseLunge = Exercise(
   difficultyTier: 2,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Step back into deep stride, dropping back knee toward floor.',
-    'Keep lead shin vertical and torso upright.',
-    'Drive through front heel to return to standing position.',
+    'Step one foot back into a long stride, lowering your back knee toward the floor.',
+    'Keep your front shin upright and your chest tall.',
+    'Push through your front heel to stand back up.',
   ],
   correctiveCues: {
-    'torso_lean': 'Brace core to prevent excessive forward trunk lean.',
+    'torso_lean': 'Tighten your stomach so you don\'t lean too far forward.',
   },
 );
 
@@ -374,13 +403,13 @@ const bulgarianSplitSquat = Exercise(
   difficultyTier: 3,
   equipmentRequirements: {Equipment.benchOrChair},
   defaultCues: [
-    'Rest top of rear foot on bench or elevated edge.',
-    'Lower under control until front thigh reaches parallel.',
-    'Maintain forward shin angle and press firmly through front mid-foot.',
+    'Rest the top of your back foot on a bench or raised surface.',
+    'Lower yourself slowly until your front thigh is level with the floor.',
+    'Push through the middle of your front foot to stand back up.',
   ],
   correctiveCues: {
     'shallow_depth':
-        'Adjust front stance forward if rear knee hits deck prematurely.',
+        'Step your front foot further forward if your back knee touches the floor too soon.',
   },
 );
 
@@ -391,12 +420,13 @@ const skaterSquat = Exercise(
   difficultyTier: 4,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Stand on working leg with trailing knee bent to 90 degrees.',
-    'Reach arms forward for counter-balance as working knee flexes.',
-    'Tap trailing knee softly to deck without resting weight.',
+    'Stand on one leg with your other knee bent behind you.',
+    'Reach your arms forward for balance as you bend your standing knee.',
+    'Gently tap your back knee to the floor without putting weight on it.',
   ],
   correctiveCues: {
-    'bouncing': 'Lower with 3-second eccentric control and zero impact.',
+    'bouncing':
+        'Lower down slowly over about 3 seconds — don\'t drop or bounce.',
   },
 );
 
@@ -407,11 +437,14 @@ const assistedPistolSquat = Exercise(
   difficultyTier: 5,
   equipmentRequirements: {Equipment.benchOrChair},
   defaultCues: [
-    'Sit down to bench on single working foot, opposite leg extended out.',
-    'Drive through heel to stand tall without using momentum.',
-    'Lower back to seat with complete deceleration control.',
+    'Sit down onto a bench on one leg, with your other leg held straight out in front.',
+    'Push through your heel to stand back up without swinging your body.',
+    'Lower back down to the bench slowly and under control.',
   ],
-  correctiveCues: {'knee_cave': 'Keep working knee tracking over second toe.'},
+  correctiveCues: {
+    'knee_cave':
+        'Keep your knee pointing the same way as your toes — don\'t let it cave inward.',
+  },
 );
 
 const fullPistolSquat = Exercise(
@@ -421,12 +454,13 @@ const fullPistolSquat = Exercise(
   difficultyTier: 6,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Single leg full-depth squat with non-working leg held straight in front.',
-    'Descend until hamstring meets calf, maintaining balance on mid-foot.',
-    'Drive up through heel and midfoot to full standing lockout.',
+    'Squat all the way down on one leg, with the other leg held straight out in front.',
+    'Lower until the back of your thigh touches your calf, balancing on the middle of your foot.',
+    'Push through your whole foot to stand all the way back up.',
   ],
   correctiveCues: {
-    'heel_lift': 'Improve ankle dorsiflexion or elevate heel on micro-plate.',
+    'heel_lift':
+        'If your heel keeps lifting off the floor, try squatting with a small block under your heel.',
   },
 );
 
@@ -441,13 +475,13 @@ const deadBug = Exercise(
   difficultyTier: 1,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Lie on back with knees at 90 degrees and arms extended ceiling-ward.',
-    'Press lumbar spine flat into deck with no gap.',
-    'Extend opposite arm and leg simultaneously while maintaining flat back.',
+    'Lie on your back with your knees bent at a right angle and arms reaching straight up.',
+    'Press your lower back flat against the floor, with no gap underneath.',
+    'Slowly straighten one arm and the opposite leg at the same time, keeping your back flat.',
   ],
   correctiveCues: {
     'lumbar_arch':
-        'Exhale sharply and anchor ribcage down before extending limbs.',
+        'Breathe out and pull your ribs down before you move your arm and leg.',
   },
 );
 
@@ -458,11 +492,13 @@ const sidePlank = Exercise(
   difficultyTier: 2,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Elbow stacked directly beneath shoulder, feet stacked or staggered.',
-    'Lift hips to form unbroken straight diagonal from crown to ankles.',
-    'Hold static contraction breathing rhythmically into abdomen.',
+    'Place your elbow directly under your shoulder, feet stacked or staggered.',
+    'Lift your hips so your body forms one straight line from head to ankles.',
+    'Hold this position, breathing normally.',
   ],
-  correctiveCues: {'hip_drop': 'Elevate bottom oblique away from the floor.'},
+  correctiveCues: {
+    'hip_drop': 'Lift your hips higher so they don\'t sag toward the floor.',
+  },
 );
 
 const bandedPallofPress = Exercise(
@@ -472,13 +508,13 @@ const bandedPallofPress = Exercise(
   difficultyTier: 3,
   equipmentRequirements: {Equipment.bands},
   defaultCues: [
-    'Anchor band at chest height, stand sideways to anchor with tension.',
-    'Hold band handle at sternum, feet athletic width.',
-    'Press hands straight out resisting rotational pull of band.',
+    'Attach the band at chest height and stand sideways to it, so there\'s tension.',
+    'Hold the band at your chest with your feet about shoulder-width apart.',
+    'Push the band straight out in front of you, resisting its pull to the side.',
   ],
   correctiveCues: {
     'torso_twisting':
-        'Keep shoulders and hips squared forward throughout press.',
+        'Keep your shoulders and hips facing forward — don\'t let the band twist you.',
   },
 );
 
@@ -489,13 +525,13 @@ const windshieldWipers = Exercise(
   difficultyTier: 4,
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
-    'Lie on back, arms in T-formation, legs extended straight up.',
-    'Lower legs toward floor to one side while keeping shoulders pinned.',
-    'Engage obliques to return legs to center before rotating to opposite side.',
+    'Lie on your back with your arms out to the sides and legs straight up in the air.',
+    'Lower your legs to one side, keeping your shoulders flat on the floor.',
+    'Use your side muscles to bring your legs back to the center, then lower them to the other side.',
   ],
   correctiveCues: {
     'shoulder_lift':
-        'Halt descent if opposite shoulder blade loses contact with deck.',
+        'Stop lowering your legs if your opposite shoulder starts lifting off the floor.',
   },
 );
 
@@ -506,12 +542,12 @@ const dragonFlag = Exercise(
   difficultyTier: 5,
   equipmentRequirements: {Equipment.benchOrChair},
   defaultCues: [
-    'Lie on bench gripping top edges firmly behind head.',
-    'Lift entire body up on shoulder blades in rigid unbroken straight line.',
-    'Lower body slowly toward bench pivoting solely at shoulder joint.',
+    'Lie on a bench and hold the top edges firmly behind your head.',
+    'Lift your whole body up so only your shoulders touch the bench, keeping it straight.',
+    'Lower your body back down slowly, keeping it straight and only bending at your shoulders.',
   ],
   correctiveCues: {
-    'hip_bend': 'Squeeze glutes and abdominal wall to prevent hip flexion.',
+    'hip_bend': 'Squeeze your butt and stomach tight so your hips don\'t bend.',
   },
 );
 

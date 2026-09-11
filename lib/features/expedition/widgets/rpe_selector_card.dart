@@ -29,18 +29,18 @@ class RpeSelectorCard extends StatelessWidget {
       case 2:
       case 3:
       case 4:
-        return 'Active recovery intensity. Effortless, no muscular strain (4+ reps in reserve).';
+        return 'Very easy. Barely felt it, lots left in the tank.';
       case 5:
       case 6:
-        return 'Moderate warm-up effort. Noticeable effort with 3-4 reps in reserve.';
+        return 'Warm-up effort. You feel it, but it\'s not hard yet.';
       case 7:
-        return 'Vigorous speed & power zone. ~3 reps in reserve, explosive intent.';
+        return 'Getting hard. Fast and powerful, a few reps left in you.';
       case 8:
-        return 'Heavy training stimulus. 2 reps in reserve. Threshold for 48h pattern recovery lock.';
+        return 'Hard. Maybe 2 more reps left. Rests this move for 2 days.';
       case 9:
-        return 'Near-maximal effort. 1 rep in reserve. Triggers 48h movement lock.';
+        return 'Very hard. Maybe 1 more rep left. Rests this move for 2 days.';
       case 10:
-        return 'Maximum effort. 0 reps in reserve, absolute mechanical failure reached.';
+        return 'All-out. Couldn\'t have done another rep.';
       default:
         return '';
     }
@@ -51,11 +51,11 @@ class RpeSelectorCard extends StatelessWidget {
     required int targetRpe,
   }) {
     if (selectedRpe < targetRpe - 1) {
-      return 'UNDER-STIMULATED // PROGRESSION (+1 Load/ROM adaptation recommended)';
+      return 'THAT LOOKED EASY // WE\'LL MAKE IT HARDER NEXT TIME';
     } else if (selectedRpe > targetRpe + 1) {
-      return 'HIGH FATIGUE // REGRESSION PROTECTION (Load buffer will be applied)';
+      return 'THAT LOOKED TOUGH // WE\'LL EASE OFF A BIT NEXT TIME';
     } else {
-      return 'OPTIMAL STIMULUS // MASTERY SOLIDIFIED (Current parameters maintained)';
+      return 'RIGHT ON TARGET // KEEPING IT THE SAME FOR NOW';
     }
   }
 
@@ -107,7 +107,7 @@ class RpeSelectorCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      'BORG RPE SCALE',
+                      'RATE YOUR EFFORT, 1-10',
                       style: TextStyle(
                         fontFamily: 'Silkscreen',
                         fontFamilyFallback: const ['monospace'],

@@ -258,19 +258,19 @@ class _WarmUpView extends StatelessWidget {
                       const SizedBox(height: 14.0),
                       _checklistRow(
                         colors,
-                        '2-3 min dynamic joint rotations (wrists, shoulders, hips)',
+                        '2-3 minutes of easy arm, shoulder, and hip circles',
                       ),
                       _checklistRow(
                         colors,
-                        '10 bodyweight hinges or cat-cow spinal unloads',
+                        '10 slow hip hinges or gentle back stretches',
                       ),
                       _checklistRow(
                         colors,
-                        'Core bracing test: draw in transverse abdominis',
+                        'Tighten your stomach like you\'re about to be poked',
                       ),
                       _checklistRow(
                         colors,
-                        'Gear check: clear perimeter and secure floor anchor',
+                        'Clear the space around you and check your gear is secure',
                       ),
                     ],
                   ),

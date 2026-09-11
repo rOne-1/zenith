@@ -233,7 +233,7 @@ class ArmoryScreen extends ConsumerWidget {
                         // Joint Protection Toggle Tile
                         _PhysiologyToggleTile(
                           title: 'JOINT PROTECTION',
-                          subtitle: 'Excludes high-impact plyometrics',
+                          subtitle: 'Skips jumping and other hard-impact moves',
                           isActive: userProfile.hasJointPain,
                           onTap: () {
                             HapticFeedback.selectionClick();
@@ -247,7 +247,7 @@ class ArmoryScreen extends ConsumerWidget {
                         _PhysiologyToggleTile(
                           title: 'CYCLE AUTOREGULATION',
                           subtitle:
-                              'Early-follicular rest padding & endocrine cues',
+                              'Adds extra rest days early in your cycle',
                           isActive: userProfile.hasCycleAutoregulation,
                           onTap: () {
                             HapticFeedback.selectionClick();
