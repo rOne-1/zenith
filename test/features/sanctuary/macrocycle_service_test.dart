@@ -4,19 +4,42 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sbee/sbee.dart';
 import 'package:zenith/core/theme/theme.dart';
+import 'package:zenith/engine/engine.dart';
 import 'package:zenith/features/sanctuary/services/macrocycle_service.dart';
 import 'package:zenith/features/sanctuary/widgets/macrocycle_progress_card.dart';
+
+/// Always reports a deload week active, regardless of the actual session
+/// history -- used to prove MacrocycleService asks the engine for this
+/// decision rather than independently re-deriving it.
+class _AlwaysDeloadEngine extends SbeeEngine {
+  _AlwaysDeloadEngine({
+    required super.sessionRepository,
+    required super.progressionRepository,
+    required super.exerciseGraph,
+  });
+
+  @override
+  Future<bool> isDeloadActive({required DateTime currentTime}) async => true;
+}
 
 void main() {
   group('MacrocycleService Unit Tests', () {
     late SbeeDatabase database;
     late DriftSessionRepository sessionRepo;
+    late DriftProgressionRepository progressionRepo;
+    late SbeeEngine engine;
     late MacrocycleService service;
 
     setUp(() {
       database = SbeeDatabase(NativeDatabase.memory());
       sessionRepo = DriftSessionRepository(database);
-      service = MacrocycleService(sessionRepo);
+      progressionRepo = DriftProgressionRepository(database);
+      engine = SbeeEngine(
+        sessionRepository: sessionRepo,
+        progressionRepository: progressionRepo,
+        exerciseGraph: expandedExerciseGraph,
+      );
+      service = MacrocycleService(sessionRepo, engine);
     });
 
     tearDown(() async {
@@ -89,6 +112,28 @@ void main() {
       expect(statusC2W1.phase, equals(MacrocyclePhase.accumulation));
       expect(statusC2W1.steppedMeterText, equals('[ █ ░ ░ ░ ░ ] WEEK 1/5'));
     });
+
+    test(
+      'phase reflects SbeeEngine.isDeloadActive directly, not a re-derived formula',
+      () async {
+        final fakeEngine = _AlwaysDeloadEngine(
+          sessionRepository: sessionRepo,
+          progressionRepository: progressionRepo,
+          exerciseGraph: expandedExerciseGraph,
+        );
+        final serviceWithFakeEngine = MacrocycleService(sessionRepo, fakeEngine);
+
+        // Week 1 -- local weekInCycle arithmetic alone would say
+        // accumulation. The engine says deload, so the service must too.
+        final now = DateTime(2026, 9, 1, 10, 0);
+        final status =
+            await serviceWithFakeEngine.getMacrocycleStatus(currentTime: now);
+
+        expect(status.weekInCycle, equals(1));
+        expect(status.phase, equals(MacrocyclePhase.deload));
+        expect(status.isDeload, isTrue);
+      },
+    );
 
     test('computes weekly training volume and load volume accurately', () async {
       final programStart = DateTime(2026, 9, 1, 9, 0);
@@ -241,7 +286,14 @@ void main() {
         ],
       ));
 
-      final testMacrocycle = await MacrocycleService(sessionRepo).getMacrocycleStatus(
+      final progressionRepo = DriftProgressionRepository(database);
+      final engine = SbeeEngine(
+        sessionRepository: sessionRepo,
+        progressionRepository: progressionRepo,
+        exerciseGraph: expandedExerciseGraph,
+      );
+      final testMacrocycle =
+          await MacrocycleService(sessionRepo, engine).getMacrocycleStatus(
         currentTime: now,
       );
 

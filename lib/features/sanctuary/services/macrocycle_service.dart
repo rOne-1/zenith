@@ -123,8 +123,9 @@ class MacrocycleState {
 /// against a 5-week block periodization model (3 Weeks Accumulation, 1 Week Overload, 1 Week Deload).
 class MacrocycleService {
   final SessionRepository _sessionRepository;
+  final SbeeEngine _sbeeEngine;
 
-  const MacrocycleService(this._sessionRepository);
+  const MacrocycleService(this._sessionRepository, this._sbeeEngine);
 
   /// Resolves the current [MacrocycleState] given the user\'s session history.
   Future<MacrocycleState> getMacrocycleStatus({DateTime? currentTime}) async {
@@ -171,13 +172,21 @@ class MacrocycleService {
       }
     }
 
+    // The deload boundary is the one thing here SBEE itself also computes
+    // and enforces (generateNextWorkout applies deload constraints when
+    // this is true) -- always sourced from the engine directly rather than
+    // re-derived, per doc/HOST_APP_ONBOARDING.md's guidance. Accumulation
+    // vs. overload is a display-only narrative Zenith invents on top; SBEE
+    // has no equivalent concept, so weekInCycle (computed locally above)
+    // is the only source for that distinction.
+    final isDeload = await _sbeeEngine.isDeloadActive(currentTime: now);
     final MacrocyclePhase phase;
-    if (weekInCycle <= 3) {
-      phase = MacrocyclePhase.accumulation;
+    if (isDeload) {
+      phase = MacrocyclePhase.deload;
     } else if (weekInCycle == 4) {
       phase = MacrocyclePhase.overload;
     } else {
-      phase = MacrocyclePhase.deload;
+      phase = MacrocyclePhase.accumulation;
     }
 
     // Query weekly training volume
@@ -222,7 +231,8 @@ class MacrocycleService {
 /// Provider for [MacrocycleService].
 final macrocycleServiceProvider = Provider<MacrocycleService>((ref) {
   final sessionRepo = ref.watch(sessionRepositoryProvider);
-  return MacrocycleService(sessionRepo);
+  final sbeeEngine = ref.watch(sbeeEngineProvider);
+  return MacrocycleService(sessionRepo, sbeeEngine);
 });
 
 /// Async provider yielding the latest [MacrocycleState].
