@@ -67,10 +67,6 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
-dependency_overrides:
-  # file_picker ^11.0.3 and share_plus ^13.3.0 pin incompatible win32 ranges otherwise.
-  win32: ^5.9.0
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
