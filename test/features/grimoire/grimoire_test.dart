@@ -65,12 +65,19 @@ void main() {
       // Verify Inspector Sheet contents
       expect(find.text('STATION INSPECTION PASS'), findsOneWidget);
       expect(find.text('BIOMECHANICAL FORM SPECIFICATIONS'), findsOneWidget);
+      expect(find.byType(ExerciseIllustration), findsOneWidget);
       expect(find.text('KENNETH MILLER PROGRESSION GAUGES'), findsOneWidget);
       expect(find.text('LOAD VECTOR'), findsOneWidget);
       expect(find.text('RANGE OF MOTION'), findsOneWidget);
       expect(find.text('CLOSE INSPECTOR'), findsOneWidget);
 
       // 8. Close Inspector Sheet
+      // The sheet's own content can now be taller than the default test
+      // surface (800x600) with the illustration added, so the close button
+      // may sit below the fold of the sheet's internal scroll view -- scroll
+      // it into view first, same as a real user would.
+      await tester.ensureVisible(find.text('CLOSE INSPECTOR'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('CLOSE INSPECTOR'));
       await tester.pumpAndSettle();
 

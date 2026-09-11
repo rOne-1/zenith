@@ -4,5 +4,6 @@
 library;
 
 export 'screens/grimoire_screen.dart';
+export 'widgets/exercise_illustration.dart';
 export 'widgets/metro_transit_map.dart';
 export 'widgets/station_inspector_sheet.dart';

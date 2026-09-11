@@ -6,6 +6,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../engine/engine.dart';
 import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
+import '../../grimoire/widgets/exercise_illustration.dart';
 import '../../grimoire/widgets/metro_transit_map.dart';
 import '../controllers/active_session_controller.dart';
 
@@ -368,6 +369,10 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                             ],
                           ),
                           const SizedBox(height: 12.0),
+                          if (exercise != null) ...[
+                            ExerciseIllustration(exercise: exercise),
+                            const SizedBox(height: 12.0),
+                          ],
                           ...cues.map(
                             (cue) => Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),

@@ -10,6 +10,7 @@ import '../../../core/widgets/stepped_pixel_border.dart';
 import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../providers/user_profile_provider.dart';
 import '../widgets/gear_tile.dart';
+import '../widgets/illustration_credits_section.dart';
 
 /// The 6 canonical equipment types rendered in the 3x2 Armory gear grid.
 const List<Equipment> kArmoryEquipmentGrid = [
@@ -253,6 +254,34 @@ class ArmoryScreen extends ConsumerWidget {
                             notifier.toggleCycleAutoregulation();
                           },
                         ),
+
+                        const SizedBox(height: 24.0),
+
+                        // Section Header: Illustration Credits
+                        Row(
+                          children: [
+                            Container(
+                              width: 6.0,
+                              height: 6.0,
+                              color: colors.amberAccent,
+                            ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              'ATTRIBUTION',
+                              style: TextStyle(
+                                fontFamily: 'Silkscreen',
+                                fontFamilyFallback: const ['monospace'],
+                                fontSize: 11.0,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                                color: colors.textPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12.0),
+
+                        const IllustrationCreditsSection(),
                       ],
                     ),
                   ),

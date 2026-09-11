@@ -9,6 +9,7 @@ import 'package:zenith/core/widgets/widgets.dart';
 import 'package:zenith/engine/engine.dart';
 import 'package:zenith/features/expedition/controllers/active_session_controller.dart';
 import 'package:zenith/features/expedition/screens/working_set_screen.dart';
+import 'package:zenith/features/grimoire/widgets/exercise_illustration.dart';
 
 void main() {
   group('WorkingSetScreen Widget Tests', () {
@@ -100,6 +101,7 @@ void main() {
 
       // Cues card verification
       expect(find.text('FORM CUES'), findsOneWidget);
+      expect(find.byType(ExerciseIllustration), findsOneWidget);
 
       // Kenneth Miller variables card is secondary — collapsed by default
       final variablesHeaderFinder = find.text("TODAY'S DIFFICULTY DIALS");
