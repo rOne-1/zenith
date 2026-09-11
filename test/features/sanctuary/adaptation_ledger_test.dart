@@ -92,36 +92,103 @@ void main() {
       expect(squatItem.hasAdvancedVariables, isTrue);
     });
 
-    test('detects autoregulation promotion events from recent completed sessions', () async {
-      final now = DateTime(2026, 9, 8, 14, 0);
+    test(
+      'detects a promotion from a real variable increase between two sessions',
+      () async {
+        // SBEE only ever changes an exercise's prescribed variables between
+        // sessions (generateNextWorkout prescribes a whole session at once
+        // from the exercise's current progression). So a genuine promotion
+        // shows up as a persisted increase in WorkoutSet.variables between
+        // two sessions for the same exercise, not any single set's RPE.
+        final now = DateTime(2026, 9, 8, 14, 0);
+        final earlierSession = now.subtract(const Duration(days: 5));
+        final laterSession = now.subtract(const Duration(days: 2));
 
-      await sessionRepo.saveSession(WorkoutSession(
-        id: 'promo_session',
-        startTime: now.subtract(const Duration(days: 2)),
-        isCompleted: true,
-        sets: [
-          WorkoutSet(
-            id: 'p_set_1',
-            sessionId: 'promo_session',
-            exerciseId: 'standard_pushup',
-            movementPattern: MovementPattern.pushing,
-            setNumber: 1,
-            reps: 12,
-            targetRpe: 7,
-            reportedRpe: 5, // <= 6 -> promotion trigger
-            variables: const MillerVariables(load: 2),
-            timestamp: now.subtract(const Duration(days: 2)),
-          ),
-        ],
-      ));
+        await sessionRepo.saveSession(WorkoutSession(
+          id: 'session_before',
+          startTime: earlierSession,
+          isCompleted: true,
+          sets: [
+            WorkoutSet(
+              id: 'set_before',
+              sessionId: 'session_before',
+              exerciseId: 'standard_pushup',
+              movementPattern: MovementPattern.pushing,
+              setNumber: 1,
+              reps: 12,
+              targetRpe: 7,
+              reportedRpe: 6,
+              variables: const MillerVariables(load: 1),
+              timestamp: earlierSession,
+            ),
+          ],
+        ));
 
-      final state = await service.getLedgerState(currentTime: now);
+        await sessionRepo.saveSession(WorkoutSession(
+          id: 'session_after',
+          startTime: laterSession,
+          isCompleted: true,
+          sets: [
+            WorkoutSet(
+              id: 'set_after',
+              sessionId: 'session_after',
+              exerciseId: 'standard_pushup',
+              movementPattern: MovementPattern.pushing,
+              setNumber: 1,
+              reps: 12,
+              targetRpe: 7,
+              reportedRpe: 7,
+              variables: const MillerVariables(load: 2),
+              timestamp: laterSession,
+            ),
+          ],
+        ));
 
-      expect(state.recentPromotions.isNotEmpty, isTrue);
-      final promo = state.recentPromotions.first;
-      expect(promo.exerciseName.toUpperCase(), contains('PUSH'));
-      expect(promo.variableDelta, contains('RPE 5'));
-    });
+        final state = await service.getLedgerState(currentTime: now);
+
+        expect(state.recentPromotions, hasLength(1));
+        final promo = state.recentPromotions.first;
+        expect(promo.exerciseName.toUpperCase(), contains('PUSH'));
+        expect(promo.variableDelta, equals('LOAD L1→L2'));
+        // Attributed to the earlier session -- its performance earned the
+        // upgrade reflected in the later one.
+        expect(promo.timestamp, equals(earlierSession));
+      },
+    );
+
+    test(
+      'a single session alone never registers as a promotion',
+      () async {
+        // Regression coverage: the old RPE<=6-per-set heuristic would have
+        // wrongly flagged this as a promotion. With no earlier session to
+        // compare against, there is nothing to diff.
+        final now = DateTime(2026, 9, 8, 14, 0);
+
+        await sessionRepo.saveSession(WorkoutSession(
+          id: 'lone_session',
+          startTime: now.subtract(const Duration(days: 1)),
+          isCompleted: true,
+          sets: [
+            WorkoutSet(
+              id: 'lone_set',
+              sessionId: 'lone_session',
+              exerciseId: 'standard_pushup',
+              movementPattern: MovementPattern.pushing,
+              setNumber: 1,
+              reps: 12,
+              targetRpe: 7,
+              reportedRpe: 5,
+              variables: const MillerVariables(load: 2),
+              timestamp: now.subtract(const Duration(days: 1)),
+            ),
+          ],
+        ));
+
+        final state = await service.getLedgerState(currentTime: now);
+
+        expect(state.recentPromotions, isEmpty);
+      },
+    );
   });
 
   group('AdaptationLedgerCard Widget Tests', () {

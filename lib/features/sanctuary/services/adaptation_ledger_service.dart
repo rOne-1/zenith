@@ -25,7 +25,11 @@ class MillerAdaptationItem {
   /// Formatted competency tier string (e.g. "TIER 02").
   String get tierLabel => 'TIER 0$competencyLevel';
 
-  /// Mastery classification title based on competency level (T1 to T6).
+  /// Mastery classification title based on competency level.
+  ///
+  /// SBEE's `ExerciseProgression.competencyLevel` only ever produces 1, 2,
+  /// or 3 (Beginner/Intermediate/Advanced -- monotonic, derived from
+  /// completed-set counts in `SbeeEngine`). There is no 4-6 to classify.
   String get masteryTitle {
     switch (competencyLevel) {
       case 1:
@@ -33,14 +37,8 @@ class MillerAdaptationItem {
       case 2:
         return 'PROFICIENT';
       case 3:
-        return 'ADVANCED';
-      case 4:
-        return 'EXPERT';
-      case 5:
-        return 'MASTER';
-      case 6:
       default:
-        return 'ZENITH';
+        return 'ADVANCED';
     }
   }
 
@@ -167,7 +165,25 @@ class AdaptationLedgerService {
       }
     }
 
-    // Inspect recent completed sessions for promotion/adaptation events
+    // Inspect recent completed sessions for genuine promotion events.
+    //
+    // SBEE only ever changes an exercise's prescribed variables *between*
+    // sessions (generateNextWorkout prescribes a whole session at once from
+    // the exercise's current ExerciseProgression; logSetPerformance only
+    // updates that progression for the exercise's *next* appearance). So a
+    // promotion can't be detected from a single set's reported RPE -- it
+    // has to be read off a real increase between two sessions' persisted
+    // `WorkoutSet.variables` snapshots for the same exercise. This avoids
+    // re-deriving SBEE's RPE threshold (which would also need the
+    // female-adjusted target to match SBEE exactly -- see
+    // ActiveSessionController's `_diffAutoregulationAction`) by reading
+    // what SBEE actually prescribed instead of guessing from RPE.
+    //
+    // Known limitation: an exercise's very first appearance inside the
+    // lookback window has no earlier snapshot to compare against, so a
+    // promotion whose "before" session falls just outside the window can be
+    // missed. Accepted for this history ledger rather than adding
+    // per-exercise boundary queries.
     final recentPromotions = <PromotionEvent>[];
     final now = currentTime ?? DateTime.now();
     final lookbackStart = now.subtract(const Duration(days: 30));
@@ -176,25 +192,44 @@ class AdaptationLedgerService {
       now,
     );
 
+    final Map<String, List<MapEntry<DateTime, MillerVariables>>>
+        exerciseSnapshots = {};
     for (final session in recentSessions.where((s) => s.isCompleted)) {
+      final seenExercises = <String>{};
       for (final set in session.sets) {
-        final rpe = set.reportedRpe;
-        if (rpe != null && rpe <= 6) {
-          // Autoregulation candidate
-          final ex = expandedExerciseGraph.findById(set.exerciseId) ??
-              baselineExerciseGraph.findById(set.exerciseId);
-          final exName = ex?.name ?? set.exerciseId;
+        if (set.reportedRpe == null) continue;
+        if (!seenExercises.add(set.exerciseId)) continue;
+        exerciseSnapshots
+            .putIfAbsent(set.exerciseId, () => [])
+            .add(MapEntry(session.startTime, set.variables));
+      }
+    }
+
+    for (final entry in exerciseSnapshots.entries) {
+      final snapshots = entry.value..sort((a, b) => a.key.compareTo(b.key));
+      for (var i = 1; i < snapshots.length; i++) {
+        final before = snapshots[i - 1].value;
+        final after = snapshots[i].value;
+        if (millerVariablesIncreased(before, after)) {
+          final ex = expandedExerciseGraph.findById(entry.key) ??
+              baselineExerciseGraph.findById(entry.key);
+          final exName = ex?.name ?? entry.key;
           recentPromotions.add(
             PromotionEvent(
               exerciseName: exName,
-              variableDelta: 'LOAD L${set.variables.load} // RPE $rpe',
-              description: 'Exceeded target capacity (RPE $rpe <= 6). Variable upgrade eligible.',
-              timestamp: set.timestamp,
+              variableDelta: _describeVariableIncrease(before, after),
+              description:
+                  'Miller variables advanced following logged performance.',
+              // The earlier session's performance is what earned the
+              // upgrade reflected in the later one.
+              timestamp: snapshots[i - 1].key,
             ),
           );
         }
       }
     }
+
+    recentPromotions.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
     return AdaptationLedgerState(
       adaptations: items,
@@ -203,6 +238,27 @@ class AdaptationLedgerService {
       highestCompetencyTier: maxTier,
     );
   }
+}
+
+/// Names the specific Miller variable(s) that increased, e.g. "LOAD L1→L2".
+String _describeVariableIncrease(MillerVariables before, MillerVariables after) {
+  final parts = <String>[];
+  if (after.load > before.load) {
+    parts.add('LOAD L${before.load}→L${after.load}');
+  }
+  if (after.bodyPosition > before.bodyPosition) {
+    parts.add('POSITION L${before.bodyPosition}→L${after.bodyPosition}');
+  }
+  if (after.rom > before.rom) {
+    parts.add('ROM L${before.rom}→L${after.rom}');
+  }
+  if (after.height > before.height) {
+    parts.add('HEIGHT L${before.height}→L${after.height}');
+  }
+  if (after.tempo > before.tempo) {
+    parts.add('TEMPO L${before.tempo}→L${after.tempo}');
+  }
+  return parts.join(' // ');
 }
 
 /// Provider for [AdaptationLedgerService].

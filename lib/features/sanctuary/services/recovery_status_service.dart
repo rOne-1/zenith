@@ -54,8 +54,9 @@ class PatternRecoveryStatus {
 /// based on historical set exertion data.
 class RecoveryStatusService {
   final SessionRepository _sessionRepository;
+  final SbeeEngine _sbeeEngine;
 
-  const RecoveryStatusService(this._sessionRepository);
+  const RecoveryStatusService(this._sessionRepository, this._sbeeEngine);
 
   /// Calculates recovery status across all 5 ACE IFT movement patterns.
   Future<Map<MovementPattern, PatternRecoveryStatus>> getAllPatternStatuses({
@@ -76,8 +77,12 @@ class RecoveryStatusService {
       int taxingCount = 0;
 
       for (final set in sets) {
-        final rpe = set.reportedRpe ?? set.targetRpe;
-        if (rpe >= kTaxingRpeThreshold) {
+        // Mirrors SafetyRules.isMovementLocked exactly: only an actually
+        // *reported* RPE counts as taxing. An unlogged/prescribed set's
+        // targetRpe is never a substitute -- SBEE's own rule has no such
+        // fallback (see SBEE/lib/src/engine/safety_rules.dart).
+        final rpe = set.reportedRpe;
+        if (rpe != null && rpe >= kTaxingRpeThreshold) {
           taxingCount++;
           if (latestTaxingTimestamp == null ||
               set.timestamp.isAfter(latestTaxingTimestamp)) {
@@ -86,37 +91,37 @@ class RecoveryStatusService {
         }
       }
 
-      if (latestTaxingTimestamp == null) {
+      // The lock/fresh decision itself always comes from SBEE directly,
+      // never re-derived -- see doc/HOST_APP_ONBOARDING.md: "Never
+      // reimplement or duplicate a safety check client-side... Always call
+      // engine.isMovementLocked()." The loop above only recovers the
+      // remaining-duration/last-taxing-timestamp display details that
+      // SBEE's boolean-only isMovementLocked() doesn't expose.
+      final isLocked = await _sbeeEngine.isMovementLocked(
+        pattern: pattern,
+        currentTime: now,
+      );
+
+      if (!isLocked || latestTaxingTimestamp == null) {
         statuses[pattern] = PatternRecoveryStatus(
           pattern: pattern,
           isFresh: true,
           remainingLockDuration: Duration.zero,
+          lastTaxingSetTimestamp: latestTaxingTimestamp,
           totalSetsIn48Hours: sets.length,
-          taxingSetsIn48Hours: 0,
+          taxingSetsIn48Hours: taxingCount,
         );
       } else {
         final lockExpiry = latestTaxingTimestamp.add(kPatternRecoveryLockDuration);
         final remaining = lockExpiry.difference(now);
-
-        if (remaining > Duration.zero) {
-          statuses[pattern] = PatternRecoveryStatus(
-            pattern: pattern,
-            isFresh: false,
-            remainingLockDuration: remaining,
-            lastTaxingSetTimestamp: latestTaxingTimestamp,
-            totalSetsIn48Hours: sets.length,
-            taxingSetsIn48Hours: taxingCount,
-          );
-        } else {
-          statuses[pattern] = PatternRecoveryStatus(
-            pattern: pattern,
-            isFresh: true,
-            remainingLockDuration: Duration.zero,
-            lastTaxingSetTimestamp: latestTaxingTimestamp,
-            totalSetsIn48Hours: sets.length,
-            taxingSetsIn48Hours: taxingCount,
-          );
-        }
+        statuses[pattern] = PatternRecoveryStatus(
+          pattern: pattern,
+          isFresh: false,
+          remainingLockDuration: remaining.isNegative ? Duration.zero : remaining,
+          lastTaxingSetTimestamp: latestTaxingTimestamp,
+          totalSetsIn48Hours: sets.length,
+          taxingSetsIn48Hours: taxingCount,
+        );
       }
     }
 
@@ -127,7 +132,8 @@ class RecoveryStatusService {
 /// Primary Riverpod provider for the [RecoveryStatusService].
 final recoveryStatusServiceProvider = Provider<RecoveryStatusService>((ref) {
   final sessionRepo = ref.watch(sessionRepositoryProvider);
-  return RecoveryStatusService(sessionRepo);
+  final sbeeEngine = ref.watch(sbeeEngineProvider);
+  return RecoveryStatusService(sessionRepo, sbeeEngine);
 });
 
 /// Reactive provider yielding recovery status for all 5 patterns.

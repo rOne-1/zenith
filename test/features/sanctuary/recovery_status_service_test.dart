@@ -12,12 +12,20 @@ void main() {
   group('RecoveryStatusService Unit Tests', () {
     late SbeeDatabase database;
     late DriftSessionRepository sessionRepo;
+    late DriftProgressionRepository progressionRepo;
+    late SbeeEngine engine;
     late RecoveryStatusService service;
 
     setUp(() {
       database = SbeeDatabase(NativeDatabase.memory());
       sessionRepo = DriftSessionRepository(database);
-      service = RecoveryStatusService(sessionRepo);
+      progressionRepo = DriftProgressionRepository(database);
+      engine = SbeeEngine(
+        sessionRepository: sessionRepo,
+        progressionRepository: progressionRepo,
+        exerciseGraph: expandedExerciseGraph,
+      );
+      service = RecoveryStatusService(sessionRepo, engine);
     });
 
     tearDown(() async {
@@ -74,6 +82,51 @@ void main() {
       expect(pushing.isFresh, isTrue);
       expect(pushing.remainingLockDuration, equals(Duration.zero));
       expect(pushing.totalSetsIn48Hours, equals(1));
+      expect(pushing.taxingSetsIn48Hours, equals(0));
+    });
+
+    test('unlogged set with a high targetRpe does not trigger 48h lock', () async {
+      // A freshly generated session's sets carry a targetRpe before the
+      // athlete has actually performed them (reportedRpe stays null until
+      // logged). SBEE's own SafetyRules.isMovementLocked only ever counts
+      // an actually-reported RPE -- an unlogged prescription must never be
+      // treated as taxing, no matter how high its targetRpe is.
+      final now = DateTime(2026, 9, 9, 12, 0);
+      final setTime = now.subtract(const Duration(hours: 1));
+
+      final session = WorkoutSession(
+        id: 'unlogged_heavy_session',
+        startTime: setTime,
+        isCompleted: false,
+        sets: [
+          WorkoutSet(
+            id: 'set_unlogged',
+            sessionId: 'unlogged_heavy_session',
+            exerciseId: 'standard_pushup',
+            movementPattern: MovementPattern.pushing,
+            setNumber: 1,
+            reps: 10,
+            targetRpe: 9,
+            reportedRpe: null,
+            variables: const MillerVariables(
+              load: 1,
+              bodyPosition: 1,
+              rom: 1,
+              height: 1,
+              tempo: 1,
+            ),
+            timestamp: setTime,
+            restDuration: const Duration(seconds: 60),
+          ),
+        ],
+      );
+      await sessionRepo.saveSession(session);
+
+      final statuses = await service.getAllPatternStatuses(currentTime: now);
+      final pushing = statuses[MovementPattern.pushing]!;
+
+      expect(pushing.isFresh, isTrue);
+      expect(pushing.remainingLockDuration, equals(Duration.zero));
       expect(pushing.taxingSetsIn48Hours, equals(0));
     });
 

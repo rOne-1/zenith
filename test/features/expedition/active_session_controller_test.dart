@@ -6,6 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/engine/engine.dart';
 import 'package:zenith/features/expedition/controllers/active_session_controller.dart';
+import 'package:zenith/features/armory/models/user_profile.dart';
+import 'package:zenith/features/armory/providers/user_profile_provider.dart';
 import 'package:zenith/features/outpost/services/streak_service.dart';
 import 'package:zenith/features/sanctuary/services/macrocycle_service.dart';
 
@@ -210,6 +212,68 @@ void main() {
         expect(state.fsmState, equals(SessionState.completed));
         expect(state.session!.isCompleted, isTrue);
         expect(state.adaptations, isNotEmpty);
+      },
+    );
+
+    test(
+      'finalizeSession reflects SBEE\'s female-adjusted decision, not a raw RPE comparison',
+      () async {
+        // Untrained_Female, cycle day 1-3 -> SBEE internally adjusts the
+        // target RPE down by 1 before evaluating (adjustTargetRpe). Raw
+        // targetRpe 5, reportedRpe 3: comparing against the RAW target
+        // (5) would say increment (3 < 5-1=4); comparing against SBEE's
+        // real ADJUSTED target (4) is "maintain" (3 is not < 4-1=3). This
+        // asserts the controller reports what SBEE actually did, not the
+        // raw comparison a naive re-derivation would produce.
+        container.read(userProfileProvider.notifier).state = UserProfile(
+          availableEquipment: const {Equipment.bodyweight},
+          femaleProfile: const FemaleProfile(
+            userStatus: 'Untrained_Female',
+            cycleDay: 2,
+            hasKneeDiscomfort: false,
+            age: 25,
+            hasJointPain: false,
+          ),
+        );
+
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final session = WorkoutSession(
+          id: 'female_adjust_session',
+          startTime: DateTime.now(),
+          sets: [
+            WorkoutSet(
+              id: 'set_0',
+              sessionId: 'female_adjust_session',
+              exerciseId: 'standard_pushup',
+              movementPattern: MovementPattern.pushing,
+              setNumber: 1,
+              reps: 10,
+              targetRpe: 5,
+              variables: const MillerVariables(
+                load: 1,
+                bodyPosition: 1,
+                rom: 1,
+                height: 1,
+                tempo: 1,
+              ),
+              timestamp: DateTime.now(),
+              restDuration: const Duration(seconds: 60),
+            ),
+          ],
+        );
+
+        await controller.startSession(session);
+        controller.completeWarmUp();
+        controller.completeCurrentSet(actualReps: 10);
+        await controller.logRpe(3);
+        await controller.completeCoolDown();
+
+        final state = container.read(activeSessionControllerProvider);
+        final record = state.adaptations.single;
+        expect(record.action, equals(AutoregulationAction.maintain));
+        expect(record.variables, equals(const MillerVariables()));
       },
     );
 

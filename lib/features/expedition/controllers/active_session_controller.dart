@@ -16,6 +16,29 @@ enum AutoregulationAction {
   maintain,
 }
 
+/// Determines the autoregulation action SBEE actually took, by diffing the
+/// exercise's variables from immediately before a `logSetPerformance` call
+/// against what it returned.
+///
+/// This can't be read directly from SBEE: `AutoregulationAction`/
+/// `AutoregulationEngine` are internal to the package and never exported,
+/// and the raw reportedRpe/targetRpe comparison a caller could do locally
+/// would silently disagree with SBEE's real decision whenever a
+/// `FemaleProfile` is present, since `logSetPerformance` adjusts the target
+/// RPE internally before evaluating (see
+/// `FemalePhysiologyWrapper.adjustTargetRpe`). Diffing the actual
+/// before/after `MillerVariables` sidesteps both problems: it reads what
+/// SBEE really did rather than re-deriving it.
+AutoregulationAction _diffAutoregulationAction(
+  MillerVariables before,
+  MillerVariables after,
+) {
+  if (after == before) return AutoregulationAction.maintain;
+  return millerVariablesIncreased(before, after)
+      ? AutoregulationAction.increment
+      : AutoregulationAction.regress;
+}
+
 /// Represents an adaptation adjustment outcome recorded for a logged set.
 @immutable
 class MillerAdaptationRecord {
@@ -377,6 +400,16 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       for (final set in session.sets) {
         if (set.reportedRpe == null) continue;
 
+        // Read the pre-call variables so the actual action taken (including
+        // any invisible female-RPE adjustment) can be read back afterward
+        // instead of re-derived -- see _diffAutoregulationAction. This
+        // duplicates logSetPerformance's own internal read of the same
+        // progression record; accepted as the cost of not re-deriving
+        // SBEE's decision logic by hand.
+        final priorProgression =
+            await engine.progressionRepository.getProgression(set.exerciseId);
+        final priorVars = priorProgression?.variables ?? const MillerVariables();
+
         final newVars = await engine.logSetPerformance(
           exerciseId: set.exerciseId,
           reps: set.reps,
@@ -385,11 +418,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
           femaleProfile: profile.femaleProfile,
         );
 
-        final action = set.reportedRpe! < (set.targetRpe - 1)
-            ? AutoregulationAction.increment
-            : (set.reportedRpe! > (set.targetRpe + 1)
-                ? AutoregulationAction.regress
-                : AutoregulationAction.maintain);
+        final action = _diffAutoregulationAction(priorVars, newVars);
 
         final exercise = expandedExerciseGraph.findById(set.exerciseId) ??
             baselineExerciseGraph.findById(set.exerciseId);
