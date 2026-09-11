@@ -22,7 +22,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
     final completedSets = state.completedSetsCount;
     final totalReps = state.totalRepsCompleted;
     final avgRpe = state.averageRpe.toStringAsFixed(1);
-    final durationSeconds = session?.endTime != null && session?.startTime != null
+    final durationSeconds =
+        session?.endTime != null && session?.startTime != null
         ? session!.endTime!.difference(session.startTime).inSeconds
         : 0;
     final durationText = '${durationSeconds ~/ 60}m ${durationSeconds % 60}s';
@@ -69,10 +70,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                 ),
               ),
 
-              Container(
-                height: 2.0,
-                color: colors.borderMuted,
-              ),
+              Container(height: 2.0, color: colors.borderMuted),
 
               // Scrollable Debrief Summary
               Expanded(
@@ -266,8 +264,9 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                           else
                             ...state.adaptations.map((a) {
                               final Color actionColor = switch (a.action) {
-                                AutoregulationAction.increment =>
-                                  const Color(0xFF2EE6D6),
+                                AutoregulationAction.increment => const Color(
+                                  0xFF2EE6D6,
+                                ),
                                 AutoregulationAction.regress =>
                                   colors.signalRed,
                                 AutoregulationAction.maintain =>
@@ -295,7 +294,9 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                           a.exerciseName.toUpperCase(),
                                           style: TextStyle(
                                             fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const ['monospace'],
+                                            fontFamilyFallback: const [
+                                              'monospace',
+                                            ],
                                             fontSize: 12.0,
                                             fontWeight: FontWeight.w900,
                                             color: colors.textPrimary,
@@ -305,7 +306,9 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                           'RPE ${a.reportedRpe} (TARGET ${a.targetRpe})',
                                           style: TextStyle(
                                             fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const ['monospace'],
+                                            fontFamilyFallback: const [
+                                              'monospace',
+                                            ],
                                             fontSize: 9.0,
                                             fontWeight: FontWeight.w700,
                                             color: actionColor,
@@ -318,7 +321,9 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                       a.adaptationSummary,
                                       style: TextStyle(
                                         fontFamily: 'Inter',
-                                        fontFamilyFallback: const ['sans-serif'],
+                                        fontFamilyFallback: const [
+                                          'sans-serif',
+                                        ],
                                         fontSize: 10.0,
                                         height: 1.3,
                                         color: colors.textMuted,
@@ -344,10 +349,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: colors.surfaceDark,
                   border: Border(
-                    top: BorderSide(
-                      color: colors.borderMuted,
-                      width: 2.0,
-                    ),
+                    top: BorderSide(color: colors.borderMuted, width: 2.0),
                   ),
                 ),
                 child: PixelButton(

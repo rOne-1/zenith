@@ -140,8 +140,8 @@ class ZenithPixelThemeBuilder {
 
     const pixelMetrics = ZenithPixelMetrics();
 
-    final FontBuilder effectiveDisplayFont = displayFont ??
-        _buildFont(family: 'Silkscreen', fallback: 'monospace');
+    final FontBuilder effectiveDisplayFont =
+        displayFont ?? _buildFont(family: 'Silkscreen', fallback: 'monospace');
     final FontBuilder effectiveBodyFont =
         bodyFont ?? _buildFont(family: 'Inter', fallback: 'sans-serif');
 

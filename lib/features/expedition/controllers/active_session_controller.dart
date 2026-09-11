@@ -12,11 +12,7 @@ import '../../sanctuary/services/recovery_status_service.dart';
 import '../services/workout_preview_service.dart';
 
 /// Decision output of the Kenneth Miller autoregulation evaluation.
-enum AutoregulationAction {
-  increment,
-  regress,
-  maintain,
-}
+enum AutoregulationAction { increment, regress, maintain }
 
 /// Determines the autoregulation action SBEE actually took, by diffing the
 /// exercise's variables from immediately before a `logSetPerformance` call
@@ -96,7 +92,8 @@ class ActiveSessionState {
 
   bool get hasActiveSession => session != null;
   int get totalSets => session?.sets.length ?? 0;
-  bool get isLastSet => session != null && currentSetIndex >= session!.sets.length - 1;
+  bool get isLastSet =>
+      session != null && currentSetIndex >= session!.sets.length - 1;
 
   WorkoutSet? get currentSet {
     if (session == null || currentSetIndex >= session!.sets.length) return null;
@@ -104,7 +101,9 @@ class ActiveSessionState {
   }
 
   WorkoutSet? get nextSet {
-    if (session == null || currentSetIndex + 1 >= session!.sets.length) return null;
+    if (session == null || currentSetIndex + 1 >= session!.sets.length) {
+      return null;
+    }
     return session!.sets[currentSetIndex + 1];
   }
 
@@ -216,7 +215,9 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
     SessionProgressState? initialProgress,
   }) {
     final progress = initialProgress ?? manager.currentState;
-    final initialSet = session.sets.isNotEmpty ? session.sets[progress.currentSetIndex] : null;
+    final initialSet = session.sets.isNotEmpty
+        ? session.sets[progress.currentSetIndex]
+        : null;
 
     state = ActiveSessionState(
       session: session,
@@ -231,21 +232,42 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
 
       var sessionToUse = p.session ?? state.session;
       if (sessionToUse != null && state.session != null) {
-        final currentIdx = state.currentSetIndex;
-        if (currentIdx < state.session!.sets.length &&
-            currentIdx < sessionToUse.sets.length) {
-          final localSet = state.session!.sets[currentIdx];
-          if (localSet.reportedRpe != null) {
-            final sets = List<WorkoutSet>.from(sessionToUse.sets);
-            sets[currentIdx] = sets[currentIdx].copyWith(
-              reportedRpe: localSet.reportedRpe,
-            );
-            sessionToUse = sessionToUse.copyWith(sets: sets);
-          }
+        // Carry forward EVERY set's locally-logged RPE correction, not
+        // just the current index. logRpe() patches state.session directly
+        // without informing _manager, so the manager's own session can
+        // still hold the placeholder RPE from initial set-completion for
+        // any set the user has since corrected via the Rest/Cool-Down RPE
+        // selector. Merging only the current index here let an earlier
+        // correction silently revert the moment the FSM advanced past it.
+        // Carry forward EVERY set's locally-logged RPE correction, not
+        // just the current index. logRpe() patches state.session directly
+        // without informing _manager, so the manager's own session can
+        // still hold the placeholder RPE from initial set-completion for
+        // any set the user has since corrected via the Rest/Cool-Down RPE
+        // selector. Merging only the current index here let an earlier
+        // correction silently revert the moment the FSM advanced past it.
+        // Carry forward EVERY set's locally-logged RPE correction, not
+        // just the current index. logRpe() patches state.session directly
+        // without informing _manager, so the manager's own session can
+        // still hold the placeholder RPE from initial set-completion for
+        // any set the user has since corrected via the Rest/Cool-Down RPE
+        // selector. Merging only the current index here let an earlier
+        // correction silently revert the moment the FSM advanced past it.
+        final localSets = state.session!.sets;
+        final incomingSets = sessionToUse.sets;
+        if (localSets.length == incomingSets.length) {
+          final merged = List<WorkoutSet>.generate(incomingSets.length, (i) {
+            final localRpe = localSets[i].reportedRpe;
+            return localRpe != null
+                ? incomingSets[i].copyWith(reportedRpe: localRpe)
+                : incomingSets[i];
+          });
+          sessionToUse = sessionToUse.copyWith(sets: merged);
         }
       }
 
-      final curSet = sessionToUse != null && p.currentSetIndex < sessionToUse.sets.length
+      final curSet =
+          sessionToUse != null && p.currentSetIndex < sessionToUse.sets.length
           ? sessionToUse.sets[p.currentSetIndex]
           : null;
 
@@ -320,7 +342,8 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
     final clampedRpe = rpeScore.clamp(1, 10);
     state = state.copyWith(selectedRpe: () => clampedRpe);
 
-    if (state.session != null && state.currentSetIndex < state.session!.sets.length) {
+    if (state.session != null &&
+        state.currentSetIndex < state.session!.sets.length) {
       final sets = List<WorkoutSet>.from(state.session!.sets);
       final targetSet = sets[state.currentSetIndex];
       sets[state.currentSetIndex] = targetSet.copyWith(reportedRpe: clampedRpe);
@@ -336,10 +359,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
 
   void _startRestTimer(Duration duration) {
     _cancelTimer();
-    state = state.copyWith(
-      restRemaining: duration,
-      totalRest: duration,
-    );
+    state = state.copyWith(restRemaining: duration, totalRest: duration);
 
     _restTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) {
@@ -362,10 +382,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   void addRestTime([Duration extension = const Duration(seconds: 30)]) {
     final newRemaining = state.restRemaining + extension;
     final newTotal = state.totalRest + extension;
-    state = state.copyWith(
-      restRemaining: newRemaining,
-      totalRest: newTotal,
-    );
+    state = state.copyWith(restRemaining: newRemaining, totalRest: newTotal);
   }
 
   /// Concludes the rest phase and starts the next set.
@@ -391,7 +408,6 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   /// Concludes the cool down phase and transitions to debrief / [SessionState.completed].
   Future<void> completeCoolDown() async {
     _ensureManager();
-    _manager!.finalizeSession();
     await finalizeSession();
   }
 
@@ -419,9 +435,10 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
         // duplicates logSetPerformance's own internal read of the same
         // progression record; accepted as the cost of not re-deriving
         // SBEE's decision logic by hand.
-        final priorProgression =
-            await engine.progressionRepository.getProgression(set.exerciseId);
-        final priorVars = priorProgression?.variables ?? const MillerVariables();
+        final priorProgression = await engine.progressionRepository
+            .getProgression(set.exerciseId);
+        final priorVars =
+            priorProgression?.variables ?? const MillerVariables();
 
         final newVars = await engine.logSetPerformance(
           exerciseId: set.exerciseId,
@@ -433,7 +450,8 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
 
         final action = _diffAutoregulationAction(priorVars, newVars);
 
-        final exercise = expandedExerciseGraph.findById(set.exerciseId) ??
+        final exercise =
+            expandedExerciseGraph.findById(set.exerciseId) ??
             baselineExerciseGraph.findById(set.exerciseId);
         final name = exercise?.name ?? set.exerciseId;
 
@@ -466,6 +484,18 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
         endTime: DateTime.now(),
       );
       await sessionRepo.saveSession(completedSession);
+
+      // Only now -- once the Kenneth Miller eval and persistence above have
+      // actually succeeded -- tell SBEE's own FSM the session is done.
+      // _manager!.finalizeSession() flips the manager's internal state to
+      // SessionState.completed and fires a progressStream event; calling it
+      // any earlier (previously done in completeCoolDown() before this
+      // method even ran) let that event reach the progressStream listener
+      // and switch the UI to the debrief screen regardless of whether this
+      // try block went on to fail -- silently discarding the failure text
+      // this catch sets, since ActiveExpeditionScreen had already navigated
+      // away from the screen showing it.
+      _manager!.finalizeSession();
 
       // Invalidate preview cache, active session probe, and the Outpost
       // dashboard's streak/weekly-stats (a completed session just changed
@@ -521,7 +551,9 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
 
   void _ensureManager() {
     if (_manager == null) {
-      throw StateError('ActiveSessionController has no active SessionStreamManager.');
+      throw StateError(
+        'ActiveSessionController has no active SessionStreamManager.',
+      );
     }
   }
 

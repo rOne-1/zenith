@@ -143,6 +143,55 @@ void main() {
       expect(state.session!.sets[0].reportedRpe, equals(9));
     });
 
+    test(
+      'a corrected RPE for an earlier set survives advancing past it',
+      () async {
+        // Regression coverage: the progressStream reconciliation used to
+        // only re-merge the CURRENT set index against the manager's
+        // (possibly stale) session, so a correction logRpe() made for an
+        // earlier set could be silently overwritten by the manager's
+        // original placeholder value once the FSM advanced to a later set.
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final session = createTestSession(setCount: 3);
+
+        await controller.startSession(session);
+        controller.completeWarmUp();
+
+        // Set 0: complete, then correct its RPE on the Rest screen.
+        controller.completeCurrentSet(actualReps: 10);
+        await controller.logRpe(6);
+        expect(
+          container
+              .read(activeSessionControllerProvider)
+              .session!
+              .sets[0]
+              .reportedRpe,
+          equals(6),
+        );
+
+        // Advance through set 1 (a manager event that used to cause the
+        // set-0 correction above to revert). The merge happens inside the
+        // manager's progressStream listener, which fires asynchronously --
+        // flush pending microtasks so that listener actually runs before
+        // asserting, or this test would pass regardless of the bug.
+        controller.completeRest();
+        controller.completeCurrentSet(actualReps: 10);
+        await Future<void>.delayed(Duration.zero);
+
+        expect(
+          container
+              .read(activeSessionControllerProvider)
+              .session!
+              .sets[0]
+              .reportedRpe,
+          equals(6),
+          reason: 'set 0\'s corrected RPE must not revert once the FSM advances past it',
+        );
+      },
+    );
+
     test('addRestTime extends rest duration', () async {
       final controller = container.read(
         activeSessionControllerProvider.notifier,

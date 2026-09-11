@@ -113,12 +113,11 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
 
     final set = state.currentSet;
     if (set == null) {
-      return const Scaffold(
-        body: Center(child: PixelLoadingIndicator()),
-      );
+      return const Scaffold(body: Center(child: PixelLoadingIndicator()));
     }
 
-    final exercise = expandedExerciseGraph.findById(set.exerciseId) ??
+    final exercise =
+        expandedExerciseGraph.findById(set.exerciseId) ??
         baselineExerciseGraph.findById(set.exerciseId);
     final meta = exercise != null
         ? MetroStationMeta.forExercise(exercise)
@@ -133,7 +132,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
 
     final cues = set.cues.isNotEmpty
         ? set.cues
-        : (exercise?.defaultCues ?? ['Maintain steady core alignment and controlled tempo.']);
+        : (exercise?.defaultCues ??
+              ['Maintain steady core alignment and controlled tempo.']);
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
@@ -151,10 +151,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                 decoration: BoxDecoration(
                   color: colors.surfaceDark,
                   border: Border(
-                    bottom: BorderSide(
-                      color: colors.borderBright,
-                      width: 2.0,
-                    ),
+                    bottom: BorderSide(color: colors.borderBright, width: 2.0),
                   ),
                 ),
                 child: Column(
@@ -371,34 +368,38 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                             ],
                           ),
                           const SizedBox(height: 12.0),
-                          ...cues.map((cue) => Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '■ ',
-                                  style: TextStyle(
-                                    color: colors.amberAccent,
-                                    fontSize: 11.0,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    cue,
+                          ...cues.map(
+                            (cue) => Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '■ ',
                                     style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontFamilyFallback: const ['sans-serif'],
-                                      fontSize: 13.0,
-                                      height: 1.4,
-                                      fontWeight: FontWeight.w600,
-                                      color: colors.textPrimary,
+                                      color: colors.amberAccent,
+                                      fontSize: 11.0,
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: Text(
+                                      cue,
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontFamilyFallback: const [
+                                          'sans-serif',
+                                        ],
+                                        fontSize: 13.0,
+                                        height: 1.4,
+                                        fontWeight: FontWeight.w600,
+                                        color: colors.textPrimary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          )),
+                          ),
                         ],
                       ),
                     ),
@@ -480,10 +481,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                 decoration: BoxDecoration(
                   color: colors.surfaceDark,
                   border: Border(
-                    top: BorderSide(
-                      color: colors.borderMuted,
-                      width: 2.0,
-                    ),
+                    top: BorderSide(color: colors.borderMuted, width: 2.0),
                   ),
                 ),
                 child: Row(
@@ -519,4 +517,3 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
     );
   }
 }
-

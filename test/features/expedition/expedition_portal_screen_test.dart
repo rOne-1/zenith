@@ -171,11 +171,19 @@ void main() {
       expect(find.text('DISCARD'), findsOneWidget);
       expect(find.text('RESUME'), findsOneWidget);
 
+      // Regression coverage: INITIATE EXPEDITION must not be offered while
+      // the interrupted session is unresolved -- tapping it would create a
+      // second concurrent session and permanently orphan this one.
+      expect(find.text('▶ INITIATE EXPEDITION'), findsNothing);
+
       // Tap DISCARD
       await tester.tap(find.text('DISCARD'));
       await tester.pumpAndSettle();
 
       expect(find.textContaining('DISCARDED'), findsOneWidget);
+
+      // Once resolved, the primary CTA becomes available again.
+      expect(find.text('▶ INITIATE EXPEDITION'), findsOneWidget);
     });
   });
 }

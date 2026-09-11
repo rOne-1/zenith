@@ -172,6 +172,148 @@ void main() {
       container.dispose();
     });
 
+    testWidgets(
+      'cool-down phase lets the user log a real RPE for the session\'s final set',
+      (tester) async {
+        // Regression coverage: the FSM goes straight from the last active
+        // set to coolDown (no Rest screen in between), which used to mean
+        // the final set's reportedRpe was never anything the user actually
+        // chose -- only whatever placeholder was guessed at completion
+        // time. Cool-down now shows the same RPE selector Rest does.
+        tester.view.physicalSize = const Size(600, 1200);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
+
+        final session = createTwoSetSession();
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        await controller.startSession(session);
+
+        await tester.pumpWidget(createTestWidget(container: container));
+        await tester.pump();
+
+        await tester.tap(find.text('▶ COMMENCE WORKING SETS'));
+        await tester.pump();
+        await tester.tap(find.text('✓ COMPLETE SET'));
+        await tester.pump();
+        await tester.tap(find.text('SKIP REST & START NEXT SET'));
+        await tester.pump();
+        await tester.tap(find.text('✓ COMPLETE SET'));
+        await tester.pump();
+
+        // Now in Cool-Down, for the final (2nd) set.
+        expect(find.text('COOL-DOWN DOWNSHIFT'), findsOneWidget);
+        expect(find.text('HOW HARD DID THAT FEEL?'), findsOneWidget);
+
+        await tester.tap(find.text('7'));
+        await tester.pump();
+
+        final finalSet = container
+            .read(activeSessionControllerProvider)
+            .session!
+            .sets
+            .last;
+        expect(finalSet.reportedRpe, equals(7));
+
+        // Cleanup
+        await tester.pumpWidget(const SizedBox());
+        container.dispose();
+      },
+    );
+
+    testWidgets(
+      'a finalize failure surfaces as a visible toast instead of failing silently',
+      (tester) async {
+        // Regression coverage: finalizeSession()'s catch block set
+        // state.errorMessage but nothing ever read it -- a failed finalize
+        // just silently re-enabled the CONCLUDE button. An unknown
+        // exerciseId makes logSetPerformance throw ArgumentError naturally
+        // (no mocking needed), exercising the real failure path.
+        tester.view.physicalSize = const Size(600, 1200);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
+
+        final startTime = DateTime.now();
+        final session = WorkoutSession(
+          id: 'bad_exercise_session',
+          startTime: startTime,
+          sets: [
+            WorkoutSet(
+              id: 'bad_set_0',
+              sessionId: 'bad_exercise_session',
+              exerciseId: 'exercise_id_not_in_any_catalog',
+              movementPattern: MovementPattern.pushing,
+              setNumber: 1,
+              reps: 10,
+              targetRpe: 8,
+              variables: const MillerVariables(
+                load: 1,
+                bodyPosition: 1,
+                rom: 1,
+                height: 1,
+                tempo: 1,
+              ),
+              timestamp: startTime,
+              restDuration: const Duration(seconds: 60),
+            ),
+          ],
+        );
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        await controller.startSession(session);
+
+        await tester.pumpWidget(createTestWidget(container: container));
+        await tester.pump();
+
+        await tester.tap(find.text('▶ COMMENCE WORKING SETS'));
+        await tester.pump();
+        await tester.tap(find.text('✓ COMPLETE SET'));
+        await tester.pump();
+
+        expect(find.text('COOL-DOWN DOWNSHIFT'), findsOneWidget);
+        await tester.tap(find.text('7'));
+        await tester.pump();
+
+        // Bounded pumps rather than pumpAndSettle(): the toast dismisses
+        // itself via a real (non-fake) 2-second Timer, and pumpAndSettle's
+        // wall-clock pumping can outlast that and find the toast already
+        // gone by the time it returns.
+        await tester.tap(find.text('CONCLUDE & VIEW DEBRIEF ➔'));
+        for (var i = 0; i < 5; i++) {
+          await tester.pump();
+        }
+
+        expect(
+          find.textContaining('Error finalizing expedition'),
+          findsOneWidget,
+        );
+        // Still in cool-down, not silently marked completed.
+        expect(find.text('COOL-DOWN DOWNSHIFT'), findsOneWidget);
+
+        // Cleanup
+        await tester.pumpWidget(const SizedBox());
+        container.dispose();
+      },
+    );
+
     testWidgets('abort expedition dialog cancels or discards session', (
       tester,
     ) async {

@@ -5,12 +5,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 
 /// Semantic classification for coaching notifications to drive terminal styling.
-enum CoachingNoticeType {
-  postural,
-  recovery,
-  detraining,
-  general,
-}
+enum CoachingNoticeType { postural, recovery, detraining, general }
 
 /// Structured coaching note translated from SBEE biomechanical rules.
 class CoachingNotice {
@@ -120,7 +115,9 @@ class WarningTranslator {
     }
 
     // Postural balance notice
-    final posturalText = translatePosturalWarning(session.posturalWarningReason);
+    final posturalText = translatePosturalWarning(
+      session.posturalWarningReason,
+    );
     if (posturalText != null) {
       notices.add(
         CoachingNotice(
@@ -190,11 +187,7 @@ class SameDayAdvisoryDialog extends StatelessWidget {
         // Header
         Row(
           children: [
-            Icon(
-              Icons.info_outline,
-              color: colors.amberAccent,
-              size: 20.0,
-            ),
+            Icon(Icons.info_outline, color: colors.amberAccent, size: 20.0),
             const SizedBox(width: 8.0),
             Expanded(
               child: Text(
@@ -214,10 +207,7 @@ class SameDayAdvisoryDialog extends StatelessWidget {
         const SizedBox(height: 14.0),
 
         // Divider ribbon
-        Container(
-          height: 2.0,
-          color: colors.borderMuted,
-        ),
+        Container(height: 2.0, color: colors.borderMuted),
         const SizedBox(height: 14.0),
 
         // Supportive Message

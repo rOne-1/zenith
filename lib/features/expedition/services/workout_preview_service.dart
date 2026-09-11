@@ -7,7 +7,8 @@ import '../../armory/providers/user_profile_provider.dart';
 
 /// Clock provider allowing deterministic time injection in tests and preview caching.
 final currentClockProvider = Provider<DateTime Function()>(
-  (ref) => () => DateTime.now(),
+  (ref) =>
+      () => DateTime.now(),
 );
 
 /// Service that maintains a stable, day-level cached candidate workout preview.
@@ -34,14 +35,15 @@ class WorkoutPreviewService {
   DateTime? get cachedDay => _cachedDay;
 
   /// Validates if the current cache is fresh for the given [profile] and [currentTime].
-  bool isCacheValid({
-    required UserProfile profile,
-    DateTime? currentTime,
-  }) {
+  bool isCacheValid({required UserProfile profile, DateTime? currentTime}) {
     if (_cachedSession == null || _cachedDay == null) return false;
 
     final targetTime = currentTime ?? DateTime.now();
-    final targetDay = DateTime(targetTime.year, targetTime.month, targetTime.day);
+    final targetDay = DateTime(
+      targetTime.year,
+      targetTime.month,
+      targetTime.day,
+    );
 
     if (!_cachedDay!.isAtSameMomentAs(targetDay)) return false;
     // UserProfile's own == already does structural equipment/joint-pain/

@@ -79,9 +79,7 @@ class _ExpeditionPortalScreenState
               'EXPEDITION DISPATCHED (${session.sets.length} SETS)';
         });
         Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const ActiveExpeditionScreen(),
-          ),
+          MaterialPageRoute(builder: (_) => const ActiveExpeditionScreen()),
         );
       }
     } catch (e) {
@@ -230,10 +228,7 @@ class _ExpeditionPortalScreenState
               ),
 
               // Divider Ribbon
-              Container(
-                height: 2.0,
-                color: colors.borderMuted,
-              ),
+              Container(height: 2.0, color: colors.borderMuted),
 
               // Main Body Content
               Expanded(
@@ -256,9 +251,7 @@ class _ExpeditionPortalScreenState
                         const SizedBox(height: 16.0),
                         const SizedBox(
                           width: 160.0,
-                          child: PixelCountdownBar(
-                            progress: 0.5,
-                          ),
+                          child: PixelCountdownBar(progress: 0.5),
                         ),
                       ],
                     ),
@@ -337,7 +330,12 @@ class _ExpeditionPortalScreenState
                     );
 
                     return ListView(
-                      padding: const EdgeInsets.fromLTRB(20.0, 16.0, 20.0, 20.0),
+                      padding: const EdgeInsets.fromLTRB(
+                        20.0,
+                        16.0,
+                        20.0,
+                        20.0,
+                      ),
                       children: [
                         // Crash / Interrupted Session Banner
                         resumeState.when(
@@ -368,7 +366,9 @@ class _ExpeditionPortalScreenState
                                             'UNFINISHED EXPEDITION',
                                             style: TextStyle(
                                               fontFamily: 'Silkscreen',
-                                              fontFamilyFallback: const ['monospace'],
+                                              fontFamilyFallback: const [
+                                                'monospace',
+                                              ],
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.w900,
                                               letterSpacing: 1.0,
@@ -429,7 +429,24 @@ class _ExpeditionPortalScreenState
                             );
                           },
                           loading: () => const SizedBox.shrink(),
-                          error: (error, stackTrace) => const SizedBox.shrink(),
+                          error: (error, stackTrace) => Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: PixelCard(
+                              backgroundColor: colors.surfaceDark,
+                              borderColor: colors.signalRed,
+                              bevelColor: colors.signalRed,
+                              padding: const EdgeInsets.all(14.0),
+                              child: Text(
+                                'Failed to check for an interrupted session: $error',
+                                style: TextStyle(
+                                  fontFamily: 'Silkscreen',
+                                  fontFamilyFallback: const ['monospace'],
+                                  fontSize: 11.0,
+                                  color: colors.signalRed,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
 
                         // DUP Phase & RM Prescription Banner
@@ -452,12 +469,12 @@ class _ExpeditionPortalScreenState
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          formatDayTypeHeader(
-                                            session.dayType,
-                                          ),
+                                          formatDayTypeHeader(session.dayType),
                                           style: TextStyle(
                                             fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const ['monospace'],
+                                            fontFamilyFallback: const [
+                                              'monospace',
+                                            ],
                                             fontSize: 13.0,
                                             fontWeight: FontWeight.w900,
                                             letterSpacing: 1.2,
@@ -470,7 +487,9 @@ class _ExpeditionPortalScreenState
                                           ),
                                           style: TextStyle(
                                             fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const ['monospace'],
+                                            fontFamilyFallback: const [
+                                              'monospace',
+                                            ],
                                             fontSize: 9.0,
                                             letterSpacing: 0.6,
                                             color: colors.textMuted,
@@ -549,10 +568,10 @@ class _ExpeditionPortalScreenState
                           ...notices.map((notice) {
                             final Color noticeColor =
                                 notice.type == CoachingNoticeType.recovery
-                                    ? const Color(0xFF2EE6D6)
-                                    : (notice.type == CoachingNoticeType.postural
-                                        ? colors.amberAccent
-                                        : colors.amberGlow);
+                                ? const Color(0xFF2EE6D6)
+                                : (notice.type == CoachingNoticeType.postural
+                                      ? colors.amberAccent
+                                      : colors.amberGlow);
 
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 12.0),
@@ -663,7 +682,9 @@ class _ExpeditionPortalScreenState
                                           lineTheme.lineNameEn,
                                           style: TextStyle(
                                             fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const ['monospace'],
+                                            fontFamilyFallback: const [
+                                              'monospace',
+                                            ],
                                             fontSize: 9.0,
                                             fontWeight: FontWeight.w900,
                                             letterSpacing: 0.8,
@@ -675,7 +696,9 @@ class _ExpeditionPortalScreenState
                                         '[T${exercise.difficultyTier}]',
                                         style: TextStyle(
                                           fontFamily: 'Silkscreen',
-                                          fontFamilyFallback: const ['monospace'],
+                                          fontFamilyFallback: const [
+                                            'monospace',
+                                          ],
                                           fontSize: 11.0,
                                           fontWeight: FontWeight.w900,
                                           color: colors.amberGlow,
@@ -710,7 +733,9 @@ class _ExpeditionPortalScreenState
                                         '${exerciseSets.length} SETS × $repText',
                                         style: TextStyle(
                                           fontFamily: 'Silkscreen',
-                                          fontFamilyFallback: const ['monospace'],
+                                          fontFamilyFallback: const [
+                                            'monospace',
+                                          ],
                                           fontSize: 11.0,
                                           fontWeight: FontWeight.w700,
                                           color: colors.amberAccent,
@@ -718,8 +743,9 @@ class _ExpeditionPortalScreenState
                                       ),
                                       Text(
                                         '·',
-                                        style:
-                                            TextStyle(color: colors.textMuted),
+                                        style: TextStyle(
+                                          color: colors.textMuted,
+                                        ),
                                       ),
                                       Text(
                                         '${restSeconds}s REST',
@@ -755,7 +781,9 @@ class _ExpeditionPortalScreenState
                                               eq.name.toUpperCase(),
                                               style: TextStyle(
                                                 fontFamily: 'Silkscreen',
-                                                fontFamilyFallback: const ['monospace'],
+                                                fontFamilyFallback: const [
+                                                  'monospace',
+                                                ],
                                                 fontSize: 8.0,
                                                 color: colors.textMuted,
                                               ),
@@ -799,6 +827,16 @@ class _ExpeditionPortalScreenState
               previewAsync.maybeWhen(
                 data: (session) {
                   if (session == null) return const SizedBox.shrink();
+                  // Never offer to start a new expedition while an
+                  // unresolved interrupted session is being shown above --
+                  // starting one anyway would create a second concurrent
+                  // session and permanently orphan the interrupted one
+                  // (SessionRepository only tracks the single most recently
+                  // started incomplete session). The RESUME/DISCARD banner
+                  // is the only valid way forward until it's resolved.
+                  if (resumeState.valueOrNull != null) {
+                    return const SizedBox.shrink();
+                  }
                   return Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20.0,
@@ -807,10 +845,7 @@ class _ExpeditionPortalScreenState
                     decoration: BoxDecoration(
                       color: colors.surfaceDark,
                       border: Border(
-                        top: BorderSide(
-                          color: colors.borderMuted,
-                          width: 2.0,
-                        ),
+                        top: BorderSide(color: colors.borderMuted, width: 2.0),
                       ),
                     ),
                     child: PixelButton(

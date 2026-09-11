@@ -6,6 +6,7 @@ import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../controllers/active_session_controller.dart';
+import '../widgets/rpe_selector_card.dart';
 import 'expedition_debrief_screen.dart';
 import 'rest_screen.dart';
 import 'working_set_screen.dart';
@@ -16,6 +17,12 @@ import 'working_set_screen.dart';
 /// `warmUp` ➔ `activeSet` ➔ `rest` ➔ `coolDown` ➔ `completed`.
 class ActiveExpeditionScreen extends ConsumerWidget {
   const ActiveExpeditionScreen({super.key});
+
+  // A GlobalKey rather than PixelToastHost.of(context): the host is added
+  // as a *descendant* of this widget's own build() (wrapping the Scaffold
+  // body below), so the outer `context` this build() receives is never a
+  // descendant of it and .of(context) would always return null here.
+  static final _toastHostKey = GlobalKey<PixelToastHostState>();
 
   Future<void> _handleAbort(BuildContext context, WidgetRef ref) async {
     final colors = context.colors;
@@ -81,6 +88,18 @@ class ActiveExpeditionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
+
+    // finalizeSession() records failures on errorMessage but nothing was
+    // ever reading it -- a failed finalize silently re-enabled the
+    // CONCLUDE button with zero indication the workout wasn't actually
+    // saved. Surface it as a toast the moment it appears.
+    ref.listen(activeSessionControllerProvider, (previous, next) {
+      final message = next.errorMessage;
+      if (message != null && message != previous?.errorMessage) {
+        _toastHostKey.currentState?.show(message);
+      }
+    });
+
     final state = ref.watch(activeSessionControllerProvider);
     final controller = ref.read(activeSessionControllerProvider.notifier);
 
@@ -98,6 +117,16 @@ class ActiveExpeditionScreen extends ConsumerWidget {
       SessionState.rest => const RestScreen(),
       SessionState.coolDown => _CoolDownView(
         isFinalizing: state.isFinalizing,
+        // The FSM reaches coolDown only by completing the session's last
+        // set, which -- unlike every other set -- has no Rest screen after
+        // it to show the Borg RPE selector during (SBEE's own FSM goes
+        // straight activeSet -> coolDown on the final set). Without this,
+        // the last set's reportedRpe would stay whatever placeholder value
+        // was guessed at completion time, and autoregulation could never
+        // progress/regress off it.
+        targetRpe: state.currentSet?.targetRpe ?? 8,
+        selectedRpe: state.selectedRpe ?? state.currentSet?.targetRpe ?? 8,
+        onLogRpe: controller.logRpe,
         onFinish: () => controller.completeCoolDown(),
       ),
       SessionState.completed => const ExpeditionDebriefScreen(),
@@ -105,62 +134,65 @@ class ActiveExpeditionScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Station Sign Header — matches the bespoke header pattern used
-            // by every other screen (Portal/Working Set/Rest), rather than
-            // a stock Material AppBar.
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20.0,
-                vertical: 10.0,
-              ),
-              decoration: BoxDecoration(
-                color: colors.surfaceDark,
-                border: Border(
-                  bottom: BorderSide(color: colors.borderBright, width: 2.0),
+      body: PixelToastHost(
+        key: _toastHostKey,
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Station Sign Header — matches the bespoke header pattern used
+              // by every other screen (Portal/Working Set/Rest), rather than
+              // a stock Material AppBar.
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 10.0,
+                ),
+                decoration: BoxDecoration(
+                  color: colors.surfaceDark,
+                  border: Border(
+                    bottom: BorderSide(color: colors.borderBright, width: 2.0),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        'ACTIVE EXPEDITION',
+                        style: TextStyle(
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.2,
+                          color: colors.amberAccent,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    PixelButton(
+                      variant: PixelButtonVariant.secondary,
+                      padding: const EdgeInsets.all(8.0),
+                      semanticLabel: 'Abort expedition',
+                      onPressed: () => _handleAbort(context, ref),
+                      child: Text(
+                        '✕',
+                        style: TextStyle(
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
+                          fontSize: 16.0,
+                          color: colors.signalRed,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                      'ACTIVE EXPEDITION',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2,
-                        color: colors.amberAccent,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  PixelButton(
-                    variant: PixelButtonVariant.secondary,
-                    padding: const EdgeInsets.all(8.0),
-                    semanticLabel: 'Abort expedition',
-                    onPressed: () => _handleAbort(context, ref),
-                    child: Text(
-                      '✕',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 16.0,
-                        color: colors.signalRed,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(child: currentPhaseWidget),
-          ],
+              Expanded(child: currentPhaseWidget),
+            ],
+          ),
         ),
       ),
     );
@@ -292,9 +324,18 @@ class _WarmUpView extends StatelessWidget {
 
 class _CoolDownView extends StatelessWidget {
   final bool isFinalizing;
+  final int targetRpe;
+  final int selectedRpe;
+  final ValueChanged<int> onLogRpe;
   final VoidCallback onFinish;
 
-  const _CoolDownView({required this.isFinalizing, required this.onFinish});
+  const _CoolDownView({
+    required this.isFinalizing,
+    required this.targetRpe,
+    required this.selectedRpe,
+    required this.onLogRpe,
+    required this.onFinish,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -331,37 +372,48 @@ class _CoolDownView extends StatelessWidget {
               const SizedBox(height: 24.0),
 
               Expanded(
-                child: PixelCard(
-                  backgroundColor: colors.surfaceDark,
-                  borderColor: colors.borderBright,
-                  padding: const EdgeInsets.all(20.0),
-                  child: ListView(
-                    children: [
-                      Text(
-                        'RESTORATIVE PROTOCOL:',
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF2EE6D6),
-                        ),
+                child: ListView(
+                  children: [
+                    RpeSelectorCard(
+                      targetRpe: targetRpe,
+                      selectedRpe: selectedRpe,
+                      onSelect: onLogRpe,
+                    ),
+                    const SizedBox(height: 18.0),
+                    PixelCard(
+                      backgroundColor: colors.surfaceDark,
+                      borderColor: colors.borderBright,
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'RESTORATIVE PROTOCOL:',
+                            style: TextStyle(
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF2EE6D6),
+                            ),
+                          ),
+                          const SizedBox(height: 14.0),
+                          Text(
+                            '1. 4-second box breathing to downregulate sympathetic tone.\n'
+                            '2. Child’s pose or passive spinal decompression for 60s.\n'
+                            '3. Hydrate with electrolyte-balanced water.',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontFamilyFallback: const ['sans-serif'],
+                              fontSize: 13.0,
+                              height: 1.6,
+                              color: colors.textPrimary,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 14.0),
-                      Text(
-                        '1. 4-second box breathing to downregulate sympathetic tone.\n'
-                        '2. Child’s pose or passive spinal decompression for 60s.\n'
-                        '3. Hydrate with electrolyte-balanced water.',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontFamilyFallback: const ['sans-serif'],
-                          fontSize: 13.0,
-                          height: 1.6,
-                          color: colors.textPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20.0),

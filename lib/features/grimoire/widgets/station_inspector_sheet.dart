@@ -328,4 +328,3 @@ class _PillBadge extends StatelessWidget {
     );
   }
 }
-
