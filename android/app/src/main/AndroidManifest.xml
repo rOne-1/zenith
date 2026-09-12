@@ -30,23 +30,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!-- Impeller (the Android default renderer since Flutter 3.29)
-             renders some of the exercise illustration SVGs as fully
-             blank on at least one real device, while the same assets
-             render correctly everywhere else this was tested (Flutter
-             web, and an x86_64 Android emulator in both debug and
-             release builds), consistent with a GPU driver specific
-             Impeller path-tessellation bug that doesn't reproduce on
-             the emulator's software GL. Skia is the older, far more
-             widely hardened renderer across real ARM GPUs, so falling
-             back to it trades Impeller's performance work for
-             rendering correctness here. Must be a direct child of the
-             application element, not the activity element: the engine
-             reads it via PackageManager's ApplicationInfo.metaData,
-             which does not include activity-scoped meta-data. -->
-        <meta-data
-            android:name="io.flutter.embedding.android.EnableImpeller"
-            android:value="false" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
