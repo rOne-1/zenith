@@ -143,7 +143,7 @@ class ZenithPixelThemeBuilder {
     final FontBuilder effectiveDisplayFont =
         displayFont ?? _buildFont(family: 'Silkscreen', fallback: 'monospace');
     final FontBuilder effectiveBodyFont =
-        bodyFont ?? _buildFont(family: 'Inter', fallback: 'sans-serif');
+        bodyFont ?? _buildFont(family: 'IBM Plex Mono', fallback: 'monospace');
 
     final themeData = ThemeData(
       brightness: Brightness.dark,
