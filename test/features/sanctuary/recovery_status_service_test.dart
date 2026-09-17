@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sbee/sbee.dart';
 import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/engine/engine.dart';
+import 'package:zenith/core/widgets/pixel_countdown_bar.dart';
 import 'package:zenith/features/sanctuary/services/recovery_status_service.dart';
 import 'package:zenith/features/sanctuary/widgets/pattern_recovery_grid.dart';
 
@@ -85,50 +86,53 @@ void main() {
       expect(pushing.taxingSetsIn48Hours, equals(0));
     });
 
-    test('unlogged set with a high targetRpe does not trigger 48h lock', () async {
-      // A freshly generated session's sets carry a targetRpe before the
-      // athlete has actually performed them (reportedRpe stays null until
-      // logged). SBEE's own SafetyRules.isMovementLocked only ever counts
-      // an actually-reported RPE -- an unlogged prescription must never be
-      // treated as taxing, no matter how high its targetRpe is.
-      final now = DateTime(2026, 9, 9, 12, 0);
-      final setTime = now.subtract(const Duration(hours: 1));
+    test(
+      'unlogged set with a high targetRpe does not trigger 48h lock',
+      () async {
+        // A freshly generated session's sets carry a targetRpe before the
+        // athlete has actually performed them (reportedRpe stays null until
+        // logged). SBEE's own SafetyRules.isMovementLocked only ever counts
+        // an actually-reported RPE -- an unlogged prescription must never be
+        // treated as taxing, no matter how high its targetRpe is.
+        final now = DateTime(2026, 9, 9, 12, 0);
+        final setTime = now.subtract(const Duration(hours: 1));
 
-      final session = WorkoutSession(
-        id: 'unlogged_heavy_session',
-        startTime: setTime,
-        isCompleted: false,
-        sets: [
-          WorkoutSet(
-            id: 'set_unlogged',
-            sessionId: 'unlogged_heavy_session',
-            exerciseId: 'standard_pushup',
-            movementPattern: MovementPattern.pushing,
-            setNumber: 1,
-            reps: 10,
-            targetRpe: 9,
-            reportedRpe: null,
-            variables: const MillerVariables(
-              load: 1,
-              bodyPosition: 1,
-              rom: 1,
-              height: 1,
-              tempo: 1,
+        final session = WorkoutSession(
+          id: 'unlogged_heavy_session',
+          startTime: setTime,
+          isCompleted: false,
+          sets: [
+            WorkoutSet(
+              id: 'set_unlogged',
+              sessionId: 'unlogged_heavy_session',
+              exerciseId: 'standard_pushup',
+              movementPattern: MovementPattern.pushing,
+              setNumber: 1,
+              reps: 10,
+              targetRpe: 9,
+              reportedRpe: null,
+              variables: const MillerVariables(
+                load: 1,
+                bodyPosition: 1,
+                rom: 1,
+                height: 1,
+                tempo: 1,
+              ),
+              timestamp: setTime,
+              restDuration: const Duration(seconds: 60),
             ),
-            timestamp: setTime,
-            restDuration: const Duration(seconds: 60),
-          ),
-        ],
-      );
-      await sessionRepo.saveSession(session);
+          ],
+        );
+        await sessionRepo.saveSession(session);
 
-      final statuses = await service.getAllPatternStatuses(currentTime: now);
-      final pushing = statuses[MovementPattern.pushing]!;
+        final statuses = await service.getAllPatternStatuses(currentTime: now);
+        final pushing = statuses[MovementPattern.pushing]!;
 
-      expect(pushing.isFresh, isTrue);
-      expect(pushing.remainingLockDuration, equals(Duration.zero));
-      expect(pushing.taxingSetsIn48Hours, equals(0));
-    });
+        expect(pushing.isFresh, isTrue);
+        expect(pushing.remainingLockDuration, equals(Duration.zero));
+        expect(pushing.taxingSetsIn48Hours, equals(0));
+      },
+    );
 
     test('taxing set (RPE >= 8) imposes 48h cooldown lock', () async {
       final now = DateTime(2026, 9, 9, 12, 0);
@@ -234,9 +238,7 @@ void main() {
         child: MaterialApp(
           theme: zenithThemeRegistry.defaultTheme.themeData,
           home: const Scaffold(
-            body: SingleChildScrollView(
-              child: PatternRecoveryGrid(),
-            ),
+            body: SingleChildScrollView(child: PatternRecoveryGrid()),
           ),
         ),
       );
@@ -260,6 +262,19 @@ void main() {
 
       // 5 fresh chips
       expect(find.text('FRESH'), findsNWidgets(5));
+
+      // A fresh/ready pattern renders its bar in the district's green
+      // token, not the old hardcoded cyan literal (0xFF2EE6D6) -- cyan is
+      // reserved as an accent elsewhere, never a bar-fill color.
+      final colors = ZenithDistrictColors.fallback;
+      final bars = tester.widgetList<PixelCountdownBar>(
+        find.byType(PixelCountdownBar),
+      );
+      expect(bars, isNotEmpty);
+      for (final bar in bars) {
+        expect(bar.activeColor, colors.foliageVibrant);
+        expect(bar.activeColor, isNot(const Color(0xFF2EE6D6)));
+      }
     });
 
     testWidgets('renders 48H LOCK chip when a pattern is cooling down', (
@@ -297,9 +312,7 @@ void main() {
 
       await tester.pumpWidget(
         createTestWidget(
-          overrides: [
-            recoveryStatusProvider.overrideWith((ref) => statuses),
-          ],
+          overrides: [recoveryStatusProvider.overrideWith((ref) => statuses)],
         ),
       );
       await tester.pumpAndSettle();
@@ -349,9 +362,7 @@ void main() {
 
         await tester.pumpWidget(
           createTestWidget(
-            overrides: [
-              recoveryStatusProvider.overrideWith((ref) => statuses),
-            ],
+            overrides: [recoveryStatusProvider.overrideWith((ref) => statuses)],
           ),
         );
         await tester.pumpAndSettle();

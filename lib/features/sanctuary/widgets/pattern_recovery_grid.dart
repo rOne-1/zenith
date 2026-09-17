@@ -116,7 +116,7 @@ class _PatternRecoveryRow extends StatelessWidget {
     final progress = status.recoveryProgress;
 
     final Color statusColor = isFresh
-        ? const Color(0xFF2EE6D6)
+        ? colors.foliageVibrant
         : (status.remainingLockDuration.inHours > 24
               ? colors.signalRed
               : colors.amberAccent);
