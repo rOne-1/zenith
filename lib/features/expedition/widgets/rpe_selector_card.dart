@@ -213,9 +213,7 @@ class RpeSelectorCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         _getRpeHint(selectedRpe),
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontFamilyFallback: const ['sans-serif'],
+                        style: zenithBodyMono(
                           fontSize: 10.0,
                           height: 1.3,
                           color: colors.textPrimary,

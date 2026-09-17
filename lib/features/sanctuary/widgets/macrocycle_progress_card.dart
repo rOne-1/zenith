@@ -148,9 +148,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
               const SizedBox(height: 6.0),
               Text(
                 state.restorativeGuidance,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontFamilyFallback: const ['sans-serif'],
+                style: zenithBodyMono(
                   fontSize: 10.5,
                   height: 1.35,
                   color: colors.textPrimary,

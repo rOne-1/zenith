@@ -307,9 +307,7 @@ class _WarmUpView extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontFamilyFallback: const ['sans-serif'],
+              style: zenithBodyMono(
                 fontSize: 12.0,
                 height: 1.4,
                 color: colors.textPrimary,
@@ -402,9 +400,7 @@ class _CoolDownView extends StatelessWidget {
                             '1. 4-second box breathing to downregulate sympathetic tone.\n'
                             '2. Child’s pose or passive spinal decompression for 60s.\n'
                             '3. Hydrate with electrolyte-balanced water.',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontFamilyFallback: const ['sans-serif'],
+                            style: zenithBodyMono(
                               fontSize: 13.0,
                               height: 1.6,
                               color: colors.textPrimary,

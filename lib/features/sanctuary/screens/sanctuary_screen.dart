@@ -79,10 +79,7 @@ class SanctuaryScreen extends ConsumerWidget {
                     decoration: ShapeDecoration(
                       color: colors.surfaceDark,
                       shape: SteppedPixelBorder(
-                        side: BorderSide(
-                          color: colors.amberAccent,
-                          width: 1.5,
-                        ),
+                        side: BorderSide(color: colors.amberAccent, width: 1.5),
                         stepSize: context.pixelMetrics.cornerStepSize,
                       ),
                     ),
@@ -158,9 +155,7 @@ class SanctuaryScreen extends ConsumerWidget {
                     const SizedBox(height: 8.0),
                     Text(
                       'Musculoskeletal remodeling, collagen repair, and CNS resensitization occur during downtime. Honor cooldown timers and periodization deloads to consolidate progress.',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontFamilyFallback: const ['sans-serif'],
+                      style: zenithBodyMono(
                         fontSize: 11.0,
                         height: 1.4,
                         color: colors.textPrimary,

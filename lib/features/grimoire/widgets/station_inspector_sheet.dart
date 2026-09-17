@@ -238,9 +238,7 @@ class StationInspectorSheet extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     exercise.defaultCues[i],
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontFamilyFallback: const ['sans-serif'],
+                                    style: zenithBodyMono(
                                       fontSize: 11.0,
                                       height: 1.4,
                                       color: colors.textPrimary,

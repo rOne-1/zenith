@@ -319,11 +319,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                     const SizedBox(height: 4.0),
                                     Text(
                                       a.adaptationSummary,
-                                      style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontFamilyFallback: const [
-                                          'sans-serif',
-                                        ],
+                                      style: zenithBodyMono(
                                         fontSize: 10.0,
                                         height: 1.3,
                                         color: colors.textMuted,

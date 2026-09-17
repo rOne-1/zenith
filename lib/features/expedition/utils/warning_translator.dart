@@ -213,9 +213,7 @@ class SameDayAdvisoryDialog extends StatelessWidget {
         // Supportive Message
         Text(
           WarningTranslator.sameDayAdvisoryMessage,
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontFamilyFallback: const ['sans-serif'],
+          style: zenithBodyMono(
             fontSize: 13.0,
             height: 1.5,
             color: colors.textPrimary,

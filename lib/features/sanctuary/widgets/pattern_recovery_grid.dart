@@ -45,9 +45,7 @@ class PatternRecoveryGrid extends ConsumerWidget {
           const SizedBox(height: 6.0),
           Text(
             'High-threshold sets (RPE ≥ 8) trigger a 48-hour neuromuscular cooldown lock per ACE IFT movement pattern.',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontFamilyFallback: const ['sans-serif'],
+            style: zenithBodyMono(
               fontSize: 10.0,
               height: 1.3,
               color: colors.textMuted,

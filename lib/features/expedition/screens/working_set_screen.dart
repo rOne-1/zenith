@@ -389,11 +389,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                                   Expanded(
                                     child: Text(
                                       cue,
-                                      style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontFamilyFallback: const [
-                                          'sans-serif',
-                                        ],
+                                      style: zenithBodyMono(
                                         fontSize: 13.0,
                                         height: 1.4,
                                         fontWeight: FontWeight.w600,
