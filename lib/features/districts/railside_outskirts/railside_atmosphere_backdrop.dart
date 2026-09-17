@@ -2,6 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
+import '../../../core/widgets/pixel_scanline_overlay.dart';
+
 /// The atmospheric background scene for District 01: "Railside Outskirts".
 ///
 /// Evokes suburban Japanese rail corridors at midnight: quiet dark skies, distant
@@ -71,7 +73,13 @@ class RailsideAtmosphereBackdrop extends StatelessWidget {
             child: NoiseGrainOverlay(opacity: 0.03, tint: Color(0xFF162B2B)),
           ),
 
-          // 5. Foreground content if provided
+          // 5. Hard scanlines -- the other half of the CRT texture, sitting
+          // over the atmosphere but under actual screen content.
+          const Positioned.fill(
+            child: IgnorePointer(child: PixelScanlineOverlay()),
+          ),
+
+          // 6. Foreground content if provided
           ?child,
         ],
       ),
