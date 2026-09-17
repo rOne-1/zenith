@@ -1,8 +1,16 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
+import '../../../core/theme/test_env/test_env.dart';
 import '../../../core/widgets/pixel_scanline_overlay.dart';
+
+/// Fractional x-position of the ground-level lamp post, shared between
+/// _RailCatenaryPainter (draws the static post/bulb) and _GroundLampGlow
+/// (animates the glow pool beneath it) so the two stay aligned.
+const double _lampXFrac = 0.75;
 
 /// The atmospheric background scene for District 01: "Railside Outskirts".
 ///
@@ -67,6 +75,13 @@ class RailsideAtmosphereBackdrop extends StatelessWidget {
               child: CustomPaint(painter: _RailCatenaryPainter()),
             ),
           ),
+
+          // 3b. Ground-level lamp post's breathing glow pool -- kept as its
+          // own small animated layer (rather than folding into the static
+          // CustomPaint above) since it's the one element here that moves.
+          // Positioned to align with the lamp post drawn by
+          // _RailCatenaryPainter at fractional (lampX, lampPostTopFrac).
+          const Positioned.fill(child: IgnorePointer(child: _GroundLampGlow())),
 
           // 4. Analog film grain / CRT noise overlay for retro texture depth
           const Positioned.fill(
@@ -222,6 +237,69 @@ class _RailCatenaryPainter extends CustomPainter {
       ballastLine,
     );
 
+    // --- SLANTED FOREGROUND RAILS, CONVERGING TOWARD THE HORIZON ---
+    final railPaint = Paint()
+      ..color = const Color(0xFF1E3B3A).withValues(alpha: 0.8)
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
+    canvas.drawLine(
+      Offset(width * 0.38, height - 28),
+      Offset(width * -0.05, height),
+      railPaint,
+    );
+    canvas.drawLine(
+      Offset(width * 0.46, height - 28),
+      Offset(width * 0.20, height),
+      railPaint,
+    );
+
+    // --- RAIL PLINTHS (posts with a cross-tie cap) either side of the lamp ---
+    final plinthPaint = Paint()
+      ..color = const Color(0xFF091416)
+      ..style = PaintingStyle.fill;
+    for (final xFrac in [0.30, 0.90]) {
+      final x = width * xFrac;
+      canvas.drawRect(
+        Rect.fromCenter(
+          center: Offset(x, height - 28 - 18),
+          width: 8,
+          height: 36,
+        ),
+        plinthPaint,
+      );
+      canvas.drawRect(
+        Rect.fromCenter(
+          center: Offset(x, height - 28 - 36),
+          width: 16,
+          height: 6,
+        ),
+        plinthPaint,
+      );
+    }
+
+    // --- GROUND-LEVEL LAMP POST (glow pool is a separate animated layer,
+    // see _GroundLampGlow, aligned to the same _lampXFrac/height) ---
+    final lampPostX = width * _lampXFrac;
+    final lampPostPaint = Paint()
+      ..color = const Color(0xFF152B2C)
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(
+      Rect.fromLTWH(lampPostX - 2, height - 28 - 44, 4, 44),
+      lampPostPaint,
+    );
+    canvas.drawRect(
+      Rect.fromCenter(
+        center: Offset(lampPostX, height - 28 - 48),
+        width: 12,
+        height: 6,
+      ),
+      lampPostPaint,
+    );
+    final lampBulbPaint = Paint()
+      ..color = const Color(0xFFFFD269)
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(lampPostX, height - 28 - 48), 2.5, lampBulbPaint);
+
     // --- WINDBLOWN TRACKSIDE WEEDS & GRASS CLUSTERS ---
     final deepFoliage = Paint()
       ..color = const Color(0xFF224231)
@@ -230,32 +308,22 @@ class _RailCatenaryPainter extends CustomPainter {
       ..color = const Color(0xFF4B8E62)
       ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
+    final mutedFoliage = Paint()
+      ..color = const Color(0xFF2E5B41)
+      ..strokeWidth = 1.5
+      ..style = PaintingStyle.stroke;
 
-    // Grass clumps along the bottom right and left
-    _drawGrassCluster(
-      canvas,
-      Offset(width * 0.05, height - 28),
-      deepFoliage,
-      vibrantFoliage,
-    );
-    _drawGrassCluster(
-      canvas,
-      Offset(width * 0.22, height - 28),
-      deepFoliage,
-      vibrantFoliage,
-    );
-    _drawGrassCluster(
-      canvas,
-      Offset(width * 0.68, height - 28),
-      deepFoliage,
-      vibrantFoliage,
-    );
-    _drawGrassCluster(
-      canvas,
-      Offset(width * 0.85, height - 28),
-      deepFoliage,
-      vibrantFoliage,
-    );
+    // A wider strip of grass tufts along the ballast line, alternating the
+    // two foliage tones so the strip doesn't read as one repeated stamp.
+    for (var i = 0; i < 16; i++) {
+      final xFrac = 0.02 + i * (0.96 / 15);
+      _drawGrassCluster(
+        canvas,
+        Offset(width * xFrac, height - 28),
+        deepFoliage,
+        i.isEven ? vibrantFoliage : mutedFoliage,
+      );
+    }
   }
 
   void _drawGrassCluster(
@@ -290,4 +358,75 @@ class _RailCatenaryPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// Breathing radial glow pool beneath the ground-level lamp post drawn by
+/// [_RailCatenaryPainter], oscillating slowly rather than sitting static --
+/// the one genuinely animated element in this otherwise-static backdrop.
+class _GroundLampGlow extends StatefulWidget {
+  const _GroundLampGlow();
+
+  @override
+  State<_GroundLampGlow> createState() => _GroundLampGlowState();
+}
+
+class _GroundLampGlowState extends State<_GroundLampGlow>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 5500),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    // A repeating animation never reaches rest, so it hangs every
+    // pumpAndSettle() call on any of the 9 screens sharing this backdrop --
+    // not just in a test that renders this widget directly. Stay at a
+    // fixed mid-value under test instead of animating.
+    if (isTestEnvironment) {
+      _controller.value = 0.5;
+    } else {
+      _controller.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, _) {
+        final alpha = 0.14 + (0.24 - 0.14) * _controller.value;
+        return CustomPaint(painter: _GroundLampGlowPainter(alpha: alpha));
+      },
+    );
+  }
+}
+
+class _GroundLampGlowPainter extends CustomPainter {
+  final double alpha;
+  const _GroundLampGlowPainter({required this.alpha});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (size.isEmpty) return;
+    final center = Offset(size.width * _lampXFrac, size.height - 28 - 44);
+    const radius = 70.0;
+    final paint = Paint()
+      ..shader = ui.Gradient.radial(center, radius, [
+        const Color(0xFFFFD269).withValues(alpha: alpha),
+        Colors.transparent,
+      ]);
+    canvas.drawCircle(center, radius, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _GroundLampGlowPainter oldDelegate) =>
+      oldDelegate.alpha != alpha;
 }

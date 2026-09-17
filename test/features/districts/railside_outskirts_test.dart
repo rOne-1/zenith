@@ -141,5 +141,24 @@ void main() {
       expect(find.text('Bottom Controls'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
+
+    testWidgets(
+      'pumpAndSettle completes -- the breathing lamp glow must not repeat forever under test',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(home: Scaffold(body: RailsideAtmosphereBackdrop())),
+        );
+
+        // A repeating (non-test-gated) AnimationController never reaches
+        // rest, so pumpAndSettle() times out -- not just here, but on
+        // every one of the 9 screens sharing this backdrop. This is the
+        // regression test for that: it fails (times out) if the ground
+        // lamp glow's controller ever repeats under isTestEnvironment
+        // again, passes as soon as it holds a fixed value instead.
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }
