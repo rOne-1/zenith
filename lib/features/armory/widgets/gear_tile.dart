@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 import 'package:sbee/sbee.dart';
 
 import '../../../core/theme/theme.dart';
@@ -75,7 +74,7 @@ class EquipmentInfo {
 ///
 /// Features:
 /// - Three distinct visual states: `ANCHORED ●` (Bodyweight), `EQUIPPED ●`, and `LOCKED ○`.
-/// - Tactile mechanical 1-frame drop and spring-rebound on press.
+/// - Tactile mechanical 1-frame drop and quantized-step rebound on press.
 /// - Haptic feedback on state modification.
 class GearTile extends StatefulWidget {
   final Equipment equipment;
@@ -109,7 +108,7 @@ class _GearTileState extends State<GearTile>
       duration: const Duration(milliseconds: 200),
     );
     _springAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _springController, curve: HouseSpring.curve),
+      CurvedAnimation(parent: _springController, curve: zenithStepCurve),
     );
   }
 

@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 import '../theme/theme.dart';
 import 'stepped_pixel_border.dart';
 
@@ -18,7 +17,8 @@ enum PixelButtonVariant {
 }
 
 /// An authentic retro mechanical arcade button featuring stepped corners,
-/// a 1-frame physical drop on tap, and damped [HouseSpring] rebound.
+/// a 1-frame physical drop on tap, and a quantized [zenithStepCurve] rebound
+/// (pixel-art-stepped, not physically eased).
 class PixelButton extends StatefulWidget {
   final String? label;
   final Widget? child;
@@ -182,8 +182,8 @@ class _PixelButtonState extends State<PixelButton> {
           scale: _isPressed ? 0.98 : 1.0,
           duration: _isPressed
               ? const Duration(milliseconds: 60)
-              : HouseSpring.duration,
-          curve: HouseSpring.curve,
+              : zenithMotionDuration,
+          curve: zenithStepCurve,
           child: SizedBox(
             width: widget.width,
             height: widget.height != null ? widget.height! + bevelDepth : null,

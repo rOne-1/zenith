@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
@@ -309,8 +308,8 @@ class _RpeButtonState extends State<_RpeButton> {
         scale: _isPressed ? 0.9 : 1.0,
         duration: _isPressed
             ? const Duration(milliseconds: 60)
-            : HouseSpring.duration,
-        curve: HouseSpring.curve,
+            : zenithMotionDuration,
+        curve: zenithStepCurve,
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 2.0),
           height: 38.0,
