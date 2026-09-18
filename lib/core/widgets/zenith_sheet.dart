@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
-/// Presents a bottom sheet using the app's own [HouseSpring] motion instead
-/// of Flutter's default slide-up bottom-sheet transition.
+import '../theme/theme.dart';
+
+/// Presents a bottom sheet using the app's own quantized [zenithStepCurve]
+/// motion instead of Flutter's default slide-up bottom-sheet transition.
 ///
 /// Content is unchanged -- callers still build whatever pixel-bordered
 /// sheet layout they need inside [builder] (typically already wrapped in
@@ -25,7 +26,7 @@ class ZenithSheet {
       barrierDismissible: barrierDismissible,
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black54,
-      transitionDuration: HouseSpring.duration,
+      transitionDuration: zenithMotionDuration,
       pageBuilder: (dialogContext, animation, secondaryAnimation) {
         // showModalBottomSheet's own BottomSheet route wraps content in a
         // route-scoping Semantics node (empty label on iOS/macOS, the
@@ -51,7 +52,7 @@ class ZenithSheet {
       transitionBuilder: (dialogContext, animation, secondaryAnimation, child) {
         final curved = CurvedAnimation(
           parent: animation,
-          curve: HouseSpring.curve,
+          curve: zenithStepCurve,
         );
         return SlideTransition(
           position: Tween<Offset>(

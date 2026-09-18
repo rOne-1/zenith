@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
 import '../theme/theme.dart';
 import 'pixel_card.dart';
 
-/// Presents a dialog using the app's own [HouseSpring] motion instead of
-/// Flutter's default fade+scale dialog transition.
+/// Presents a dialog using the app's own quantized [zenithStepCurve] motion
+/// instead of Flutter's default fade+scale dialog transition.
 ///
 /// Content is unchanged — callers still build whatever `PixelCard`/
 /// `PixelButton` layout they need inside [builder]. Only the
@@ -25,7 +24,7 @@ class ZenithDialog {
       barrierDismissible: barrierDismissible,
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black54,
-      transitionDuration: HouseSpring.duration,
+      transitionDuration: zenithMotionDuration,
       pageBuilder: (dialogContext, animation, secondaryAnimation) {
         // showDialog's DialogRoute wraps content in a route-scoping
         // Semantics node and a SafeArea; showGeneralDialog doesn't do
@@ -42,7 +41,7 @@ class ZenithDialog {
       transitionBuilder: (dialogContext, animation, secondaryAnimation, child) {
         final curved = CurvedAnimation(
           parent: animation,
-          curve: HouseSpring.curve,
+          curve: zenithStepCurve,
         );
         return FadeTransition(
           opacity: curved,

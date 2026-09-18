@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
 import '../theme/theme.dart';
 
@@ -69,12 +68,12 @@ class PixelToastHostState extends State<PixelToastHost> {
             child: IgnorePointer(
               child: AnimatedSlide(
                 offset: _message != null ? Offset.zero : const Offset(0, 0.3),
-                duration: HouseSpring.duration,
-                curve: HouseSpring.curve,
+                duration: zenithMotionDuration,
+                curve: zenithStepCurve,
                 child: AnimatedOpacity(
                   opacity: _message != null ? 1.0 : 0.0,
-                  duration: HouseSpring.duration,
-                  curve: HouseSpring.curve,
+                  duration: zenithMotionDuration,
+                  curve: zenithStepCurve,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 14.0,
@@ -82,10 +81,7 @@ class PixelToastHostState extends State<PixelToastHost> {
                     ),
                     decoration: BoxDecoration(
                       color: colors.surfaceElevated,
-                      border: Border.all(
-                        color: colors.amberAccent,
-                        width: 1.5,
-                      ),
+                      border: Border.all(color: colors.amberAccent, width: 1.5),
                     ),
                     child: Text(
                       _message ?? '',
