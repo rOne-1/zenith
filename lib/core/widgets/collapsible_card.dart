@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
 import '../theme/theme.dart';
 import 'pixel_card.dart';
 
 /// A [PixelCard] that starts collapsed to a single summary row and expands
-/// on tap to reveal its full content, using the app's own [HouseSpring]
-/// motion (never a default Flutter transition curve).
+/// on tap to reveal its full content, using the app's own quantized
+/// [zenithStepCurve] motion (never a default Flutter transition curve).
 ///
 /// Used to keep secondary information (data that's useful but not the
 /// reason the athlete opened this screen) out of the way by default,
@@ -96,8 +95,8 @@ class _CollapsibleCardState extends State<CollapsibleCard> {
               const SizedBox(width: 8.0),
               AnimatedRotation(
                 turns: _expanded ? 0.5 : 0.0,
-                duration: HouseSpring.duration,
-                curve: HouseSpring.curve,
+                duration: zenithMotionDuration,
+                curve: zenithStepCurve,
                 child: Icon(
                   Icons.expand_more,
                   color: colors.textMuted,
@@ -107,14 +106,14 @@ class _CollapsibleCardState extends State<CollapsibleCard> {
             ],
           ),
           AnimatedSize(
-            duration: HouseSpring.duration,
-            curve: HouseSpring.curve,
+            duration: zenithMotionDuration,
+            curve: zenithStepCurve,
             alignment: Alignment.topCenter,
             child: ClipRect(
               child: AnimatedOpacity(
                 opacity: _expanded ? 1.0 : 0.0,
-                duration: HouseSpring.duration,
-                curve: HouseSpring.curve,
+                duration: zenithMotionDuration,
+                curve: zenithStepCurve,
                 child: _expanded
                     ? Padding(
                         padding: const EdgeInsets.only(top: 10.0),
