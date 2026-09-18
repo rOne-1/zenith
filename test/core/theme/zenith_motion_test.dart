@@ -31,4 +31,36 @@ void main() {
       expect(zenithStepCurve.steps, 6);
     });
   });
+
+  group('zenithMotionDuration', () {
+    test('per-step hold time cleanly divides both 60Hz and 120Hz frame '
+        'periods -- no fractional-frame jitter', () {
+      final stepHoldMicros =
+          zenithMotionDuration.inMicroseconds / (zenithStepCurve.steps - 1);
+      const frame60Micros = 1000000 / 60;
+      const frame120Micros = 1000000 / 120;
+
+      double distanceFromWholeMultiple(double value, double period) {
+        final remainder = value % period;
+        return remainder < period / 2 ? remainder : period - remainder;
+      }
+
+      // A hold time must land within 1ms of an exact multiple of the
+      // frame period at both refresh rates, or real-world vsync jitter
+      // will make some steps render for one more/fewer frame than their
+      // neighbors -- the mechanism behind the "frame drop" complaint at
+      // the old 180ms/6-step curve (36ms/step, only ~2.7ms clear of the
+      // 60Hz 2-frame boundary at 33.3ms).
+      expect(
+        distanceFromWholeMultiple(stepHoldMicros, frame60Micros),
+        lessThan(1000),
+        reason: 'not cleanly aligned to a 60Hz frame multiple',
+      );
+      expect(
+        distanceFromWholeMultiple(stepHoldMicros, frame120Micros),
+        lessThan(1000),
+        reason: 'not cleanly aligned to a 120Hz frame multiple',
+      );
+    });
+  });
 }

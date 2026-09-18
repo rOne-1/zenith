@@ -29,4 +29,13 @@ const zenithStepCurve = ZenithStepCurve();
 /// Default duration for quantized motion -- use this in place of
 /// `HouseSpring.duration` alongside [zenithStepCurve]. Short enough to read
 /// as a snap rather than a lingering animation.
-const zenithMotionDuration = Duration(milliseconds: 180);
+///
+/// 250ms over 6 steps holds each step for exactly 50ms -- 3 whole frames at
+/// 60Hz and 6 whole frames at 120Hz. That's deliberate: the previous 180ms
+/// held each step for 36ms, only ~2.7ms clear of the 60Hz 2-frame boundary
+/// (33.3ms), so ordinary vsync jitter pushed some steps to render for 2
+/// frames and others for 3 -- uneven hold-times that read as stutter/frame
+/// drops rather than a clean retro snap. 50ms sits on an exact frame
+/// multiple at both 60Hz and 120Hz, so every step renders for a consistent
+/// number of frames on both refresh classes.
+const zenithMotionDuration = Duration(milliseconds: 250);
