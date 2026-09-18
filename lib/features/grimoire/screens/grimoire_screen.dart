@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbee/sbee.dart';
 
+import '../../../app_shell.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/pixel_button.dart';
 import '../../../engine/engine.dart';
@@ -57,9 +58,10 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                       padding: const EdgeInsets.all(8.0),
                       semanticLabel: 'Back to Outpost',
                       onPressed: () {
-                        if (Navigator.canPop(context)) {
-                          Navigator.pop(context);
-                        }
+                        ref
+                                .read(activeNavigationTabIndexProvider.notifier)
+                                .state =
+                            0;
                       },
                       child: Text(
                         '←',

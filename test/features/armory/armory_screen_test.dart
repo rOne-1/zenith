@@ -2,10 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zenith/app_shell.dart';
 import 'package:zenith/core/theme/theme.dart';
+import 'package:zenith/core/widgets/pixel_button.dart';
 import 'package:zenith/features/armory/armory.dart';
 
 void main() {
+  testWidgets(
+    'ArmoryScreen back button returns to Outpost (tab index 0), not a no-op pop',
+    (WidgetTester tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      final container = ProviderContainer(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      );
+      addTearDown(container.dispose);
+      container.read(activeNavigationTabIndexProvider.notifier).state = 2;
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp(
+            theme: zenithThemeRegistry.defaultTheme.themeData,
+            home: const ArmoryScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final backButton = find.byWidgetPredicate(
+        (widget) =>
+            widget is PixelButton && widget.semanticLabel == 'Back to Outpost',
+      );
+      expect(backButton, findsOneWidget);
+      await tester.tap(backButton);
+      await tester.pumpAndSettle();
+
+      expect(container.read(activeNavigationTabIndexProvider), 0);
+    },
+  );
+
   testWidgets(
     'ArmoryScreen renders all 6 gear slots and physiology toggles cleanly',
     (WidgetTester tester) async {
