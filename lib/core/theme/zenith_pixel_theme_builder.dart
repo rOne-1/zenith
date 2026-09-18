@@ -4,11 +4,17 @@ import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 import 'test_env/test_env.dart';
 import 'zenith_district_colors.dart';
 import 'zenith_district_palette.dart';
+import 'zenith_motion.dart';
 import 'zenith_pixel_metrics.dart';
 
-/// Route transitions builder powered by [HouseSpring.curve].
-class HouseSpringPageTransitionsBuilder extends PageTransitionsBuilder {
-  const HouseSpringPageTransitionsBuilder();
+/// Route transitions builder powered by the app's quantized
+/// [zenithStepCurve] -- stepped, not physically eased, per the pixel-art
+/// design correction. Touches every screen navigation in the app, so this
+/// was the last and highest-blast-radius piece of the motion re-curve (see
+/// PixelButton, RpeSelectorCard, GearTile, ZenithSheet, ZenithDialog,
+/// PixelToastHost, and CollapsibleCard for the rest).
+class ZenithPageTransitionsBuilder extends PageTransitionsBuilder {
+  const ZenithPageTransitionsBuilder();
 
   @override
   Widget buildTransitions<T>(
@@ -20,7 +26,7 @@ class HouseSpringPageTransitionsBuilder extends PageTransitionsBuilder {
   ) {
     final curvedAnimation = CurvedAnimation(
       parent: animation,
-      curve: HouseSpring.curve,
+      curve: zenithStepCurve,
     );
     return FadeTransition(
       opacity: curvedAnimation,
@@ -150,11 +156,11 @@ class ZenithPixelThemeBuilder {
       scaffoldBackgroundColor: palette.backgroundVoid,
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: HouseSpringPageTransitionsBuilder(),
-          TargetPlatform.iOS: HouseSpringPageTransitionsBuilder(),
-          TargetPlatform.windows: HouseSpringPageTransitionsBuilder(),
-          TargetPlatform.macOS: HouseSpringPageTransitionsBuilder(),
-          TargetPlatform.linux: HouseSpringPageTransitionsBuilder(),
+          TargetPlatform.android: ZenithPageTransitionsBuilder(),
+          TargetPlatform.iOS: ZenithPageTransitionsBuilder(),
+          TargetPlatform.windows: ZenithPageTransitionsBuilder(),
+          TargetPlatform.macOS: ZenithPageTransitionsBuilder(),
+          TargetPlatform.linux: ZenithPageTransitionsBuilder(),
         },
       ),
       textTheme: buildTextTheme(
