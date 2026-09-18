@@ -11,6 +11,12 @@ import 'features/sanctuary/sanctuary.dart';
 /// App-level provider tracking the active bottom navigation tab index.
 final activeNavigationTabIndexProvider = StateProvider<int>((ref) => 0);
 
+/// Minimum horizontal fling velocity (logical px/s) for a swipe gesture to
+/// change tabs. Below this, a drag is left alone so it doesn't fight a
+/// deliberate short drag on content nested inside a tab (e.g. the Atlas
+/// filter-pill row) -- only a real, committed swipe should navigate.
+const double _kTabSwipeVelocityThreshold = 300.0;
+
 /// Primary App Shell managing top-level feature routing and persistent tab states.
 ///
 /// Uses [IndexedStack] to ensure that map panning in Atlas, scroll positions
@@ -36,9 +42,25 @@ class ZenithAppShell extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: IndexedStack(
-        index: currentIndex,
-        children: _screens,
+      body: GestureDetector(
+        key: const Key('zenithTabSwipeDetector'),
+        behavior: HitTestBehavior.translucent,
+        onHorizontalDragEnd: (details) {
+          final velocity = details.primaryVelocity ?? 0.0;
+          if (velocity.abs() < _kTabSwipeVelocityThreshold) return;
+          // A negative velocity is a right-to-left swipe (finger moving
+          // toward negative x) -- that advances to the next tab.
+          final direction = velocity < 0 ? 1 : -1;
+          final nextIndex = (currentIndex + direction).clamp(
+            0,
+            _screens.length - 1,
+          );
+          if (nextIndex != currentIndex) {
+            ref.read(activeNavigationTabIndexProvider.notifier).state =
+                nextIndex;
+          }
+        },
+        child: IndexedStack(index: currentIndex, children: _screens),
       ),
       bottomNavigationBar: ZenithNavigationBar(
         currentIndex: currentIndex,
