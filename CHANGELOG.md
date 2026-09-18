@@ -2,6 +2,23 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.6.1] — 2026-09-18
+
+### Added
+- **Swipe navigation** — Outpost, Atlas, Depot, and Sanctuary can now be
+  navigated with a horizontal swipe, in addition to the bottom nav bar.
+
+### Changed
+- Interaction and route-transition motion (buttons, sheets, dialogs,
+  toasts, collapsible cards, screen navigation) now uses a fast,
+  continuous snap instead of the pixel-stepped motion introduced in
+  0.6.0, after it read as stutter rather than deliberate retro motion on
+  a real device.
+
+### Fixed
+- The back button on Atlas and Depot did nothing — it now returns you to
+  the Outpost.
+
 ## [0.6.0] — 2026-09-18
 
 ### Added
