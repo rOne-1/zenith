@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import '../theme/theme.dart';
 
-/// Presents a bottom sheet using the app's own quantized [zenithStepCurve]
+/// Presents a bottom sheet using the app's own fast [zenithMotionCurve]
 /// motion instead of Flutter's default slide-up bottom-sheet transition.
 ///
 /// Content is unchanged -- callers still build whatever pixel-bordered
@@ -52,7 +52,7 @@ class ZenithSheet {
       transitionBuilder: (dialogContext, animation, secondaryAnimation, child) {
         final curved = CurvedAnimation(
           parent: animation,
-          curve: zenithStepCurve,
+          curve: zenithMotionCurve,
         );
         return SlideTransition(
           position: Tween<Offset>(

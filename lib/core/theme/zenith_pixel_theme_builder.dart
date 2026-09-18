@@ -7,9 +7,8 @@ import 'zenith_district_palette.dart';
 import 'zenith_motion.dart';
 import 'zenith_pixel_metrics.dart';
 
-/// Route transitions builder powered by the app's quantized
-/// [zenithStepCurve] -- stepped, not physically eased, per the pixel-art
-/// design correction. Touches every screen navigation in the app, so this
+/// Route transitions builder powered by the app's fast, continuous
+/// [zenithMotionCurve]. Touches every screen navigation in the app, so this
 /// was the last and highest-blast-radius piece of the motion re-curve (see
 /// PixelButton, RpeSelectorCard, GearTile, ZenithSheet, ZenithDialog,
 /// PixelToastHost, and CollapsibleCard for the rest).
@@ -26,7 +25,7 @@ class ZenithPageTransitionsBuilder extends PageTransitionsBuilder {
   ) {
     final curvedAnimation = CurvedAnimation(
       parent: animation,
-      curve: zenithStepCurve,
+      curve: zenithMotionCurve,
     );
     return FadeTransition(
       opacity: curvedAnimation,

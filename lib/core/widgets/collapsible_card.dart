@@ -5,8 +5,8 @@ import '../theme/theme.dart';
 import 'pixel_card.dart';
 
 /// A [PixelCard] that starts collapsed to a single summary row and expands
-/// on tap to reveal its full content, using the app's own quantized
-/// [zenithStepCurve] motion (never a default Flutter transition curve).
+/// on tap to reveal its full content, using the app's own fast
+/// [zenithMotionCurve] motion (never a default Flutter transition curve).
 ///
 /// Used to keep secondary information (data that's useful but not the
 /// reason the athlete opened this screen) out of the way by default,
@@ -96,7 +96,7 @@ class _CollapsibleCardState extends State<CollapsibleCard> {
               AnimatedRotation(
                 turns: _expanded ? 0.5 : 0.0,
                 duration: zenithMotionDuration,
-                curve: zenithStepCurve,
+                curve: zenithMotionCurve,
                 child: Icon(
                   Icons.expand_more,
                   color: colors.textMuted,
@@ -107,13 +107,13 @@ class _CollapsibleCardState extends State<CollapsibleCard> {
           ),
           AnimatedSize(
             duration: zenithMotionDuration,
-            curve: zenithStepCurve,
+            curve: zenithMotionCurve,
             alignment: Alignment.topCenter,
             child: ClipRect(
               child: AnimatedOpacity(
                 opacity: _expanded ? 1.0 : 0.0,
                 duration: zenithMotionDuration,
-                curve: zenithStepCurve,
+                curve: zenithMotionCurve,
                 child: _expanded
                     ? Padding(
                         padding: const EdgeInsets.only(top: 10.0),

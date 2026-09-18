@@ -69,11 +69,11 @@ class PixelToastHostState extends State<PixelToastHost> {
               child: AnimatedSlide(
                 offset: _message != null ? Offset.zero : const Offset(0, 0.3),
                 duration: zenithMotionDuration,
-                curve: zenithStepCurve,
+                curve: zenithMotionCurve,
                 child: AnimatedOpacity(
                   opacity: _message != null ? 1.0 : 0.0,
                   duration: zenithMotionDuration,
-                  curve: zenithStepCurve,
+                  curve: zenithMotionCurve,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 14.0,

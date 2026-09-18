@@ -309,7 +309,7 @@ class _RpeButtonState extends State<_RpeButton> {
         duration: _isPressed
             ? const Duration(milliseconds: 60)
             : zenithMotionDuration,
-        curve: zenithStepCurve,
+        curve: zenithMotionCurve,
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 2.0),
           height: 38.0,

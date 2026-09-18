@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 import 'pixel_card.dart';
 
-/// Presents a dialog using the app's own quantized [zenithStepCurve] motion
+/// Presents a dialog using the app's own fast [zenithMotionCurve] motion
 /// instead of Flutter's default fade+scale dialog transition.
 ///
 /// Content is unchanged — callers still build whatever `PixelCard`/
@@ -41,7 +41,7 @@ class ZenithDialog {
       transitionBuilder: (dialogContext, animation, secondaryAnimation, child) {
         final curved = CurvedAnimation(
           parent: animation,
-          curve: zenithStepCurve,
+          curve: zenithMotionCurve,
         );
         return FadeTransition(
           opacity: curved,

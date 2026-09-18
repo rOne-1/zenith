@@ -108,7 +108,7 @@ class _GearTileState extends State<GearTile>
       duration: const Duration(milliseconds: 200),
     );
     _springAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _springController, curve: zenithStepCurve),
+      CurvedAnimation(parent: _springController, curve: zenithMotionCurve),
     );
   }
 

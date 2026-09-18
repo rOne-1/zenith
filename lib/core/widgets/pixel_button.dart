@@ -17,8 +17,8 @@ enum PixelButtonVariant {
 }
 
 /// An authentic retro mechanical arcade button featuring stepped corners,
-/// a 1-frame physical drop on tap, and a quantized [zenithStepCurve] rebound
-/// (pixel-art-stepped, not physically eased).
+/// a 1-frame physical drop on tap, and a fast [zenithMotionCurve] rebound
+/// snap.
 class PixelButton extends StatefulWidget {
   final String? label;
   final Widget? child;
@@ -183,7 +183,7 @@ class _PixelButtonState extends State<PixelButton> {
           duration: _isPressed
               ? const Duration(milliseconds: 60)
               : zenithMotionDuration,
-          curve: zenithStepCurve,
+          curve: zenithMotionCurve,
           child: SizedBox(
             width: widget.width,
             height: widget.height != null ? widget.height! + bevelDepth : null,
