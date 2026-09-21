@@ -52,6 +52,7 @@ class SbeeService {
     Set<Equipment> availableEquipment = const {Equipment.bodyweight},
     FemaleProfile? femaleProfile,
     bool hasJointPain = false,
+    int? maxDifficultyTierOverride,
   }) {
     return _engine.generateNextWorkout(
       userId: userId,
@@ -59,6 +60,7 @@ class SbeeService {
       availableEquipment: availableEquipment,
       femaleProfile: femaleProfile,
       hasJointPain: hasJointPain,
+      maxDifficultyTierOverride: maxDifficultyTierOverride,
     );
   }
 

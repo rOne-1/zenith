@@ -74,6 +74,7 @@ class WorkoutPreviewService {
       availableEquipment: profile.availableEquipment,
       femaleProfile: profile.femaleProfile,
       hasJointPain: profile.hasJointPain,
+      maxDifficultyTierOverride: profile.maxDifficultyTierOverride,
     );
 
     _cachedSession = session;

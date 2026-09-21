@@ -74,6 +74,49 @@ void main() {
       expect(restored.availableEquipment, contains(Equipment.bodyweight));
       expect(restored.availableEquipment.length, equals(1));
     });
+
+    test('experienceLevel round-trips through toJson/fromJson', () {
+      final original = UserProfile(experienceLevel: ExperienceLevel.beginner);
+      final restored = UserProfile.fromJson(
+        jsonDecode(jsonEncode(original.toJson())) as Map<String, dynamic>,
+      );
+      expect(restored.experienceLevel, equals(ExperienceLevel.beginner));
+      expect(restored, equals(original));
+    });
+
+    test('fromJson defaults experienceLevel to null for a pre-onboarding '
+        'profile with no stored value', () {
+      final restored = UserProfile.fromJson({
+        'availableEquipment': ['bodyweight'],
+        'hasJointPain': false,
+      });
+      expect(restored.experienceLevel, isNull);
+    });
+
+    test(
+      'maxDifficultyTierOverride narrows only for a self-declared beginner',
+      () {
+        expect(
+          UserProfile(
+            experienceLevel: ExperienceLevel.beginner,
+          ).maxDifficultyTierOverride,
+          equals(2),
+        );
+        expect(
+          UserProfile(
+            experienceLevel: ExperienceLevel.intermediate,
+          ).maxDifficultyTierOverride,
+          isNull,
+        );
+        expect(
+          UserProfile(
+            experienceLevel: ExperienceLevel.advanced,
+          ).maxDifficultyTierOverride,
+          isNull,
+        );
+        expect(UserProfile().maxDifficultyTierOverride, isNull);
+      },
+    );
   });
 
   group('UserProfileNotifier State & Persistence', () {
@@ -177,6 +220,21 @@ void main() {
 
       await notifier.setCycleDay(-5);
       expect(notifier.state.femaleProfile!.cycleDay, equals(1));
+    });
+
+    test('setExperienceLevel updates state and persists', () async {
+      final notifier = UserProfileNotifier(prefs);
+      expect(notifier.state.experienceLevel, isNull);
+
+      await notifier.setExperienceLevel(ExperienceLevel.beginner);
+      expect(notifier.state.experienceLevel, equals(ExperienceLevel.beginner));
+
+      final storedJson = prefs.getString(kUserProfileStorageKey);
+      expect(storedJson, contains('beginner'));
+
+      // Re-reading from the same persisted prefs restores the choice.
+      final reloaded = UserProfileNotifier(prefs);
+      expect(reloaded.state.experienceLevel, equals(ExperienceLevel.beginner));
     });
   });
 }

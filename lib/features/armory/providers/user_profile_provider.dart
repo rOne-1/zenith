@@ -97,6 +97,12 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
     }
   }
 
+  /// Sets the self-declared training experience level captured at onboarding.
+  Future<void> setExperienceLevel(ExperienceLevel level) async {
+    final updated = state.copyWith(experienceLevel: () => level);
+    await _persist(updated);
+  }
+
   /// Directly updates the menstrual cycle day if cycle autoregulation is enabled.
   Future<void> setCycleDay(int cycleDay) async {
     if (state.femaleProfile == null) return;

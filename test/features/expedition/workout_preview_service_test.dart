@@ -175,7 +175,10 @@ void main() {
 
         // New session object generated
         expect(identical(initialSession, newSession), isFalse);
-        expect(service.isCacheValid(profile: modifiedProfile, currentTime: now), isTrue);
+        expect(
+          service.isCacheValid(profile: modifiedProfile, currentTime: now),
+          isTrue,
+        );
       },
     );
 
@@ -230,5 +233,33 @@ void main() {
         }
       },
     );
+
+    test('a self-declared beginner profile never generates a tier-3 exercise, '
+        'across many days', () async {
+      final beginnerProfile = UserProfile(
+        experienceLevel: ExperienceLevel.beginner,
+      );
+      final service = container.read(workoutPreviewServiceProvider);
+
+      for (var i = 0; i < 40; i++) {
+        final session = await service.getOrGeneratePreview(
+          profile: beginnerProfile,
+          currentTime: DateTime(2026, 9, 8, 10, 0).add(Duration(days: i)),
+          forceRefresh: true,
+        );
+        for (final set in session.sets) {
+          final exercise =
+              expandedExerciseGraph.findById(set.exerciseId) ??
+              baselineExerciseGraph.findById(set.exerciseId);
+          expect(
+            exercise!.difficultyTier,
+            lessThanOrEqualTo(2),
+            reason:
+                '${exercise.name} is tier ${exercise.difficultyTier}, '
+                'above a self-declared beginner\'s narrowed cap',
+          );
+        }
+      }
+    });
   });
 }
