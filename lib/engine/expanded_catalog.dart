@@ -55,8 +55,8 @@ const standardPushup = Exercise(
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
     'Keep your body in one straight line from head to heels.',
-    'Keep your elbows close to your sides as you lower down.',
-    'Lower until your chest is a fist\'s width from the floor.',
+    'Bend your elbows close to your sides and lower until your chest is a fist\'s width from the floor.',
+    'Push back up through your palms until your arms are straight.',
   ],
   correctiveCues: {
     'flared_elbows':
@@ -73,9 +73,9 @@ const feetElevatedPushup = Exercise(
   difficultyTier: 2,
   equipmentRequirements: {Equipment.benchOrChair},
   defaultCues: [
-    'Rest your toes on a sturdy bench, chair, or step.',
-    'Keep your neck relaxed and look down at the floor.',
-    'Push evenly through your whole hand as you push up.',
+    'Rest your toes on a sturdy bench, chair, or step, hands under your shoulders.',
+    'Bend your elbows to lower your chest toward the floor, neck relaxed.',
+    'Push evenly through your whole hand until your arms are straight again.',
   ],
   correctiveCues: {
     'lumbar_hyperextension':
@@ -125,7 +125,7 @@ const archerPushup = Exercise(
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
     'Place your hands wide apart, fingers pointing slightly outward.',
-    'Shift your weight onto one arm and keep the other arm straight out to the side.',
+    'Shift your weight onto one arm and bend it to lower your chest, keeping the other arm straight out to the side.',
     'Push back up mainly with the working arm, while the other arm slides along the floor.',
   ],
   correctiveCues: {
@@ -163,7 +163,7 @@ const doorframeRow = Exercise(
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
     'Hold onto the doorframe firmly with your feet braced near the bottom of the door.',
-    'Squeeze your shoulder blades together before you start pulling.',
+    'Squeeze your shoulder blades together and pull your chest toward your hands.',
     'Lower back down slowly, taking about 2 seconds.',
   ],
   correctiveCues: {
@@ -181,7 +181,7 @@ const towelRow = Exercise(
   defaultCues: [
     'Tie the towel tightly around the hinge side of a closed door.',
     'Hold both ends of the towel and lean back, keeping your body straight.',
-    'Pull your elbows back past your ribs.',
+    'Pull your elbows back past your ribs, then lower back down under control.',
   ],
   correctiveCues: {
     'wrist_flexion':
@@ -214,7 +214,7 @@ const standardPullup = Exercise(
   defaultCues: [
     'Grip the bar with palms facing away, hands slightly wider than your shoulders.',
     'Pull your shoulders down before you start bending your arms.',
-    'Pull yourself up until your chin clears the bar.',
+    'Pull yourself up until your chin clears the bar, then lower back down under control.',
   ],
   correctiveCues: {
     'kipping':
@@ -231,7 +231,7 @@ const lSitPullup = Exercise(
   defaultCues: [
     'Hold your legs straight out in front of you the whole time.',
     'Pull your shoulders down first, keeping your hips bent at a right angle.',
-    'Pull up until your chin clears the bar, without dropping your legs.',
+    'Pull up until your chin clears the bar, then lower back down without dropping your legs.',
   ],
   correctiveCues: {
     'drooping_legs':
@@ -318,7 +318,7 @@ const singleLegDeadlift = Exercise(
   defaultCues: [
     'Balance on one foot with a slight bend in that knee.',
     'Lift your other leg straight back behind you as your body tips forward.',
-    'Keep bending forward until your body is close to flat, facing the floor.',
+    'Bend forward until your body is close to flat, then squeeze your glute to stand back up.',
   ],
   correctiveCues: {
     'hip_rotation':
@@ -352,7 +352,7 @@ const nordicCurl = Exercise(
   defaultCues: [
     'Hook your heels under something sturdy, like a couch, or have a partner hold them.',
     'Keep your body in one straight line from knees to head.',
-    'Lower your body forward as slowly as you can, using your hamstrings to control it.',
+    'Lower your body forward as slowly as you can, using your hamstrings to control it, then use your hands to push back up to kneeling.',
   ],
   correctiveCues: {
     'broken_hip':
@@ -373,7 +373,7 @@ const airSquat = Exercise(
   defaultCues: [
     'Stand with feet shoulder-width apart, toes turned out slightly.',
     'Bend your knees and hips at the same time as you lower down.',
-    'Lower until your thighs are at least level with the floor.',
+    'Lower until your thighs are at least level with the floor, then push through your heels to stand back up.',
   ],
   correctiveCues: {
     'knee_valgus': 'Push your knees out so they stay in line with your toes.',
@@ -422,7 +422,7 @@ const skaterSquat = Exercise(
   defaultCues: [
     'Stand on one leg with your other knee bent behind you.',
     'Reach your arms forward for balance as you bend your standing knee.',
-    'Gently tap your back knee to the floor without putting weight on it.',
+    'Gently tap your back knee to the floor without putting weight on it, then push back up to standing.',
   ],
   correctiveCues: {
     'bouncing':
@@ -477,7 +477,7 @@ const deadBug = Exercise(
   defaultCues: [
     'Lie on your back with your knees bent at a right angle and arms reaching straight up.',
     'Press your lower back flat against the floor, with no gap underneath.',
-    'Slowly straighten one arm and the opposite leg at the same time, keeping your back flat.',
+    'Slowly straighten one arm and the opposite leg, keeping your back flat, then return to the start and switch sides.',
   ],
   correctiveCues: {
     'lumbar_arch':
@@ -511,7 +511,7 @@ const bandedPallofPress = Exercise(
   defaultCues: [
     'Attach the band at chest height and stand sideways to it, so there\'s tension.',
     'Hold the band at your chest with your feet about shoulder-width apart.',
-    'Push the band straight out in front of you, resisting its pull to the side.',
+    'Push the band straight out in front of you, resisting its pull to the side, then pull it back to your chest with control.',
   ],
   correctiveCues: {
     'torso_twisting':
