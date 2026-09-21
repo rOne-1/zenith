@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../controllers/active_session_controller.dart';
 
 /// Screen 1d: Expedition Debrief Screen.
@@ -30,7 +29,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: RailsideAtmosphereBackdrop(
+      body: DistrictAtmosphereBackdrop(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

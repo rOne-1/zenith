@@ -5,9 +5,9 @@ import 'package:sbee/sbee.dart';
 
 import '../../../app_shell.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/district_atmosphere_backdrop.dart';
 import '../../../core/widgets/pixel_button.dart';
 import '../../../engine/engine.dart';
-import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../widgets/metro_transit_map.dart';
 import '../widgets/station_inspector_sheet.dart';
 
@@ -40,7 +40,7 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: RailsideAtmosphereBackdrop(
+      body: DistrictAtmosphereBackdrop(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

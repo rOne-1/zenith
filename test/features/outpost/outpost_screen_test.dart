@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sbee/sbee.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenith/core/theme/theme.dart';
+import 'package:zenith/core/widgets/pixel_button.dart';
 import 'package:zenith/engine/engine.dart';
 import 'package:zenith/features/expedition/expedition.dart';
 import 'package:zenith/features/outpost/outpost.dart';
@@ -77,18 +78,73 @@ void main() {
       },
     );
 
-    testWidgets('renders without RenderFlex overflow at a narrow mobile viewport', (
-      tester,
-    ) async {
-      tester.view.physicalSize = const Size(375, 812);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets(
+      'renders without RenderFlex overflow at a narrow mobile viewport',
+      (tester) async {
+        tester.view.physicalSize = const Size(375, 812);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      await tester.pumpWidget(createTestWidget());
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(createTestWidget());
+        await tester.pumpAndSettle();
 
-      expect(tester.takeException(), isNull);
-    });
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets(
+      'tapping the theme-toggle button cycles the active district theme',
+      (tester) async {
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        expect(
+          container.read(themeControllerProvider).current.id,
+          'railside_outskirts',
+        );
+
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: MaterialApp(
+              theme: zenithThemeRegistry.defaultTheme.themeData,
+              home: const OutpostScreen(),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final themeButton = find.byWidgetPredicate(
+          (widget) =>
+              widget is PixelButton &&
+              widget.semanticLabel == 'Change district theme',
+        );
+        expect(themeButton, findsOneWidget);
+
+        await tester.tap(themeButton);
+        await tester.pumpAndSettle();
+
+        expect(
+          container.read(themeControllerProvider).current.id,
+          'neon_alleys',
+        );
+
+        // Cycling again returns to the first theme rather than throwing --
+        // ThemeRegistry.next() wraps around the registered theme list.
+        await tester.tap(themeButton);
+        await tester.pumpAndSettle();
+
+        expect(
+          container.read(themeControllerProvider).current.id,
+          'railside_outskirts',
+        );
+      },
+    );
   });
 }

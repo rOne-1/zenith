@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../engine/engine.dart';
-import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../../grimoire/widgets/metro_transit_map.dart';
 import '../controllers/active_session_controller.dart';
 import '../widgets/rpe_selector_card.dart';
@@ -55,7 +54,7 @@ class RestScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: RailsideAtmosphereBackdrop(
+      body: DistrictAtmosphereBackdrop(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

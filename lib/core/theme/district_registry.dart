@@ -1,6 +1,7 @@
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../features/districts/neon_alleys/neon_alleys_theme.dart';
 import '../../features/districts/railside_outskirts/railside_outskirts_theme.dart';
 import 'zenith_district_colors.dart';
 
@@ -9,6 +10,7 @@ import 'zenith_district_colors.dart';
 /// Falls back safely to District 01 ("Railside Outskirts") if an unknown ID is requested.
 final zenithThemeRegistry = ThemeRegistry<ZenithDistrictColors>([
   district01RailsideOutskirts,
+  district02NeonAlleys,
 ]);
 
 /// Provider for the async-initialized [SharedPreferences] instance.

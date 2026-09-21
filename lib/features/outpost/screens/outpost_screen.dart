@@ -4,7 +4,6 @@ import 'package:sbee/sbee.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../../expedition/screens/expedition_portal_screen.dart';
 import '../../expedition/services/workout_preview_service.dart';
 import '../../expedition/utils/session_summary_formatter.dart';
@@ -30,36 +29,61 @@ class OutpostScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: RailsideAtmosphereBackdrop(
+      body: DistrictAtmosphereBackdrop(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(20.0, 14.0, 20.0, 0.0),
-                child: Column(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'THE OUTPOST',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.5,
-                        color: colors.amberAccent,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'THE OUTPOST',
+                            style: TextStyle(
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.5,
+                              color: colors.amberAccent,
+                            ),
+                          ),
+                          const SizedBox(height: 2.0),
+                          Text(
+                            'DAILY BRIEFING & TRAINING STATUS',
+                            style: TextStyle(
+                              fontFamily: 'Silkscreen',
+                              fontFamilyFallback: const ['monospace'],
+                              fontSize: 10.0,
+                              letterSpacing: 1.0,
+                              color: colors.textMuted,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 2.0),
-                    Text(
-                      'DAILY BRIEFING & TRAINING STATUS',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 10.0,
-                        letterSpacing: 1.0,
-                        color: colors.textMuted,
+                    const SizedBox(width: 10.0),
+                    PixelButton(
+                      variant: PixelButtonVariant.secondary,
+                      padding: const EdgeInsets.all(8.0),
+                      semanticLabel: 'Change district theme',
+                      onPressed: () {
+                        ref.read(themeControllerProvider).next();
+                      },
+                      child: Text(
+                        '⟳',
+                        style: TextStyle(
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
+                          fontSize: 18.0,
+                          color: colors.amberAccent,
+                        ),
                       ),
                     ),
                   ],
@@ -250,10 +274,7 @@ class _TodaySessionCard extends ConsumerWidget {
                     decoration: ShapeDecoration(
                       color: colors.backgroundVoid,
                       shape: SteppedPixelBorder(
-                        side: BorderSide(
-                          color: colors.amberGlow,
-                          width: 1.0,
-                        ),
+                        side: BorderSide(color: colors.amberGlow, width: 1.0),
                         stepSize: context.pixelMetrics.cornerStepSize,
                       ),
                     ),

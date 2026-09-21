@@ -1,22 +1,14 @@
-import 'dart:math' as math;
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 
-import '../../../core/theme/test_env/test_env.dart';
 import '../../../core/widgets/pixel_scanline_overlay.dart';
 
-/// Fractional x-position of the ground-level lamp post, shared between
-/// _RailCatenaryPainter (draws the static post/bulb) and _GroundLampGlow
-/// (animates the glow pool beneath it) so the two stay aligned.
-const double _lampXFrac = 0.75;
-
-/// The atmospheric background scene for District 01: "Railside Outskirts".
-///
-/// Evokes suburban Japanese rail corridors at midnight: quiet dark skies, distant
-/// misty cityscape silhouettes, overhead catenary wire silhouettes, warm amber
-/// streetlight glow pools on the ground, and windblown trackside grass.
+/// The atmospheric background scene for District 01: "Railside Outskirts" --
+/// the illustrated reference art itself (a train arriving trackside at
+/// night, overhead catenary wires, a red destination board, windblown
+/// trackside foliage), not a procedural approximation of it. Same treatment
+/// as District 02's NeonAlleysAtmosphereBackdrop: full-bleed art, a scrim
+/// for foreground legibility, then the shared grain/scanline texture.
 class RailsideAtmosphereBackdrop extends StatelessWidget {
   final Widget? child;
 
@@ -28,405 +20,39 @@ class RailsideAtmosphereBackdrop extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // 1. Deep atmospheric gradient: void black to misty skyline and ground
-          const DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF070E10), // backgroundVoid
-                  Color(0xFF162B2B), // mid-atmosphere
-                  Color(0xFF264947), // skylineMist
-                  Color(0xFF0C181A), // surfaceDark (ground ballast)
-                ],
-                stops: [0.0, 0.42, 0.72, 1.0],
-              ),
-            ),
-          ),
-
-          // 2. Warm amber streetlight radial glow pool resting on the ground
-          Positioned(
-            left: -40,
-            right: -40,
-            bottom: -50,
-            height: 320,
-            child: IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    center: const Alignment(0.15, 0.25),
-                    radius: 0.85,
-                    colors: [
-                      const Color(0xFFFFAE34).withValues(alpha: 0.16),
-                      const Color(0xFFFFD269).withValues(alpha: 0.07),
-                      Colors.transparent,
-                    ],
-                    stops: const [0.0, 0.45, 1.0],
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // 3. Custom painted railway catenary overhead wires and trackside grass
+          // 1. The illustrated reference art
           const Positioned.fill(
-            child: IgnorePointer(
-              child: CustomPaint(painter: _RailCatenaryPainter()),
+            child: Image(
+              image: AssetImage(
+                'assets/backgrounds/railside_outskirts_illustration.jpg',
+              ),
+              fit: BoxFit.cover,
             ),
           ),
 
-          // 3b. Ground-level lamp post's breathing glow pool -- kept as its
-          // own small animated layer (rather than folding into the static
-          // CustomPaint above) since it's the one element here that moves.
-          // Positioned to align with the lamp post drawn by
-          // _RailCatenaryPainter at fractional (lampX, lampPostTopFrac).
-          const Positioned.fill(child: IgnorePointer(child: _GroundLampGlow())),
+          // 2. A scrim so foreground text/cards stay legible over the
+          // busy, high-contrast art.
+          const Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(color: Color(0x66070E10)),
+            ),
+          ),
 
-          // 4. Analog film grain / CRT noise overlay for retro texture depth
+          // 3. Analog film grain / CRT noise overlay for retro texture depth
           const Positioned.fill(
             child: NoiseGrainOverlay(opacity: 0.03, tint: Color(0xFF162B2B)),
           ),
 
-          // 5. Hard scanlines -- the other half of the CRT texture, sitting
+          // 4. Hard scanlines -- the other half of the CRT texture, sitting
           // over the atmosphere but under actual screen content.
           const Positioned.fill(
             child: IgnorePointer(child: PixelScanlineOverlay()),
           ),
 
-          // 6. Foreground content if provided
+          // 5. Foreground content if provided
           ?child,
         ],
       ),
     );
   }
-}
-
-class _RailCatenaryPainter extends CustomPainter {
-  const _RailCatenaryPainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (size.isEmpty) return;
-
-    final width = size.width;
-    final height = size.height;
-
-    // --- OVERHEAD CATENARY WIRES & POLE SILHOUETTE ---
-    final cablePaint = Paint()
-      ..color = const Color(0xFF1A3332).withValues(alpha: 0.75)
-      ..strokeWidth = 1.2
-      ..style = PaintingStyle.stroke;
-
-    // Upper contact wire with gentle catenary sag
-    final upperCable = Path()
-      ..moveTo(0, height * 0.08)
-      ..quadraticBezierTo(width * 0.5, height * 0.11, width, height * 0.07);
-    canvas.drawPath(upperCable, cablePaint);
-
-    // Lower messenger wire
-    final lowerCable = Path()
-      ..moveTo(0, height * 0.13)
-      ..quadraticBezierTo(width * 0.55, height * 0.15, width, height * 0.12);
-    canvas.drawPath(lowerCable, cablePaint);
-
-    // Minimal catenary dropper wires (vertical ties between cables)
-    final dropperPaint = Paint()
-      ..color = const Color(0xFF1A3332).withValues(alpha: 0.50)
-      ..strokeWidth = 1.0
-      ..style = PaintingStyle.stroke;
-
-    for (double xFrac = 0.18; xFrac < 0.90; xFrac += 0.22) {
-      final x = width * xFrac;
-      final y1 = height * (0.08 + 0.03 * math.sin(xFrac * math.pi));
-      final y2 = height * (0.13 + 0.02 * math.sin(xFrac * math.pi));
-      canvas.drawLine(Offset(x, y1), Offset(x, y2), dropperPaint);
-    }
-
-    // Overhead gantry bracket arm on the left side
-    final gantryPaint = Paint()
-      ..color = const Color(0xFF152B2C).withValues(alpha: 0.85)
-      ..strokeWidth = 2.5
-      ..style = PaintingStyle.stroke;
-
-    final gantryArm = Path()
-      ..moveTo(0, height * 0.05)
-      ..lineTo(width * 0.14, height * 0.06)
-      ..lineTo(width * 0.14, height * 0.14)
-      ..lineTo(0, height * 0.15);
-    canvas.drawPath(gantryArm, gantryPaint);
-
-    // Hanging street lamp silhouette bracket on the upper left
-    final lampBracketPaint = Paint()
-      ..color = const Color(0xFF152B2C)
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke;
-
-    canvas.drawLine(
-      Offset(width * 0.14, height * 0.06),
-      Offset(width * 0.18, height * 0.08),
-      lampBracketPaint,
-    );
-    canvas.drawLine(
-      Offset(width * 0.18, height * 0.08),
-      Offset(width * 0.18, height * 0.11),
-      lampBracketPaint,
-    );
-
-    // Streetlight lamp head cowl
-    final lampHead = Paint()
-      ..color = const Color(0xFF152B2C)
-      ..style = PaintingStyle.fill;
-    canvas.drawRect(
-      Rect.fromCenter(
-        center: Offset(width * 0.18, height * 0.11),
-        width: 10,
-        height: 4,
-      ),
-      lampHead,
-    );
-
-    // Subtle streetlight filament point
-    final filamentPaint = Paint()
-      ..color = const Color(0xFFFFD269).withValues(alpha: 0.90)
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(width * 0.18, height * 0.115), 1.5, filamentPaint);
-
-    // --- DISTANT METROPOLITAN SILHOUETTES (HORIZON) ---
-    final skylinePaint = Paint()
-      ..color = const Color(0xFF152B2C).withValues(alpha: 0.35)
-      ..style = PaintingStyle.fill;
-
-    final horizonY = height * 0.74;
-    final skyline = Path()..moveTo(0, horizonY);
-    skyline.lineTo(width * 0.08, horizonY - 14);
-    skyline.lineTo(width * 0.14, horizonY - 14);
-    skyline.lineTo(width * 0.14, horizonY - 8);
-    skyline.lineTo(width * 0.22, horizonY - 8);
-    skyline.lineTo(width * 0.22, horizonY - 22);
-    skyline.lineTo(width * 0.30, horizonY - 22);
-    skyline.lineTo(width * 0.30, horizonY);
-    skyline.lineTo(width * 0.44, horizonY);
-    skyline.lineTo(width * 0.44, horizonY - 18);
-    skyline.lineTo(width * 0.52, horizonY - 18);
-    skyline.lineTo(width * 0.52, horizonY - 30);
-    skyline.lineTo(width * 0.58, horizonY - 30);
-    skyline.lineTo(width * 0.58, horizonY);
-    skyline.lineTo(width * 0.72, horizonY);
-    skyline.lineTo(width * 0.72, horizonY - 12);
-    skyline.lineTo(width * 0.82, horizonY - 12);
-    skyline.lineTo(width * 0.82, horizonY);
-    skyline.lineTo(width, horizonY);
-    skyline.lineTo(width, height);
-    skyline.lineTo(0, height);
-    skyline.close();
-    canvas.drawPath(skyline, skylinePaint);
-
-    // --- TRACKSIDE BALLAST GROUND LINE ---
-    final groundPaint = Paint()
-      ..color = const Color(0xFF0C181A)
-      ..style = PaintingStyle.fill;
-    canvas.drawRect(Rect.fromLTWH(0, height - 28, width, 28), groundPaint);
-
-    final ballastLine = Paint()
-      ..color = const Color(0xFF1A3332)
-      ..strokeWidth = 1.5;
-    canvas.drawLine(
-      Offset(0, height - 28),
-      Offset(width, height - 28),
-      ballastLine,
-    );
-
-    // --- SLANTED FOREGROUND RAILS, CONVERGING TOWARD THE HORIZON ---
-    final railPaint = Paint()
-      ..color = const Color(0xFF1E3B3A).withValues(alpha: 0.8)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-    canvas.drawLine(
-      Offset(width * 0.38, height - 28),
-      Offset(width * -0.05, height),
-      railPaint,
-    );
-    canvas.drawLine(
-      Offset(width * 0.46, height - 28),
-      Offset(width * 0.20, height),
-      railPaint,
-    );
-
-    // --- RAIL PLINTHS (posts with a cross-tie cap) either side of the lamp ---
-    final plinthPaint = Paint()
-      ..color = const Color(0xFF091416)
-      ..style = PaintingStyle.fill;
-    for (final xFrac in [0.30, 0.90]) {
-      final x = width * xFrac;
-      canvas.drawRect(
-        Rect.fromCenter(
-          center: Offset(x, height - 28 - 18),
-          width: 8,
-          height: 36,
-        ),
-        plinthPaint,
-      );
-      canvas.drawRect(
-        Rect.fromCenter(
-          center: Offset(x, height - 28 - 36),
-          width: 16,
-          height: 6,
-        ),
-        plinthPaint,
-      );
-    }
-
-    // --- GROUND-LEVEL LAMP POST (glow pool is a separate animated layer,
-    // see _GroundLampGlow, aligned to the same _lampXFrac/height) ---
-    final lampPostX = width * _lampXFrac;
-    final lampPostPaint = Paint()
-      ..color = const Color(0xFF152B2C)
-      ..style = PaintingStyle.fill;
-    canvas.drawRect(
-      Rect.fromLTWH(lampPostX - 2, height - 28 - 44, 4, 44),
-      lampPostPaint,
-    );
-    canvas.drawRect(
-      Rect.fromCenter(
-        center: Offset(lampPostX, height - 28 - 48),
-        width: 12,
-        height: 6,
-      ),
-      lampPostPaint,
-    );
-    final lampBulbPaint = Paint()
-      ..color = const Color(0xFFFFD269)
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(lampPostX, height - 28 - 48), 2.5, lampBulbPaint);
-
-    // --- WINDBLOWN TRACKSIDE WEEDS & GRASS CLUSTERS ---
-    final deepFoliage = Paint()
-      ..color = const Color(0xFF224231)
-      ..style = PaintingStyle.fill;
-    final vibrantFoliage = Paint()
-      ..color = const Color(0xFF4B8E62)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-    final mutedFoliage = Paint()
-      ..color = const Color(0xFF2E5B41)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-
-    // A wider strip of grass tufts along the ballast line, alternating the
-    // two foliage tones so the strip doesn't read as one repeated stamp.
-    for (var i = 0; i < 16; i++) {
-      final xFrac = 0.02 + i * (0.96 / 15);
-      _drawGrassCluster(
-        canvas,
-        Offset(width * xFrac, height - 28),
-        deepFoliage,
-        i.isEven ? vibrantFoliage : mutedFoliage,
-      );
-    }
-  }
-
-  void _drawGrassCluster(
-    Canvas canvas,
-    Offset origin,
-    Paint fillPaint,
-    Paint strokePaint,
-  ) {
-    // Stepped windblown tufts leaning right
-    final tuft = Path()
-      ..moveTo(origin.dx - 6, origin.dy)
-      ..lineTo(origin.dx - 2, origin.dy - 12)
-      ..lineTo(origin.dx + 4, origin.dy - 16)
-      ..lineTo(origin.dx + 2, origin.dy - 6)
-      ..lineTo(origin.dx + 10, origin.dy - 14)
-      ..lineTo(origin.dx + 8, origin.dy)
-      ..close();
-    canvas.drawPath(tuft, fillPaint);
-
-    // Slender windblown blade highlights
-    canvas.drawLine(
-      Offset(origin.dx - 1, origin.dy),
-      Offset(origin.dx + 6, origin.dy - 18),
-      strokePaint,
-    );
-    canvas.drawLine(
-      Offset(origin.dx + 4, origin.dy),
-      Offset(origin.dx + 13, origin.dy - 13),
-      strokePaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-/// Breathing radial glow pool beneath the ground-level lamp post drawn by
-/// [_RailCatenaryPainter], oscillating slowly rather than sitting static --
-/// the one genuinely animated element in this otherwise-static backdrop.
-class _GroundLampGlow extends StatefulWidget {
-  const _GroundLampGlow();
-
-  @override
-  State<_GroundLampGlow> createState() => _GroundLampGlowState();
-}
-
-class _GroundLampGlowState extends State<_GroundLampGlow>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 5500),
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    // A repeating animation never reaches rest, so it hangs every
-    // pumpAndSettle() call on any of the 9 screens sharing this backdrop --
-    // not just in a test that renders this widget directly. Stay at a
-    // fixed mid-value under test instead of animating.
-    if (isTestEnvironment) {
-      _controller.value = 0.5;
-    } else {
-      _controller.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, _) {
-        final alpha = 0.14 + (0.24 - 0.14) * _controller.value;
-        return CustomPaint(painter: _GroundLampGlowPainter(alpha: alpha));
-      },
-    );
-  }
-}
-
-class _GroundLampGlowPainter extends CustomPainter {
-  final double alpha;
-  const _GroundLampGlowPainter({required this.alpha});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (size.isEmpty) return;
-    final center = Offset(size.width * _lampXFrac, size.height - 28 - 44);
-    const radius = 70.0;
-    final paint = Paint()
-      ..shader = ui.Gradient.radial(center, radius, [
-        const Color(0xFFFFD269).withValues(alpha: alpha),
-        Colors.transparent,
-      ]);
-    canvas.drawCircle(center, radius, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _GroundLampGlowPainter oldDelegate) =>
-      oldDelegate.alpha != alpha;
 }

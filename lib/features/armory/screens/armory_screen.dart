@@ -5,10 +5,10 @@ import 'package:sbee/sbee.dart';
 
 import '../../../app_shell.dart';
 import '../../../core/theme/theme.dart';
+import '../../../core/widgets/district_atmosphere_backdrop.dart';
 import '../../../core/widgets/pixel_button.dart';
 import '../../../core/widgets/pixel_toast.dart';
 import '../../../core/widgets/stepped_pixel_border.dart';
-import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../providers/user_profile_provider.dart';
 import '../widgets/gear_tile.dart';
 import '../widgets/illustration_credits_section.dart';
@@ -41,7 +41,7 @@ class ArmoryScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
       body: PixelToastHost(
-        child: RailsideAtmosphereBackdrop(
+        child: DistrictAtmosphereBackdrop(
           child: SafeArea(
             child: Column(
               children: [

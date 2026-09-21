@@ -4,7 +4,6 @@ import 'package:sbee/sbee.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../controllers/active_session_controller.dart';
 import '../widgets/rpe_selector_card.dart';
 import 'expedition_debrief_screen.dart';
@@ -208,7 +207,7 @@ class _WarmUpView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
-    return RailsideAtmosphereBackdrop(
+    return DistrictAtmosphereBackdrop(
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -339,7 +338,7 @@ class _CoolDownView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
-    return RailsideAtmosphereBackdrop(
+    return DistrictAtmosphereBackdrop(
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),

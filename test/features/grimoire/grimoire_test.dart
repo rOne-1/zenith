@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenith/app_shell.dart';
 import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/core/widgets/pixel_button.dart';
@@ -10,7 +11,12 @@ void main() {
   testWidgets(
     'GrimoireScreen back button returns to Outpost (tab index 0), not a no-op pop',
     (WidgetTester tester) async {
-      final container = ProviderContainer();
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      final container = ProviderContainer(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      );
       addTearDown(container.dispose);
       container.read(activeNavigationTabIndexProvider.notifier).state = 1;
 
@@ -40,8 +46,12 @@ void main() {
   testWidgets(
     'GrimoireScreen renders metro transit map, filters lines, and inspects station',
     (WidgetTester tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: MaterialApp(
             theme: zenithThemeRegistry.defaultTheme.themeData,
             home: const GrimoireScreen(),
@@ -127,8 +137,12 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
           child: MaterialApp(
             theme: zenithThemeRegistry.defaultTheme.themeData,
             home: const GrimoireScreen(),

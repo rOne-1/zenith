@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../widgets/adaptation_ledger_card.dart';
 import '../widgets/macrocycle_progress_card.dart';
 import '../widgets/pattern_recovery_grid.dart';
@@ -24,7 +23,7 @@ class SanctuaryScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: RailsideAtmosphereBackdrop(
+      body: DistrictAtmosphereBackdrop(
         child: SafeArea(
           child: ListView(
             padding: const EdgeInsets.symmetric(
