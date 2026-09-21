@@ -4,10 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sbee/sbee.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zenith/app_shell.dart';
 import 'package:zenith/core/theme/theme.dart';
+import 'package:zenith/features/armory/armory.dart';
 import 'package:zenith/core/widgets/widgets.dart';
 import 'package:zenith/engine/engine.dart';
 import 'package:zenith/features/expedition/expedition.dart';
+import 'package:zenith/features/onboarding/providers/onboarding_provider.dart';
+import 'package:zenith/features/onboarding/screens/onboarding_flow_screen.dart';
 import 'package:zenith/features/sanctuary/sanctuary.dart';
 import 'package:zenith/main.dart';
 
@@ -15,7 +19,9 @@ void main() {
   testWidgets(
     'ZenithApp smoke test renders AppShell, navigation bar, and dispatches expedition',
     (WidgetTester tester) async {
-      SharedPreferences.setMockInitialValues({});
+      SharedPreferences.setMockInitialValues({
+        kHasCompletedOnboardingKey: true,
+      });
       final prefs = await SharedPreferences.getInstance();
       final db = SbeeDatabase(NativeDatabase.memory());
 
@@ -118,7 +124,9 @@ void main() {
   testWidgets(
     'swiping the tab body navigates Outpost <-> Atlas <-> Depot <-> Sanctuary',
     (WidgetTester tester) async {
-      SharedPreferences.setMockInitialValues({});
+      SharedPreferences.setMockInitialValues({
+        kHasCompletedOnboardingKey: true,
+      });
       final prefs = await SharedPreferences.getInstance();
       final db = SbeeDatabase(NativeDatabase.memory());
 
@@ -193,4 +201,106 @@ void main() {
       }
     },
   );
+
+  group('First-launch onboarding routing', () {
+    testWidgets(
+      'a fresh install (no stored flag, no stored profile) sees onboarding',
+      (WidgetTester tester) async {
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
+        final db = SbeeDatabase(NativeDatabase.memory());
+
+        try {
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                sharedPreferencesProvider.overrideWithValue(prefs),
+                sbeeDatabaseProvider.overrideWithValue(db),
+              ],
+              child: const ZenithApp(),
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          expect(find.byType(OnboardingFlowScreen), findsOneWidget);
+          expect(find.byType(ZenithAppShell), findsNothing);
+        } finally {
+          await db.close();
+        }
+      },
+    );
+
+    testWidgets(
+      'an existing install upgrading from before onboarding existed (a '
+      'stored profile, no flag) skips straight to the app shell',
+      (WidgetTester tester) async {
+        SharedPreferences.setMockInitialValues({
+          kUserProfileStorageKey: '{"availableEquipment":["bodyweight"]}',
+        });
+        final prefs = await SharedPreferences.getInstance();
+        final db = SbeeDatabase(NativeDatabase.memory());
+
+        try {
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                sharedPreferencesProvider.overrideWithValue(prefs),
+                sbeeDatabaseProvider.overrideWithValue(db),
+              ],
+              child: const ZenithApp(),
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          expect(find.byType(ZenithAppShell), findsOneWidget);
+          expect(find.byType(OnboardingFlowScreen), findsNothing);
+        } finally {
+          await db.close();
+        }
+      },
+    );
+
+    testWidgets(
+      'skipping every onboarding step reaches the app shell and sets the flag',
+      (WidgetTester tester) async {
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
+        final db = SbeeDatabase(NativeDatabase.memory());
+
+        try {
+          await tester.pumpWidget(
+            ProviderScope(
+              overrides: [
+                sharedPreferencesProvider.overrideWithValue(prefs),
+                sbeeDatabaseProvider.overrideWithValue(db),
+              ],
+              child: const ZenithApp(),
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          // Welcome
+          await tester.tap(find.text('GET STARTED'));
+          await tester.pumpAndSettle();
+
+          // Equipment
+          await tester.tap(find.text('SKIP'));
+          await tester.pumpAndSettle();
+
+          // Physiology
+          await tester.tap(find.text('SKIP'));
+          await tester.pumpAndSettle();
+
+          // Experience -- SKIP is enabled even with nothing selected.
+          await tester.tap(find.text('SKIP'));
+          await tester.pumpAndSettle();
+
+          expect(find.byType(ZenithAppShell), findsOneWidget);
+          expect(prefs.getBool(kHasCompletedOnboardingKey), isTrue);
+        } finally {
+          await db.close();
+        }
+      },
+    );
+  });
 }

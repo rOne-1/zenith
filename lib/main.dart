@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_shell.dart';
 import 'core/theme/theme.dart';
+import 'features/onboarding/providers/onboarding_provider.dart';
+import 'features/onboarding/screens/onboarding_flow_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,12 +64,15 @@ class ZenithApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeController = ref.watch(themeControllerProvider);
+    final prefs = ref.watch(sharedPreferencesProvider);
 
     return MaterialApp(
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
       theme: themeController.current.themeData,
-      home: const ZenithAppShell(),
+      home: hasCompletedOnboarding(prefs)
+          ? const ZenithAppShell()
+          : const OnboardingFlowScreen(),
     );
   }
 }
