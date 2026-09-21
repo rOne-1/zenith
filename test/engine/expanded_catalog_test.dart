@@ -80,11 +80,12 @@ void main() {
           MovementPattern.singleLeg,
           MovementPattern.rotation,
         ]) {
-          final tiers = expandedExercises
-              .where((e) => e.movementPattern == pattern)
-              .map((e) => e.difficultyTier)
-              .toList()
-            ..sort();
+          final tiers =
+              expandedExercises
+                  .where((e) => e.movementPattern == pattern)
+                  .map((e) => e.difficultyTier)
+                  .toList()
+                ..sort();
           final expected = List<int>.generate(tiers.length, (i) => i + 1);
           expect(
             tiers,
@@ -149,6 +150,38 @@ void main() {
       );
       expect(archerPullSuccessors, contains(muscleUp));
     });
+
+    test(
+      'Exactly one exercise (Forearm Side Plank) is tagged as a static hold',
+      () {
+        // Regression coverage for a reported bug: isometric-hold exercises
+        // were prescribed with reps despite their cues describing only a
+        // static hold. An audit of every catalog exercise's cue text found
+        // exactly one genuine hold-with-reps mismatch.
+        final holdExercises = expandedExercises
+            .where((e) => e.type == ExerciseType.hold)
+            .toList();
+        expect(holdExercises, hasLength(1));
+        expect(holdExercises.single.id, 'side_plank');
+      },
+    );
+
+    test(
+      'Every ExerciseType.hold exercise describes holding, not counting reps',
+      () {
+        for (final ex in expandedExercises.where(
+          (e) => e.type == ExerciseType.hold,
+        )) {
+          final cuesText = ex.defaultCues.join(' ').toLowerCase();
+          expect(
+            cuesText,
+            contains('hold'),
+            reason:
+                '${ex.name} is tagged ExerciseType.hold but its cues never mention holding',
+          );
+        }
+      },
+    );
 
     test('findExpandedExercise retrieves exercises by id', () {
       expect(findExpandedExercise('one_arm_pushup'), equals(oneArmPushup));

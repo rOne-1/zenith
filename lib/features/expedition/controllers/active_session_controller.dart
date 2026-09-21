@@ -71,6 +71,8 @@ class ActiveSessionState {
   final int? selectedRpe;
   final Duration restRemaining;
   final Duration totalRest;
+  final Duration workRemaining;
+  final Duration totalWork;
   final List<MillerAdaptationRecord> adaptations;
   final bool isFinalizing;
   final String? errorMessage;
@@ -83,6 +85,8 @@ class ActiveSessionState {
     this.selectedRpe,
     this.restRemaining = Duration.zero,
     this.totalRest = Duration.zero,
+    this.workRemaining = Duration.zero,
+    this.totalWork = Duration.zero,
     this.adaptations = const [],
     this.isFinalizing = false,
     this.errorMessage,
@@ -112,11 +116,15 @@ class ActiveSessionState {
     return session!.sets.where((s) => s.reportedRpe != null).length;
   }
 
+  /// Sums only rep-based completed sets -- a hold-type set logs its
+  /// prescribed duration into [WorkoutSet.reps] for storage (see
+  /// WorkingSetScreen), which would otherwise silently inflate this with
+  /// held seconds miscounted as repetitions.
   int get totalRepsCompleted {
     if (session == null) return 0;
     var sum = 0;
     for (final s in session!.sets) {
-      if (s.reportedRpe != null) {
+      if (s.reportedRpe != null && !s.isHold) {
         sum += s.reps;
       }
     }
@@ -139,6 +147,8 @@ class ActiveSessionState {
     int? Function()? selectedRpe,
     Duration? restRemaining,
     Duration? totalRest,
+    Duration? workRemaining,
+    Duration? totalWork,
     List<MillerAdaptationRecord>? adaptations,
     bool? isFinalizing,
     String? Function()? errorMessage,
@@ -151,6 +161,8 @@ class ActiveSessionState {
       selectedRpe: selectedRpe != null ? selectedRpe() : this.selectedRpe,
       restRemaining: restRemaining ?? this.restRemaining,
       totalRest: totalRest ?? this.totalRest,
+      workRemaining: workRemaining ?? this.workRemaining,
+      totalWork: totalWork ?? this.totalWork,
       adaptations: adaptations ?? this.adaptations,
       isFinalizing: isFinalizing ?? this.isFinalizing,
       errorMessage: errorMessage != null ? errorMessage() : this.errorMessage,
@@ -167,6 +179,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   SessionStreamManager? _manager;
   StreamSubscription<SessionProgressState>? _progressSubscription;
   Timer? _restTimer;
+  Timer? _workTimer;
 
   ActiveSessionController(this._ref) : super(ActiveSessionState.initial);
 
@@ -226,6 +239,9 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       currentRepsInput: initialSet?.reps ?? 10,
       selectedRpe: initialSet?.targetRpe ?? 8,
     );
+    if (progress.state == SessionState.activeSet) {
+      _startWorkTimerIfNeeded(initialSet);
+    }
 
     _progressSubscription = manager.progressStream.listen((p) {
       if (!mounted) return;
@@ -281,6 +297,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       currentRepsInput: curSet?.reps ?? 10,
       selectedRpe: () => curSet?.targetRpe ?? 8,
     );
+    _startWorkTimerIfNeeded(curSet);
   }
 
   /// Updates the planned rep count before completing the active set.
@@ -295,6 +312,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
     final set = state.currentSet;
     if (set == null) return;
 
+    _cancelWorkTimer();
     final repsToLog = actualReps ?? state.currentRepsInput;
     final rpeToLog = state.selectedRpe ?? set.targetRpe;
 
@@ -370,6 +388,42 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
     });
   }
 
+  /// Starts (or clears) the per-set work timer for a static-hold exercise.
+  /// A no-op for rep-based sets -- [WorkingSetScreen] only reads
+  /// [ActiveSessionState.workRemaining]/[totalWork] when the current set
+  /// is a hold, so leaving them at zero for a rep-based set is harmless.
+  void _startWorkTimerIfNeeded(WorkoutSet? set) {
+    _cancelWorkTimer();
+    final holdSeconds = set?.holdDurationSeconds;
+    if (holdSeconds == null) return;
+    _startWorkTimer(Duration(seconds: holdSeconds));
+  }
+
+  void _startWorkTimer(Duration duration) {
+    state = state.copyWith(workRemaining: duration, totalWork: duration);
+
+    _workTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+      final current = state.workRemaining;
+      if (current.inSeconds <= 1) {
+        timer.cancel();
+        state = state.copyWith(workRemaining: Duration.zero);
+      } else {
+        state = state.copyWith(
+          workRemaining: current - const Duration(seconds: 1),
+        );
+      }
+    });
+  }
+
+  void _cancelWorkTimer() {
+    _workTimer?.cancel();
+    _workTimer = null;
+  }
+
   /// Adds a duration extension (defaults to 30s) to the active rest countdown.
   void addRestTime([Duration extension = const Duration(seconds: 30)]) {
     final newRemaining = state.restRemaining + extension;
@@ -396,6 +450,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       selectedRpe: () => curSet?.targetRpe ?? 8,
       restRemaining: Duration.zero,
     );
+    _startWorkTimerIfNeeded(curSet);
   }
 
   /// Concludes the cool down phase and transitions to debrief / [SessionState.completed].
@@ -523,6 +578,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   /// Discards the active workout attempt and resets state.
   Future<void> abortSession() async {
     _cancelTimer();
+    _cancelWorkTimer();
     // SBEE's incremental mid-workout persistence is fire-and-forget: a set
     // logged just before this abort can still have its save in flight. If
     // discardActiveSession()'s delete ran first, that save could land
@@ -559,6 +615,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   @override
   void dispose() {
     _cancelTimer();
+    _cancelWorkTimer();
     _progressSubscription?.cancel();
     _disposeManager();
     super.dispose();

@@ -127,6 +127,167 @@ void main() {
       );
     }
 
+    WorkoutSession createMixedTestSession() {
+      return WorkoutSession(
+        id: 'test_session_hold',
+        startTime: DateTime.now(),
+        sets: [
+          WorkoutSet(
+            id: 'set_rep',
+            sessionId: 'test_session_hold',
+            exerciseId: 'standard_pushup',
+            movementPattern: MovementPattern.pushing,
+            setNumber: 1,
+            reps: 10,
+            targetRpe: 8,
+            variables: const MillerVariables(),
+            timestamp: DateTime.now(),
+            restDuration: const Duration(seconds: 60),
+          ),
+          WorkoutSet(
+            id: 'set_hold',
+            sessionId: 'test_session_hold',
+            exerciseId: 'side_plank',
+            movementPattern: MovementPattern.rotation,
+            setNumber: 1,
+            reps: 30,
+            targetRpe: 7,
+            variables: const MillerVariables(),
+            timestamp: DateTime.now(),
+            restDuration: const Duration(seconds: 60),
+            holdDurationSeconds: 30,
+          ),
+        ],
+      );
+    }
+
+    test(
+      'completeWarmUp on a hold-type first set starts the work timer',
+      () async {
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final session = WorkoutSession(
+          id: 'hold_first_session',
+          startTime: DateTime.now(),
+          sets: [
+            WorkoutSet(
+              id: 'set_hold_0',
+              sessionId: 'hold_first_session',
+              exerciseId: 'side_plank',
+              movementPattern: MovementPattern.rotation,
+              setNumber: 1,
+              reps: 30,
+              targetRpe: 7,
+              variables: const MillerVariables(),
+              timestamp: DateTime.now(),
+              holdDurationSeconds: 30,
+            ),
+          ],
+        );
+
+        await controller.startSession(session);
+        controller.completeWarmUp();
+
+        final state = container.read(activeSessionControllerProvider);
+        expect(state.workRemaining, equals(const Duration(seconds: 30)));
+        expect(state.totalWork, equals(const Duration(seconds: 30)));
+      },
+    );
+
+    test('completeRest into a hold-type next set starts its work timer, and '
+        'a rep-type set never has a work timer running', () async {
+      final controller = container.read(
+        activeSessionControllerProvider.notifier,
+      );
+      final session = createMixedTestSession();
+
+      await controller.startSession(session);
+      controller.completeWarmUp();
+
+      // First set is rep-based: no work timer.
+      final repState = container.read(activeSessionControllerProvider);
+      expect(repState.totalWork, equals(Duration.zero));
+
+      controller.completeCurrentSet(actualReps: 10);
+      controller.completeRest();
+
+      // Second set is the hold: work timer must now be armed with its
+      // prescribed duration.
+      final holdState = container.read(activeSessionControllerProvider);
+      expect(holdState.currentSetIndex, equals(1));
+      expect(holdState.workRemaining, equals(const Duration(seconds: 30)));
+      expect(holdState.totalWork, equals(const Duration(seconds: 30)));
+    });
+
+    test(
+      'completing a hold-type set logs its prescribed duration as reps',
+      () async {
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final session = WorkoutSession(
+          id: 'hold_log_session',
+          startTime: DateTime.now(),
+          sets: [
+            WorkoutSet(
+              id: 'set_hold_log',
+              sessionId: 'hold_log_session',
+              exerciseId: 'side_plank',
+              movementPattern: MovementPattern.rotation,
+              setNumber: 1,
+              reps: 30,
+              targetRpe: 7,
+              variables: const MillerVariables(),
+              timestamp: DateTime.now(),
+              holdDurationSeconds: 30,
+            ),
+          ],
+        );
+
+        await controller.startSession(session);
+        controller.completeWarmUp();
+        controller.completeCurrentSet(actualReps: 30);
+
+        final state = container.read(activeSessionControllerProvider);
+        expect(state.fsmState, equals(SessionState.coolDown));
+        expect(state.session!.sets.first.reps, equals(30));
+      },
+    );
+
+    test(
+      'totalRepsCompleted excludes hold-type sets from the rep count',
+      () async {
+        // Regression coverage: a hold-type set logs its prescribed hold
+        // duration into WorkoutSet.reps for storage (there's no separate
+        // logging pathway) -- without this exclusion, a completed session
+        // mixing rep-based and hold-based exercises would silently inflate
+        // the debrief's "TOTAL VOLUME: N REPS" stat with held seconds
+        // miscounted as repetitions.
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final session = createMixedTestSession();
+
+        await controller.startSession(session);
+        controller.completeWarmUp();
+        controller.completeCurrentSet(actualReps: 10); // rep-based set
+        await controller.logRpe(8);
+        controller.completeRest();
+        controller.completeCurrentSet(actualReps: 30); // hold-type set
+        await controller.logRpe(7);
+
+        final state = container.read(activeSessionControllerProvider);
+        expect(
+          state.totalRepsCompleted,
+          equals(10),
+          reason:
+              'only the rep-based set\'s 10 reps should count -- the hold '
+              'set\'s 30 (seconds, stored in reps) must be excluded',
+        );
+      },
+    );
+
     test('startSession initializes FSM in warmUp state', () async {
       final controller = container.read(
         activeSessionControllerProvider.notifier,

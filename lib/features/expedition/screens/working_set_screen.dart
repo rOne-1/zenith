@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../engine/engine.dart';
-import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../../grimoire/widgets/exercise_illustration.dart';
 import '../../grimoire/widgets/metro_transit_map.dart';
 import '../controllers/active_session_controller.dart';
@@ -127,7 +126,9 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
         ? MetroLineTheme.forPattern(exercise.movementPattern)
         : null;
 
-    final targetRepsText = set.hasRepRange
+    final targetRepsText = set.isHold
+        ? 'TARGET: ${set.holdDurationSeconds}s HOLD'
+        : set.hasRepRange
         ? '${set.minReps}-${set.maxReps} RM // TARGET: ${set.reps} REPS'
         : 'TARGET: ${set.reps} REPS';
 
@@ -138,7 +139,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: RailsideAtmosphereBackdrop(
+      body: DistrictAtmosphereBackdrop(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -406,69 +407,76 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                     ),
                     const SizedBox(height: 20.0),
 
-                    // Reps Completed Mechanical Adjuster
-                    PixelCard(
-                      backgroundColor: colors.surfaceDark,
-                      borderColor: colors.amberAccent,
-                      bevelColor: colors.borderMuted,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 14.0,
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            'REPS COMPLETED',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
-                              fontSize: 11.0,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1.0,
-                              color: colors.textMuted,
+                    // Static hold: countdown timer. Dynamic movement: reps stepper.
+                    if (set.isHold)
+                      _HoldTimerCard(
+                        workRemaining: state.workRemaining,
+                        totalWork: state.totalWork,
+                      )
+                    else
+                      // Reps Completed Mechanical Adjuster
+                      PixelCard(
+                        backgroundColor: colors.surfaceDark,
+                        borderColor: colors.amberAccent,
+                        bevelColor: colors.borderMuted,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 14.0,
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              'REPS COMPLETED',
+                              style: TextStyle(
+                                fontFamily: 'Silkscreen',
+                                fontFamilyFallback: const ['monospace'],
+                                fontSize: 11.0,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1.0,
+                                color: colors.textMuted,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              PixelButton(
-                                label: '−',
-                                width: 54.0,
-                                height: 54.0,
-                                variant: PixelButtonVariant.secondary,
-                                onPressed: () {
-                                  controller.updateRepsInput(
-                                    state.currentRepsInput - 1,
-                                  );
-                                },
-                              ),
-                              const SizedBox(width: 24.0),
-                              Text(
-                                '${state.currentRepsInput}',
-                                style: pixelHudNumeral(
-                                  fontSize: 44.0,
-                                  fontWeight: FontWeight.w900,
-                                  color: colors.amberAccent,
+                            const SizedBox(height: 12.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                PixelButton(
+                                  label: '−',
+                                  width: 54.0,
+                                  height: 54.0,
+                                  variant: PixelButtonVariant.secondary,
+                                  onPressed: () {
+                                    controller.updateRepsInput(
+                                      state.currentRepsInput - 1,
+                                    );
+                                  },
                                 ),
-                              ),
-                              const SizedBox(width: 24.0),
-                              PixelButton(
-                                label: '+',
-                                width: 54.0,
-                                height: 54.0,
-                                variant: PixelButtonVariant.secondary,
-                                onPressed: () {
-                                  controller.updateRepsInput(
-                                    state.currentRepsInput + 1,
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
+                                const SizedBox(width: 24.0),
+                                Text(
+                                  '${state.currentRepsInput}',
+                                  style: pixelHudNumeral(
+                                    fontSize: 44.0,
+                                    fontWeight: FontWeight.w900,
+                                    color: colors.amberAccent,
+                                  ),
+                                ),
+                                const SizedBox(width: 24.0),
+                                PixelButton(
+                                  label: '+',
+                                  width: 54.0,
+                                  height: 54.0,
+                                  variant: PixelButtonVariant.secondary,
+                                  onPressed: () {
+                                    controller.updateRepsInput(
+                                      state.currentRepsInput + 1,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -504,7 +512,11 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                         variant: PixelButtonVariant.primary,
                         height: 52.0,
                         onPressed: () {
-                          controller.completeCurrentSet();
+                          controller.completeCurrentSet(
+                            actualReps: set.isHold
+                                ? set.holdDurationSeconds
+                                : null,
+                          );
                         },
                       ),
                     ),
@@ -514,6 +526,67 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Countdown timer shown in place of the rep stepper for a static-hold set --
+/// the prescribed duration counts down via [ActiveSessionController]'s work
+/// timer, the same [Timer.periodic] + [Duration] state pattern the rest
+/// timer already uses between sets.
+class _HoldTimerCard extends StatelessWidget {
+  final Duration workRemaining;
+  final Duration totalWork;
+
+  const _HoldTimerCard({required this.workRemaining, required this.totalWork});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final remainingSeconds = workRemaining.inSeconds;
+    final totalSeconds = totalWork.inSeconds;
+    final progress = totalSeconds > 0
+        ? (remainingSeconds / totalSeconds).clamp(0.0, 1.0)
+        : 0.0;
+
+    return PixelCard(
+      backgroundColor: colors.surfaceDark,
+      borderColor: colors.amberAccent,
+      bevelColor: colors.borderMuted,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+      child: Column(
+        children: [
+          Text(
+            'HOLD TIME REMAINING',
+            style: TextStyle(
+              fontFamily: 'Silkscreen',
+              fontFamilyFallback: const ['monospace'],
+              fontSize: 11.0,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.0,
+              color: colors.textMuted,
+            ),
+          ),
+          const SizedBox(height: 10.0),
+          Text(
+            '${remainingSeconds}s',
+            style: pixelHudNumeral(
+              fontSize: 44.0,
+              fontWeight: FontWeight.w900,
+              color: remainingSeconds > 0
+                  ? colors.amberAccent
+                  : colors.signalRed,
+            ),
+          ),
+          const SizedBox(height: 12.0),
+          PixelCountdownBar(
+            progress: progress,
+            height: 14.0,
+            activeColor: colors.amberAccent,
+            inactiveColor: colors.borderMuted,
+          ),
+        ],
       ),
     );
   }

@@ -56,78 +56,75 @@ void main() {
       );
     }
 
-    Widget createTestWidget({
-      required ProviderContainer container,
-    }) {
+    Widget createTestWidget({required ProviderContainer container}) {
       return UncontrolledProviderScope(
         container: container,
         child: MaterialApp(
           theme: zenithThemeRegistry.defaultTheme.themeData,
-          home: const Scaffold(
-            body: WorkingSetScreen(),
-          ),
+          home: const Scaffold(body: WorkingSetScreen()),
         ),
       );
     }
 
-    testWidgets('renders station signboard, cues card, and Kenneth Miller badges', (
-      tester,
-    ) async {
-      tester.view.physicalSize = const Size(600, 1200);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets(
+      'renders station signboard, cues card, and Kenneth Miller badges',
+      (tester) async {
+        tester.view.physicalSize = const Size(600, 1200);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      final container = ProviderContainer(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-          sbeeDatabaseProvider.overrideWithValue(database),
-        ],
-      );
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
 
-      final session = createTestSession(setCount: 2);
-      final controller = container.read(
-        activeSessionControllerProvider.notifier,
-      );
-      await controller.startSession(session);
-      controller.completeWarmUp();
+        final session = createTestSession(setCount: 2);
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        await controller.startSession(session);
+        controller.completeWarmUp();
 
-      await tester.pumpWidget(createTestWidget(container: container));
-      await tester.pump();
+        await tester.pumpWidget(createTestWidget(container: container));
+        await tester.pump();
 
-      // Signboard verification
-      expect(find.textContaining('SET 1 / 2'), findsOneWidget);
-      expect(find.textContaining('PUSH LINE'), findsWidgets);
+        // Signboard verification
+        expect(find.textContaining('SET 1 / 2'), findsOneWidget);
+        expect(find.textContaining('PUSH LINE'), findsWidgets);
 
-      // Cues card verification
-      expect(find.text('FORM CUES'), findsOneWidget);
-      expect(find.byType(ExerciseIllustration), findsOneWidget);
+        // Cues card verification
+        expect(find.text('FORM CUES'), findsOneWidget);
+        expect(find.byType(ExerciseIllustration), findsOneWidget);
 
-      // Kenneth Miller variables card is secondary — collapsed by default
-      final variablesHeaderFinder = find.text("TODAY'S DIFFICULTY DIALS");
-      expect(variablesHeaderFinder, findsOneWidget);
-      expect(find.text('LOAD'), findsNothing);
+        // Kenneth Miller variables card is secondary — collapsed by default
+        final variablesHeaderFinder = find.text("TODAY'S DIFFICULTY DIALS");
+        expect(variablesHeaderFinder, findsOneWidget);
+        expect(find.text('LOAD'), findsNothing);
 
-      // Tap to expand — full detail becomes visible, nothing lost
-      await tester.tap(variablesHeaderFinder);
-      await tester.pumpAndSettle();
-      expect(find.text('LOAD'), findsOneWidget);
-      expect(find.text('POS'), findsOneWidget);
-      expect(find.text('ROM'), findsOneWidget);
-      expect(find.text('ELEV'), findsOneWidget);
-      expect(find.text('TEMPO'), findsOneWidget);
+        // Tap to expand — full detail becomes visible, nothing lost
+        await tester.tap(variablesHeaderFinder);
+        await tester.pumpAndSettle();
+        expect(find.text('LOAD'), findsOneWidget);
+        expect(find.text('POS'), findsOneWidget);
+        expect(find.text('ROM'), findsOneWidget);
+        expect(find.text('ELEV'), findsOneWidget);
+        expect(find.text('TEMPO'), findsOneWidget);
 
-      // Reps verification
-      expect(find.text('10'), findsWidgets);
-      expect(find.text('TARGET: 10 REPS'), findsOneWidget);
+        // Reps verification
+        expect(find.text('10'), findsWidgets);
+        expect(find.text('TARGET: 10 REPS'), findsOneWidget);
 
-      // Hero complete button
-      expect(find.text('✓ COMPLETE SET'), findsOneWidget);
+        // Hero complete button
+        expect(find.text('✓ COMPLETE SET'), findsOneWidget);
 
-      // Cleanup
-      await tester.pumpWidget(const SizedBox());
-      container.dispose();
-    });
+        // Cleanup
+        await tester.pumpWidget(const SizedBox());
+        container.dispose();
+      },
+    );
 
     testWidgets('rep adjuster buttons modify reps input count', (tester) async {
       tester.view.physicalSize = const Size(600, 1200);
@@ -153,26 +150,37 @@ void main() {
       await tester.pump();
 
       // Initial reps should be 10
-      expect(container.read(activeSessionControllerProvider).currentRepsInput, 10);
+      expect(
+        container.read(activeSessionControllerProvider).currentRepsInput,
+        10,
+      );
 
       // Tap '+' button
       await tester.tap(find.text('+'));
       await tester.pump();
-      expect(container.read(activeSessionControllerProvider).currentRepsInput, 11);
+      expect(
+        container.read(activeSessionControllerProvider).currentRepsInput,
+        11,
+      );
 
       // Tap '−' (Unicode minus) button twice
       await tester.tap(find.text('−'));
       await tester.pump();
       await tester.tap(find.text('−'));
       await tester.pump();
-      expect(container.read(activeSessionControllerProvider).currentRepsInput, 9);
+      expect(
+        container.read(activeSessionControllerProvider).currentRepsInput,
+        9,
+      );
 
       // Cleanup
       await tester.pumpWidget(const SizedBox());
       container.dispose();
     });
 
-    testWidgets('tapping complete set button advances to rest state', (tester) async {
+    testWidgets('tapping complete set button advances to rest state', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(600, 1200);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -209,71 +217,72 @@ void main() {
       container.dispose();
     });
 
-    testWidgets('tactical skip opens confirmation dialog and can cancel or skip', (
-      tester,
-    ) async {
-      tester.view.physicalSize = const Size(600, 1200);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+    testWidgets(
+      'tactical skip opens confirmation dialog and can cancel or skip',
+      (tester) async {
+        tester.view.physicalSize = const Size(600, 1200);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      final container = ProviderContainer(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-          sbeeDatabaseProvider.overrideWithValue(database),
-        ],
-      );
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
 
-      final session = createTestSession(setCount: 2);
-      final controller = container.read(
-        activeSessionControllerProvider.notifier,
-      );
-      await controller.startSession(session);
-      controller.completeWarmUp();
+        final session = createTestSession(setCount: 2);
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        await controller.startSession(session);
+        controller.completeWarmUp();
 
-      await tester.pumpWidget(createTestWidget(container: container));
-      await tester.pump();
+        await tester.pumpWidget(createTestWidget(container: container));
+        await tester.pump();
 
-      // Tap bottom SKIP button
-      await tester.tap(find.text('SKIP'));
-      await tester.pumpAndSettle();
+        // Tap bottom SKIP button
+        await tester.tap(find.text('SKIP'));
+        await tester.pumpAndSettle();
 
-      // Dialog should be visible
-      expect(find.text('SKIP SET'), findsOneWidget);
-      expect(find.text('CANCEL'), findsOneWidget);
+        // Dialog should be visible
+        expect(find.text('SKIP SET'), findsOneWidget);
+        expect(find.text('CANCEL'), findsOneWidget);
 
-      // Tap Cancel
-      await tester.tap(find.text('CANCEL'));
-      await tester.pumpAndSettle();
+        // Tap Cancel
+        await tester.tap(find.text('CANCEL'));
+        await tester.pumpAndSettle();
 
-      // Still in activeSet
-      expect(
-        container.read(activeSessionControllerProvider).fsmState,
-        equals(SessionState.activeSet),
-      );
+        // Still in activeSet
+        expect(
+          container.read(activeSessionControllerProvider).fsmState,
+          equals(SessionState.activeSet),
+        );
 
-      // Open again and confirm skip
-      await tester.tap(find.text('SKIP'));
-      await tester.pumpAndSettle();
+        // Open again and confirm skip
+        await tester.tap(find.text('SKIP'));
+        await tester.pumpAndSettle();
 
-      // Tap the SKIP button inside the dialog
-      final skipDialogButton = find.descendant(
-        of: find.byType(Dialog),
-        matching: find.widgetWithText(PixelButton, 'SKIP'),
-      );
-      await tester.tap(skipDialogButton);
-      await tester.pump();
+        // Tap the SKIP button inside the dialog
+        final skipDialogButton = find.descendant(
+          of: find.byType(Dialog),
+          matching: find.widgetWithText(PixelButton, 'SKIP'),
+        );
+        await tester.tap(skipDialogButton);
+        await tester.pump();
 
-      // Skipped: transitioned to rest
-      expect(
-        container.read(activeSessionControllerProvider).fsmState,
-        equals(SessionState.rest),
-      );
+        // Skipped: transitioned to rest
+        expect(
+          container.read(activeSessionControllerProvider).fsmState,
+          equals(SessionState.rest),
+        );
 
-      // Cleanup
-      await tester.pumpWidget(const SizedBox());
-      container.dispose();
-    });
+        // Cleanup
+        await tester.pumpWidget(const SizedBox());
+        container.dispose();
+      },
+    );
 
     testWidgets(
       'renders without RenderFlex overflow at a narrow mobile viewport',
@@ -326,6 +335,62 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(tester.takeException(), isNull);
+
+        // Cleanup
+        await tester.pumpWidget(const SizedBox());
+        container.dispose();
+      },
+    );
+
+    testWidgets(
+      'a hold-type set shows a countdown timer instead of the rep stepper',
+      (tester) async {
+        tester.view.physicalSize = const Size(600, 1200);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
+
+        final session = WorkoutSession(
+          id: 'hold_session',
+          startTime: DateTime.now(),
+          sets: [
+            WorkoutSet(
+              id: 'set_hold',
+              sessionId: 'hold_session',
+              exerciseId: 'side_plank',
+              movementPattern: MovementPattern.rotation,
+              setNumber: 1,
+              reps: 30,
+              targetRpe: 7,
+              variables: const MillerVariables(),
+              timestamp: DateTime.now(),
+              holdDurationSeconds: 30,
+            ),
+          ],
+        );
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        await controller.startSession(session);
+        controller.completeWarmUp();
+
+        await tester.pumpWidget(createTestWidget(container: container));
+        await tester.pump();
+
+        expect(find.text('TARGET: 30s HOLD'), findsOneWidget);
+        expect(find.text('HOLD TIME REMAINING'), findsOneWidget);
+        expect(find.text('30s'), findsOneWidget);
+        expect(find.byType(PixelCountdownBar), findsOneWidget);
+
+        // The rep stepper must not appear for a hold-type set.
+        expect(find.text('REPS COMPLETED'), findsNothing);
 
         // Cleanup
         await tester.pumpWidget(const SizedBox());

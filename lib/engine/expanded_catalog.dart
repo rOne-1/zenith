@@ -491,6 +491,7 @@ const sidePlank = Exercise(
   movementPattern: MovementPattern.rotation,
   difficultyTier: 2,
   equipmentRequirements: {Equipment.bodyweight},
+  type: ExerciseType.hold,
   defaultCues: [
     'Place your elbow directly under your shoulder, feet stacked or staggered.',
     'Lift your hips so your body forms one straight line from head to ankles.',

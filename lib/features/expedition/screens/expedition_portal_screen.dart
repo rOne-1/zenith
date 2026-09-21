@@ -5,7 +5,6 @@ import 'package:sbee/sbee.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../engine/engine.dart';
-import '../../districts/railside_outskirts/railside_atmosphere_backdrop.dart';
 import '../../grimoire/widgets/metro_transit_map.dart';
 import '../../grimoire/widgets/station_inspector_sheet.dart';
 import '../controllers/active_session_controller.dart';
@@ -114,7 +113,7 @@ class _ExpeditionPortalScreenState
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: RailsideAtmosphereBackdrop(
+      body: DistrictAtmosphereBackdrop(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -637,7 +636,9 @@ class _ExpeditionPortalScreenState
                             exercise.movementPattern,
                           );
                           final firstSet = exerciseSets.first;
-                          final repText = firstSet.hasRepRange
+                          final repText = firstSet.isHold
+                              ? '${firstSet.holdDurationSeconds}s HOLD'
+                              : firstSet.hasRepRange
                               ? '${firstSet.minReps}-${firstSet.maxReps} REPS'
                               : '${firstSet.reps} REPS';
                           final restSeconds =
