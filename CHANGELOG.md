@@ -2,6 +2,26 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.6.2] — 2026-09-21
+
+### Added
+- **Onboarding** — new installs now get a short first-launch setup (gear,
+  physical accommodations, training experience) so day one is built for
+  you instead of defaulting silently. Every question is optional and can
+  be changed later in the Depot; a self-declared beginner gets an
+  easier starting band of exercises until the app's own automatic
+  progression tracking takes over.
+- **A second district** — a theme toggle (top right of the Outpost) now
+  switches between two fully-realized backdrops, Railside Outskirts and
+  Neon Alleys.
+- **Timers for hold exercises** — a static hold (like a side plank) now
+  shows a real countdown instead of a rep counter.
+
+### Changed
+- Tightened the exercise form cues throughout the Atlas so every
+  instruction describes the complete movement, start to finish, instead
+  of stopping partway through.
+
 ## [0.6.1] — 2026-09-18
 
 ### Added
