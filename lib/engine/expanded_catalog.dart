@@ -284,8 +284,8 @@ const hipHinge = Exercise(
   equipmentRequirements: {Equipment.bodyweight},
   defaultCues: [
     'Stand with feet shoulder-width apart, knees slightly bent.',
-    'Push your hips straight back, like closing a door with your butt.',
-    'Keep your back flat and straight the whole time.',
+    'Bend forward by pushing your hips straight back, like closing a door with your butt, keeping your back flat.',
+    'Feel a stretch in your hamstrings, then drive your hips forward to stand back up.',
   ],
   correctiveCues: {
     'squatting':
