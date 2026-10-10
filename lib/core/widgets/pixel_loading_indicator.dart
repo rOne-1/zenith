@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/test_env/test_env.dart';
 import '../theme/theme.dart';
 import 'stepped_pixel_border.dart';
 
@@ -32,10 +33,19 @@ class PixelLoadingIndicator extends StatefulWidget {
 
 class _PixelLoadingIndicatorState extends State<PixelLoadingIndicator>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: widget.sweepDuration,
-  )..repeat();
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.sweepDuration,
+    );
+    if (!isTestEnvironment) {
+      _controller.repeat();
+    }
+  }
 
   @override
   void dispose() {

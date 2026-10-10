@@ -1,3 +1,6 @@
+import 'dart:io' as io;
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -15,9 +18,13 @@ import '../theme/test_env/test_env.dart';
 final districtVideoControllerProvider = Provider.autoDispose
     .family<VideoPlayerController?, String>((ref, assetPath) {
       // video_player has no registered platform implementation under
-      // `flutter test` (and no Windows-desktop implementation at all), so
-      // guard both instead of letting either hang or crash the widget tree.
-      if (isTestEnvironment) return null;
+      // `flutter test` (and no Windows or Linux desktop implementation in
+      // pubspec.yaml), so guard both instead of letting either hang or crash
+      // the widget tree with MissingPluginException.
+      if (isTestEnvironment ||
+          (!kIsWeb && (io.Platform.isWindows || io.Platform.isLinux))) {
+        return null;
+      }
       try {
         final controller = VideoPlayerController.asset(assetPath)
           ..setLooping(true)

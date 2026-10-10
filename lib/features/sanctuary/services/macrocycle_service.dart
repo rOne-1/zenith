@@ -103,13 +103,7 @@ class MacrocycleState {
   String get steppedMeterText {
     final buffer = StringBuffer('[');
     for (int i = 1; i <= 5; i++) {
-      if (i < weekInCycle) {
-        buffer.write(' █');
-      } else if (i == weekInCycle) {
-        buffer.write(' █');
-      } else {
-        buffer.write(' ░');
-      }
+      buffer.write(i <= weekInCycle ? ' █' : ' ░');
     }
     buffer.write(' ] WEEK $weekInCycle/5');
     return buffer.toString();

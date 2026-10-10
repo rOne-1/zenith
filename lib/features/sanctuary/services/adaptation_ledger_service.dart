@@ -127,9 +127,8 @@ class AdaptationLedgerService {
     final recentSessions = results[1] as List<WorkoutSession>;
 
     // Built once and reused for every lookup below, instead of re-scanning
-    // both catalogs (ExerciseGraph.findById is a linear scan) per item.
+    // the catalog (ExerciseGraph.findById is a linear scan) per item.
     final exerciseById = <String, Exercise>{
-      for (final e in baselineExerciseGraph.exercises) e.id: e,
       for (final e in expandedExerciseGraph.exercises) e.id: e,
     };
 

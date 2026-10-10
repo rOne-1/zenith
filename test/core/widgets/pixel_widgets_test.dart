@@ -372,4 +372,23 @@ void main() {
       },
     );
   });
+
+  group('PixelLoadingIndicator', () {
+    testWidgets(
+      'renders cleanly and does not hang pumpAndSettle (test-env ticker guard)',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: PixelLoadingIndicator(),
+            ),
+          ),
+        );
+        // Would time out if repeating AnimationController were running under test
+        await tester.pumpAndSettle();
+
+        expect(find.byType(PixelLoadingIndicator), findsOneWidget);
+      },
+    );
+  });
 }

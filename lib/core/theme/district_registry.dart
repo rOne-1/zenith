@@ -1,8 +1,9 @@
 import 'package:flutter_refined_kit/flutter_refined_kit.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../features/districts/neon_alleys/neon_alleys_theme.dart';
 import '../../features/districts/railside_outskirts/railside_outskirts_theme.dart';
+import '../storage/preferences_provider.dart';
 import 'zenith_district_colors.dart';
 
 /// Ordered catalogue of all available district themes in Zenith.
@@ -12,15 +13,6 @@ final zenithThemeRegistry = ThemeRegistry<ZenithDistrictColors>([
   district01RailsideOutskirts,
   district02NeonAlleys,
 ]);
-
-/// Provider for the async-initialized [SharedPreferences] instance.
-///
-/// Overridden in `main.dart` with the concrete instance from `SharedPreferences.getInstance()`.
-final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
-  throw UnimplementedError(
-    'sharedPreferencesProvider must be overridden in ProviderScope',
-  );
-});
 
 /// Riverpod provider managing active district theme selection and persistence.
 final themeControllerProvider =

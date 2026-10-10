@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbee/sbee.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../core/theme/district_registry.dart';
+import '../../../core/storage/storage.dart';
 import '../models/user_profile.dart';
 
 /// Storage key for persisting the user's armory profile.
