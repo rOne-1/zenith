@@ -24,7 +24,7 @@ class ZenithDialog {
       barrierDismissible: barrierDismissible,
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black54,
-      transitionDuration: zenithMotionDuration,
+      transitionDuration: context.motionDuration,
       pageBuilder: (dialogContext, animation, secondaryAnimation) {
         // showDialog's DialogRoute wraps content in a route-scoping
         // Semantics node and a SafeArea; showGeneralDialog doesn't do
@@ -39,6 +39,9 @@ class ZenithDialog {
         );
       },
       transitionBuilder: (dialogContext, animation, secondaryAnimation, child) {
+        if (dialogContext.animationsDisabled || context.animationsDisabled) {
+          return child;
+        }
         final curved = CurvedAnimation(
           parent: animation,
           curve: zenithMotionCurve,

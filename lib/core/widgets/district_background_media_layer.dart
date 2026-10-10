@@ -7,6 +7,7 @@ import 'package:video_player/video_player.dart';
 
 import '../theme/district_background_media.dart';
 import '../theme/test_env/test_env.dart';
+import '../theme/theme.dart';
 
 /// Shared video controller, keyed by asset path, for any district backdrop
 /// backed by [DistrictVideoBackground]. Keyed sharing (rather than one
@@ -89,6 +90,23 @@ class _VideoLayer extends ConsumerWidget {
 
     if (controller == null) {
       return ColoredBox(color: placeholderColor);
+    }
+
+    final disabled = context.animationsDisabled;
+    if (controller.value.isInitialized) {
+      if (disabled && controller.value.isPlaying) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (controller.value.isPlaying) {
+            controller.pause();
+          }
+        });
+      } else if (!disabled && !controller.value.isPlaying) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!controller.value.isPlaying) {
+            controller.play();
+          }
+        });
+      }
     }
 
     return ListenableBuilder(

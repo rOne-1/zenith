@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/test_env/test_env.dart';
+import '../theme/theme.dart';
 
 /// A small filled circle that can pulse to signal a live/changing state,
 /// matching the original design mockup's `zlamp`/`zblink` keyframe language:
@@ -92,15 +93,24 @@ class _PixelPulseDotState extends State<PixelPulseDot>
     }
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncController();
+  }
+
   void _syncController() {
-    // An infinitely-repeating AnimationController never satisfies
-    // WidgetTester.pumpAndSettle() (it waits for animations to finish, and
-    // this one never does) -- every existing screen test that pumps a
-    // screen containing this widget would hang. Render statically at full
-    // opacity under test instead, matching how the theme builder already
-    // sidesteps Google Fonts network loading under FLUTTER_TEST.
-    if (!widget.animate || isTestEnvironment) return;
-    _controller = AnimationController(vsync: this, duration: widget.period)
+    // When animations are disabled via reduced motion or in headless tests,
+    // avoid starting an infinite animation ticker.
+    final disabled = !widget.animate ||
+        isTestEnvironment ||
+        (mounted && context.animationsDisabled);
+    if (disabled) {
+      _controller?.dispose();
+      _controller = null;
+      return;
+    }
+    _controller ??= AnimationController(vsync: this, duration: widget.period)
       ..repeat();
   }
 
@@ -126,6 +136,9 @@ class _PixelPulseDotState extends State<PixelPulseDot>
 
   @override
   Widget build(BuildContext context) {
+    if (context.animationsDisabled) {
+      return _buildDot(1.0);
+    }
     final controller = _controller;
     if (controller == null) {
       return _buildDot(1.0);

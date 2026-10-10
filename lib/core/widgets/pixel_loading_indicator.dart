@@ -42,8 +42,19 @@ class _PixelLoadingIndicatorState extends State<PixelLoadingIndicator>
       vsync: this,
       duration: widget.sweepDuration,
     );
-    if (!isTestEnvironment) {
-      _controller.repeat();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!isTestEnvironment && !context.animationsDisabled) {
+      if (!_controller.isAnimating) {
+        _controller.repeat();
+      }
+    } else {
+      if (_controller.isAnimating) {
+        _controller.stop();
+      }
     }
   }
 
@@ -53,9 +64,43 @@ class _PixelLoadingIndicatorState extends State<PixelLoadingIndicator>
     super.dispose();
   }
 
+  Widget _buildBlocks(BuildContext context, int headPosition) {
+    final colors = context.colors;
+    return Container(
+      padding: const EdgeInsets.all(2.0),
+      decoration: ShapeDecoration(
+        color: colors.surfaceDark,
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: colors.borderBright, width: 1.0),
+          stepSize: 2.0,
+        ),
+      ),
+      child: Row(
+        children: List.generate(widget.totalBlocks, (index) {
+          final distance = (index - headPosition) % widget.totalBlocks;
+          final isLit = distance < widget.windowSize;
+          return Expanded(
+            child: Container(
+              margin: EdgeInsets.only(
+                right: index < widget.totalBlocks - 1 ? 1.5 : 0.0,
+              ),
+              color: isLit ? colors.amberAccent : colors.borderMuted,
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
+    if (context.animationsDisabled) {
+      return SizedBox(
+        width: widget.width,
+        height: widget.height,
+        child: _buildBlocks(context, 0),
+      );
+    }
 
     return SizedBox(
       width: widget.width,
@@ -64,31 +109,7 @@ class _PixelLoadingIndicatorState extends State<PixelLoadingIndicator>
         animation: _controller,
         builder: (context, _) {
           final headPosition = (_controller.value * widget.totalBlocks).floor();
-
-          return Container(
-            padding: const EdgeInsets.all(2.0),
-            decoration: ShapeDecoration(
-              color: colors.surfaceDark,
-              shape: SteppedPixelBorder(
-                side: BorderSide(color: colors.borderBright, width: 1.0),
-                stepSize: 2.0,
-              ),
-            ),
-            child: Row(
-              children: List.generate(widget.totalBlocks, (index) {
-                final distance = (index - headPosition) % widget.totalBlocks;
-                final isLit = distance < widget.windowSize;
-                return Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                      right: index < widget.totalBlocks - 1 ? 1.5 : 0.0,
-                    ),
-                    color: isLit ? colors.amberAccent : colors.borderMuted,
-                  ),
-                );
-              }),
-            ),
-          );
+          return _buildBlocks(context, headPosition);
         },
       ),
     );
