@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/core/widgets/widgets.dart';
 
 void main() {
@@ -198,17 +199,20 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
+          theme: zenithThemeRegistry.defaultTheme.themeData,
           home: Scaffold(
             body: Column(
               children: [
                 PixelButton(
                   label: 'SECONDARY',
                   variant: PixelButtonVariant.secondary,
+                  onPressed: () {},
                 ),
                 PixelButton(
                   label: 'DANGER',
                   variant: PixelButtonVariant.danger,
+                  onPressed: () {},
                 ),
               ],
             ),
@@ -218,6 +222,10 @@ void main() {
 
       expect(find.text('SECONDARY'), findsOneWidget);
       expect(find.text('DANGER'), findsOneWidget);
+
+      final dangerText = tester.widget<Text>(find.text('DANGER'));
+      final colors = zenithThemeRegistry.defaultTheme.colors;
+      expect(dangerText.style?.color, equals(colors.backgroundVoid));
     });
 
     testWidgets('renders icon alongside label', (tester) async {

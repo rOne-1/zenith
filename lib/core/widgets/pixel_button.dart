@@ -129,7 +129,7 @@ class _PixelButtonState extends State<PixelButton> {
           break;
         case PixelButtonVariant.danger:
           backgroundColor = colors.signalRed;
-          textColor = colors.textPrimary;
+          textColor = colors.backgroundVoid;
           borderColor = const Color(0xFFFF7A6E);
           bevelColor = const Color(0xFF8B1810);
           break;

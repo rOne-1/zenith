@@ -129,67 +129,73 @@ class _TicketTabItem extends StatelessWidget {
     // flutter_refined_kit already ships exactly this as PressableScale, just
     // never adopted here. scaleAmount/pressDuration/behavior are passed
     // explicitly to preserve this tab's original tactile feel exactly.
-    return PressableScale(
-      onTap: onTap,
-      hapticFeedback: true,
-      scaleAmount: 0.92,
-      pressDuration: const Duration(milliseconds: 60),
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 2.0),
-        decoration: ShapeDecoration(
-          color: isSelected ? colors.surfaceDark : Colors.transparent,
-          shape: SteppedPixelBorder(
-            side: BorderSide(
-              color: isSelected ? activeBorderColor : Colors.transparent,
-              width: 1.5,
-            ),
-            stepSize: metrics.cornerStepSize,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  item.glyph,
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
-                    fontSize: 15.0,
-                    color: isSelected ? activeTextColor : inactiveTextColor,
-                  ),
-                ),
-                const SizedBox(width: 4.0),
-                Text(
-                  item.indexLabel,
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
-                    fontSize: 10.0,
-                    fontWeight: FontWeight.w700,
-                    color: isSelected ? activeTextColor : inactiveTextColor,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 2.0),
-            Text(
-              item.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontFamily: 'Silkscreen',
-                fontFamilyFallback: const ['monospace'],
-                fontSize: 9.0,
-                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                letterSpacing: 0.8,
-                color: isSelected ? activeTextColor : inactiveTextColor,
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: '${item.title} tab, ${item.indexLabel} of 4',
+      excludeSemantics: true,
+      child: PressableScale(
+        onTap: onTap,
+        hapticFeedback: true,
+        scaleAmount: 0.92,
+        pressDuration: const Duration(milliseconds: 60),
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 3.0, vertical: 2.0),
+          decoration: ShapeDecoration(
+            color: isSelected ? colors.surfaceDark : Colors.transparent,
+            shape: SteppedPixelBorder(
+              side: BorderSide(
+                color: isSelected ? activeBorderColor : Colors.transparent,
+                width: 1.5,
               ),
+              stepSize: metrics.cornerStepSize,
             ),
-          ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    item.glyph,
+                    style: TextStyle(
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
+                      fontSize: 15.0,
+                      color: isSelected ? activeTextColor : inactiveTextColor,
+                    ),
+                  ),
+                  const SizedBox(width: 4.0),
+                  Text(
+                    item.indexLabel,
+                    style: TextStyle(
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.w700,
+                      color: isSelected ? activeTextColor : inactiveTextColor,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 2.0),
+              Text(
+                item.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
+                  fontSize: 9.0,
+                  fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                  letterSpacing: 0.8,
+                  color: isSelected ? activeTextColor : inactiveTextColor,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

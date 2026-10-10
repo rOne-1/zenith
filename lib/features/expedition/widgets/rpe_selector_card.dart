@@ -300,38 +300,44 @@ class _RpeButtonState extends State<_RpeButton> {
         ? const Color(0xFF2EE6D6)
         : (isSelected ? colors.amberAccent : colors.borderBright);
 
-    return GestureDetector(
-      onTapDown: _handleTapDown,
-      onTapUp: _handleTapUp,
-      onTapCancel: _handleTapCancel,
-      child: AnimatedScale(
-        scale: _isPressed ? 0.9 : 1.0,
-        duration: _isPressed
-            ? const Duration(milliseconds: 60)
-            : zenithMotionDuration,
-        curve: zenithMotionCurve,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 2.0),
-          height: 38.0,
-          decoration: ShapeDecoration(
-            color: bgColor,
-            shape: SteppedPixelBorder(
-              side: BorderSide(
-                color: borderColor,
-                width: isTarget || isSelected ? 1.5 : 1.0,
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: 'RPE $score',
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTapDown: _handleTapDown,
+        onTapUp: _handleTapUp,
+        onTapCancel: _handleTapCancel,
+        child: AnimatedScale(
+          scale: _isPressed ? 0.9 : 1.0,
+          duration: _isPressed
+              ? const Duration(milliseconds: 60)
+              : zenithMotionDuration,
+          curve: zenithMotionCurve,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 2.0),
+            height: 48.0,
+            decoration: ShapeDecoration(
+              color: bgColor,
+              shape: SteppedPixelBorder(
+                side: BorderSide(
+                  color: borderColor,
+                  width: isTarget || isSelected ? 1.5 : 1.0,
+                ),
+                stepSize: metrics.cornerStepSize,
               ),
-              stepSize: metrics.cornerStepSize,
             ),
-          ),
-          child: Center(
-            child: Text(
-              '$score',
-              style: TextStyle(
-                fontFamily: 'Silkscreen',
-                fontFamilyFallback: const ['monospace'],
-                fontSize: 13.0,
-                fontWeight: FontWeight.w900,
-                color: textColor,
+            child: Center(
+              child: Text(
+                '$score',
+                style: TextStyle(
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w900,
+                  color: textColor,
+                ),
               ),
             ),
           ),
