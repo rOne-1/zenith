@@ -1,0 +1,59 @@
+name: CI
+
+# Gate for branch protection on `main`: runs static analysis and the full
+# test suite on every PR targeting main, plus on direct pushes to main as a
+# safety net. The job name below ("Analyze & Test") is what gets registered
+# as a required status check once it's run at least once.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  analyze-and-test:
+    name: Analyze & Test
+    runs-on: ubuntu-latest
+    steps:
+      # zenith depends on two sibling repos via path dependencies
+      # (`../SBEE`, `../flutter-refined-kit` in pubspec.yaml), so all three
+      # must be checked out side by side under the same parent directory.
+      - name: Checkout zenith
+        uses: actions/checkout@v4
+        with:
+          path: zenith
+
+      - name: Checkout SBEE
+        uses: actions/checkout@v4
+        with:
+          repository: rOne-1/SBEE
+          path: SBEE
+
+      - name: Checkout flutter-refined-kit
+        uses: actions/checkout@v4
+        with:
+          repository: rOne-1/flutter-refined-kit
+          path: flutter-refined-kit
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          # Pinned to match the toolchain this project has been developed
+          # and verified against. Bump deliberately alongside local tooling
+          # updates, not silently via a floating "stable" channel.
+          flutter-version: '3.44.4'
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        working-directory: zenith
+        run: flutter pub get
+
+      - name: Static analysis
+        working-directory: zenith
+        run: flutter analyze
+
+      - name: Run tests
+        working-directory: zenith
+        run: flutter test
