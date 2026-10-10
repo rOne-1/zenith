@@ -2,6 +2,15 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.7.0] — 2026-10-11
+
+### Design System Unification, Typography Resilience & Visual Rhythm
+- **Silkscreen Typography Helper Suite (PKG-9.1 / DES-4)** — introduced centralized `zenithPixelDisplay(...)` helper suite alongside `pixelDisplaySm` (9dp), `pixelDisplayMd` (11dp), `pixelDisplayLg` (13dp), and `pixelDisplayXl` (16dp) presets in `lib/core/theme/zenith_text_styles.dart`; includes automatic fallback to `monospace` and synchronous local font evaluation under test environments (`isTestEnvironment`) to eliminate test runner font-loading hangs.
+- **System-Wide Typography Sweep (PKG-9.2 / DES-4)** — eradicated all 176 raw `TextStyle` instantiations across 26 feature and core widget files, routing brand pixel display typography strictly through `zenithPixelDisplay` and monospaced body through `zenithBodyMono`.
+- **Centralized Spacing Token Scale (PKG-9.3 / DES-6)** — introduced `ZenithSpacing` (`xxs: 2.0`, `xs: 4.0`, `sm: 8.0`, `md: 12.0`, `lg: 16.0`, `xl: 24.0`, `xxl: 32.0`) in `lib/core/theme/zenith_spacing.dart` with standard `EdgeInsets` and `SizedBox` gap presets; eliminated off-grid magic literals across high-density cards, sheets, and gutters.
+- **Dynamic Grimoire Pattern Theming (PKG-9.4 / DES-8)** — bound Grimoire `_FilterPill` active and border colors dynamically to `MetroLineTheme.forPattern(pattern, colors).color`, ensuring instantaneous chromatic adaptation between District 01 ("Railside Outskirts") and District 02 ("Neon Alleys").
+- **Stepped Pixel Border Elevation (PKG-9.5)** — upgraded 31 plain `Border.all()` vectors across 5 high-density card and chip files (`pattern_recovery_grid.dart`, `macrocycle_progress_card.dart`, `adaptation_ledger_card.dart`, `station_inspector_sheet.dart`, `expedition_portal_screen.dart`) to authentic `SteppedPixelBorder` 16-bit arcade staircases using `context.pixelMetrics.cornerStepSize`.
+
 ## [0.6.5] — 2026-10-10
 
 ### Fixed
