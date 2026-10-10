@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -185,5 +187,34 @@ void main() {
       // Once resolved, the primary CTA becomes available again.
       expect(find.text('▶ INITIATE EXPEDITION'), findsOneWidget);
     });
+
+    testWidgets(
+      'does not render INITIATE EXPEDITION button while resume probe is in loading state',
+      (tester) async {
+        final resumeCompleter = Completer<SessionStreamManager?>();
+
+        await tester.pumpWidget(
+          createTestWidget(
+            overrides: [
+              activeSessionResumeProvider.overrideWith(
+                (ref) => resumeCompleter.future,
+              ),
+            ],
+          ),
+        );
+        // Pump one frame for initial render
+        await tester.pump();
+
+        // While resume probe is querying SQLite (isLoading), the initiate CTA must not be rendered
+        expect(find.text('▶ INITIATE EXPEDITION'), findsNothing);
+
+        // Complete the resume probe with null (no unfinished session)
+        resumeCompleter.complete(null);
+        await tester.pumpAndSettle();
+
+        // Once the probe finishes with no interrupted session, the button appears
+        expect(find.text('▶ INITIATE EXPEDITION'), findsOneWidget);
+      },
+    );
   });
 }

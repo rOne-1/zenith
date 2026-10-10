@@ -463,75 +463,87 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   /// and clears cache.
   Future<void> finalizeSession() async {
     if (state.session == null) return;
-    state = state.copyWith(isFinalizing: true);
+    state = state.copyWith(
+      isFinalizing: true,
+      errorMessage: () => null,
+    );
 
     try {
+      final db = _ref.read(sbeeDatabaseProvider);
       final engine = _ref.read(sbeeEngineProvider);
       final profile = _ref.read(userProfileProvider);
       final sessionRepo = _ref.read(sessionRepositoryProvider);
 
       final session = state.session!;
-      final adaptationList = <MillerAdaptationRecord>[];
-
-      // Evaluate Kenneth Miller adjustments for each reported set
-      for (final set in session.sets) {
-        if (set.reportedRpe == null) continue;
-
-        // Read the pre-call variables so the actual action taken (including
-        // any invisible female-RPE adjustment) can be read back afterward
-        // instead of re-derived -- see _diffAutoregulationAction. This
-        // duplicates logSetPerformance's own internal read of the same
-        // progression record; accepted as the cost of not re-deriving
-        // SBEE's decision logic by hand.
-        final priorProgression = await engine.progressionRepository
-            .getProgression(set.exerciseId);
-        final priorVars =
-            priorProgression?.variables ?? const MillerVariables();
-
-        final newVars = await engine.logSetPerformance(
-          exerciseId: set.exerciseId,
-          reps: set.reps,
-          reportedRpe: set.reportedRpe!,
-          targetRpe: set.targetRpe,
-          femaleProfile: profile.femaleProfile,
-        );
-
-        final action = _diffAutoregulationAction(priorVars, newVars);
-
-        final exercise =
-            expandedExerciseGraph.findById(set.exerciseId) ??
-            baselineExerciseGraph.findById(set.exerciseId);
-        final name = exercise?.name ?? set.exerciseId;
-
-        final summary = switch (action) {
-          AutoregulationAction.increment =>
-            'PROGRESSION: Load/ROM increased. Variables now ($newVars).',
-          AutoregulationAction.regress =>
-            'REGRESSION: Load buffer applied. Variables adjusted ($newVars).',
-          AutoregulationAction.maintain =>
-            'MAINTAINED: Optimal stimulus achieved. Mastery locked ($newVars).',
-        };
-
-        adaptationList.add(
-          MillerAdaptationRecord(
-            exerciseId: set.exerciseId,
-            exerciseName: name,
-            reps: set.reps,
-            reportedRpe: set.reportedRpe!,
-            targetRpe: set.targetRpe,
-            variables: newVars,
-            action: action,
-            adaptationSummary: summary,
-          ),
-        );
-      }
-
-      // Mark completed and persist
       final completedSession = session.copyWith(
         isCompleted: true,
         endTime: DateTime.now(),
       );
-      await sessionRepo.saveSession(completedSession);
+
+      // Persist Kenneth Miller adjustments and the finalized session inside
+      // an atomic database transaction. If any failure occurs during set
+      // logging or session save, all writes roll back atomically, preventing
+      // half-committed rows or duplicate autoregulation adjustments on retry.
+      final adaptationList = await db.transaction(() async {
+        final list = <MillerAdaptationRecord>[];
+
+        // Evaluate Kenneth Miller adjustments for each reported set
+        for (final set in session.sets) {
+          if (set.reportedRpe == null) continue;
+
+          // Read the pre-call variables so the actual action taken (including
+          // any invisible female-RPE adjustment) can be read back afterward
+          // instead of re-derived -- see _diffAutoregulationAction. This
+          // duplicates logSetPerformance's own internal read of the same
+          // progression record; accepted as the cost of not re-deriving
+          // SBEE's decision logic by hand.
+          final priorProgression = await engine.progressionRepository
+              .getProgression(set.exerciseId);
+          final priorVars =
+              priorProgression?.variables ?? const MillerVariables();
+
+          final newVars = await engine.logSetPerformance(
+            exerciseId: set.exerciseId,
+            reps: set.reps,
+            reportedRpe: set.reportedRpe!,
+            targetRpe: set.targetRpe,
+            femaleProfile: profile.femaleProfile,
+          );
+
+          final action = _diffAutoregulationAction(priorVars, newVars);
+
+          final exercise =
+              expandedExerciseGraph.findById(set.exerciseId) ??
+              baselineExerciseGraph.findById(set.exerciseId);
+          final name = exercise?.name ?? set.exerciseId;
+
+          final summary = switch (action) {
+            AutoregulationAction.increment =>
+              'PROGRESSION: Load/ROM increased. Variables now ($newVars).',
+            AutoregulationAction.regress =>
+              'REGRESSION: Load buffer applied. Variables adjusted ($newVars).',
+            AutoregulationAction.maintain =>
+              'MAINTAINED: Optimal stimulus achieved. Mastery locked ($newVars).',
+          };
+
+          list.add(
+            MillerAdaptationRecord(
+              exerciseId: set.exerciseId,
+              exerciseName: name,
+              reps: set.reps,
+              reportedRpe: set.reportedRpe!,
+              targetRpe: set.targetRpe,
+              variables: newVars,
+              action: action,
+              adaptationSummary: summary,
+            ),
+          );
+        }
+
+        // Mark completed and persist
+        await sessionRepo.saveSession(completedSession);
+        return list;
+      });
 
       // Only now -- once the Kenneth Miller eval and persistence above have
       // actually succeeded -- tell SBEE's own FSM the session is done.

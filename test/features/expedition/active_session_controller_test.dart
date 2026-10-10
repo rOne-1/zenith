@@ -73,6 +73,65 @@ class _DelayedSaveSessionRepository implements SessionRepository {
   Future<void> deleteSession(String id) => _inner.deleteSession(id);
 }
 
+/// A test [SessionRepository] that can simulate write failures to verify
+/// atomic transaction rollback behavior.
+class _FaultInjectingSessionRepository implements SessionRepository {
+  final DriftSessionRepository _inner;
+  bool shouldFail;
+
+  _FaultInjectingSessionRepository(this._inner, {this.shouldFail = false});
+
+  @override
+  Future<void> saveSession(WorkoutSession session) async {
+    if (shouldFail) {
+      throw Exception('Simulated SQLite disk write failure');
+    }
+    await _inner.saveSession(session);
+  }
+
+  @override
+  Future<WorkoutSession?> getSession(String id) => _inner.getSession(id);
+
+  @override
+  Future<List<WorkoutSession>> getSessionsInDateRange(
+    DateTime start,
+    DateTime end,
+  ) => _inner.getSessionsInDateRange(start, end);
+
+  @override
+  Future<List<WorkoutSet>> getSetsForMovementPattern(
+    MovementPattern pattern,
+    DateTime since,
+  ) => _inner.getSetsForMovementPattern(pattern, since);
+
+  @override
+  Future<List<WorkoutSet>> getSetsInDateRange(DateTime start, DateTime end) =>
+      _inner.getSetsInDateRange(start, end);
+
+  @override
+  Future<WorkoutSession?> getMostRecentCompletedSession({
+    bool requireDayType = false,
+  }) => _inner.getMostRecentCompletedSession(requireDayType: requireDayType);
+
+  @override
+  Future<DateTime?> getEarliestCompletedSessionStart() =>
+      _inner.getEarliestCompletedSessionStart();
+
+  @override
+  Future<int> getCompletedSessionCount() => _inner.getCompletedSessionCount();
+
+  @override
+  Future<int> getReportedSetCountForExercise(String exerciseId) =>
+      _inner.getReportedSetCountForExercise(exerciseId);
+
+  @override
+  Future<WorkoutSession?> getActiveIncompleteSession() =>
+      _inner.getActiveIncompleteSession();
+
+  @override
+  Future<void> deleteSession(String id) => _inner.deleteSession(id);
+}
+
 void main() {
   group('ActiveSessionController Unit Tests', () {
     late SbeeDatabase database;
@@ -746,6 +805,115 @@ void main() {
           isNull,
           reason:
               'the delayed save must not resurrect the session after discardActiveSession deleted it',
+        );
+      },
+    );
+
+    test(
+      'finalizeSession rolls back progression atomically on saveSession failure and allows clean retry',
+      () async {
+        final faultRepo = _FaultInjectingSessionRepository(
+          DriftSessionRepository(database),
+          shouldFail: false,
+        );
+
+        final testContainer = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+            sessionRepositoryProvider.overrideWithValue(faultRepo),
+          ],
+        );
+        addTearDown(testContainer.dispose);
+
+        final controller = testContainer.read(
+          activeSessionControllerProvider.notifier,
+        );
+        final engine = testContainer.read(sbeeEngineProvider);
+
+        // Verify initial progression variables for standard_pushup
+        final initProgression = await engine.progressionRepository
+            .getProgression('standard_pushup');
+        final initialVars =
+            initProgression?.variables ?? const MillerVariables();
+
+        final session = WorkoutSession(
+          id: 'atomic_tx_test_session',
+          startTime: DateTime.now(),
+          sets: [
+            WorkoutSet(
+              id: 'tx_set_0',
+              sessionId: 'atomic_tx_test_session',
+              exerciseId: 'standard_pushup',
+              movementPattern: MovementPattern.pushing,
+              setNumber: 1,
+              reps: 10,
+              targetRpe: 8,
+              variables: initialVars,
+              timestamp: DateTime.now(),
+              restDuration: const Duration(seconds: 60),
+            ),
+          ],
+        );
+
+        await controller.startSession(session);
+        controller.completeWarmUp();
+        controller.completeCurrentSet(actualReps: 10);
+        // Log RPE 5 (below target 8, which triggers progression increment)
+        await controller.logRpe(5);
+
+        // Arm failure specifically for finalization persist
+        faultRepo.shouldFail = true;
+
+        // Attempt finalize with saveSession throwing
+        await controller.completeCoolDown();
+
+        final failedState = testContainer.read(activeSessionControllerProvider);
+        expect(failedState.isFinalizing, isFalse);
+        expect(failedState.errorMessage, isNotNull);
+        expect(
+          failedState.errorMessage,
+          contains('Simulated SQLite disk write failure'),
+        );
+        expect(failedState.fsmState, isNot(SessionState.completed));
+
+        // CRITICAL CHECK: Progression variables MUST have rolled back atomically to initial state!
+        final rolledBackProgression = await engine.progressionRepository
+            .getProgression('standard_pushup');
+        final rolledBackVars =
+            rolledBackProgression?.variables ?? const MillerVariables();
+        expect(
+          rolledBackVars,
+          equals(initialVars),
+          reason:
+              'Progression writes must roll back atomically when transaction aborts',
+        );
+
+        // Verify session was not marked completed in DB
+        final savedSession = await faultRepo.getSession(
+          'atomic_tx_test_session',
+        );
+        expect(savedSession?.isCompleted ?? false, isFalse);
+
+        // RETRY PHASE: Fix disk fault and finalize again
+        faultRepo.shouldFail = false;
+        await controller.finalizeSession();
+
+        final retriedState = testContainer.read(
+          activeSessionControllerProvider,
+        );
+        expect(retriedState.isFinalizing, isFalse);
+        expect(retriedState.errorMessage, isNull);
+        expect(retriedState.fsmState, equals(SessionState.completed));
+
+        // Autoregulation should have occurred exactly once, not twice
+        final finalProgression = await engine.progressionRepository
+            .getProgression('standard_pushup');
+        final finalVars = finalProgression!.variables;
+        expect(
+          millerVariablesIncreased(initialVars, finalVars),
+          isTrue,
+          reason: 'Progression increment should apply cleanly upon retry',
         );
       },
     );

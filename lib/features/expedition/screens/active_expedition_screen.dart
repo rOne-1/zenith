@@ -14,16 +14,24 @@ import 'working_set_screen.dart';
 ///
 /// Switches dynamically based on SBEE FSM lifecycle:
 /// `warmUp` ➔ `activeSet` ➔ `rest` ➔ `coolDown` ➔ `completed`.
-class ActiveExpeditionScreen extends ConsumerWidget {
+class ActiveExpeditionScreen extends ConsumerStatefulWidget {
   const ActiveExpeditionScreen({super.key});
 
-  // A GlobalKey rather than PixelToastHost.of(context): the host is added
-  // as a *descendant* of this widget's own build() (wrapping the Scaffold
-  // body below), so the outer `context` this build() receives is never a
-  // descendant of it and .of(context) would always return null here.
-  static final _toastHostKey = GlobalKey<PixelToastHostState>();
+  @override
+  ConsumerState<ActiveExpeditionScreen> createState() =>
+      _ActiveExpeditionScreenState();
+}
 
-  Future<void> _handleAbort(BuildContext context, WidgetRef ref) async {
+class _ActiveExpeditionScreenState
+    extends ConsumerState<ActiveExpeditionScreen> {
+  // An instance-scoped GlobalKey rather than a static one to prevent
+  // duplicate GlobalKey collisions across route transitions: the host is
+  // added as a *descendant* of this widget's own build() (wrapping the
+  // Scaffold body below), so the outer `context` this build() receives is
+  // never a descendant of it and .of(context) would always return null here.
+  final _toastHostKey = GlobalKey<PixelToastHostState>();
+
+  Future<void> _handleAbort() async {
     final colors = context.colors;
     final confirm = await ZenithDialog.showCard<bool>(
       context,
@@ -76,16 +84,16 @@ class ActiveExpeditionScreen extends ConsumerWidget {
       ),
     );
 
-    if (confirm == true && context.mounted) {
+    if (confirm == true && mounted) {
       await ref.read(activeSessionControllerProvider.notifier).abortSession();
-      if (context.mounted && Navigator.of(context).canPop()) {
+      if (mounted && Navigator.of(context).canPop()) {
         Navigator.of(context).pop();
       }
     }
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final colors = context.colors;
 
     // finalizeSession() records failures on errorMessage but nothing was
@@ -175,7 +183,7 @@ class ActiveExpeditionScreen extends ConsumerWidget {
                       variant: PixelButtonVariant.secondary,
                       padding: const EdgeInsets.all(8.0),
                       semanticLabel: 'Abort expedition',
-                      onPressed: () => _handleAbort(context, ref),
+                      onPressed: _handleAbort,
                       child: Text(
                         '✕',
                         style: TextStyle(

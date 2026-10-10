@@ -384,5 +384,46 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       container.dispose();
     });
+
+    testWidgets(
+      'instance-scoped toast key allows multiple ActiveExpeditionScreen instances without duplicate GlobalKey error',
+      (tester) async {
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        final session = createTwoSetSession();
+        await container
+            .read(activeSessionControllerProvider.notifier)
+            .startSession(session);
+
+        // Mounting two ActiveExpeditionScreen widgets simultaneously in the tree
+        // (as occurs during route transitions, animations, or preview split-views)
+        // would crash with AssertionError: Duplicate GlobalKey detected if the key were static.
+        await tester.pumpWidget(
+          UncontrolledProviderScope(
+            container: container,
+            child: MaterialApp(
+              theme: zenithThemeRegistry.defaultTheme.themeData,
+              home: const Stack(
+                children: [
+                  ActiveExpeditionScreen(),
+                  ActiveExpeditionScreen(),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+
+        // Must pump without any duplicate GlobalKey exceptions
+        expect(tester.takeException(), isNull);
+        expect(find.byType(ActiveExpeditionScreen), findsNWidgets(2));
+      },
+    );
   });
 }

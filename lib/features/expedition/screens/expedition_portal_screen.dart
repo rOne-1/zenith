@@ -827,13 +827,15 @@ class _ExpeditionPortalScreenState
                 data: (session) {
                   if (session == null) return const SizedBox.shrink();
                   // Never offer to start a new expedition while an
-                  // unresolved interrupted session is being shown above --
+                  // unresolved interrupted session is being shown above, or
+                  // while the resume probe is still loading --
                   // starting one anyway would create a second concurrent
                   // session and permanently orphan the interrupted one
                   // (SessionRepository only tracks the single most recently
                   // started incomplete session). The RESUME/DISCARD banner
                   // is the only valid way forward until it's resolved.
-                  if (resumeState.valueOrNull != null) {
+                  if (resumeState.isLoading ||
+                      resumeState.valueOrNull != null) {
                     return const SizedBox.shrink();
                   }
                   return Container(
