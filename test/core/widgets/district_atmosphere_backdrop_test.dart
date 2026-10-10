@@ -125,5 +125,53 @@ void main() {
             'controller instance from the shared container, not one each',
       );
     });
+
+    testWidgets(
+      'isolates NeonAlleysAtmosphereBackdrop layers inside RepaintBoundary separate from child',
+      (tester) async {
+        await tester.pumpWidget(
+          const ProviderScope(
+            child: MaterialApp(
+              home: Scaffold(
+                body: NeonAlleysAtmosphereBackdrop(
+                  child: Text('Foreground Neon Content'),
+                ),
+              ),
+            ),
+          ),
+        );
+
+        final repaintBoundaryFinder = find.descendant(
+          of: find.byType(NeonAlleysAtmosphereBackdrop),
+          matching: find.byType(RepaintBoundary),
+        );
+        expect(repaintBoundaryFinder, findsOneWidget);
+
+        expect(
+          find.descendant(
+            of: repaintBoundaryFinder,
+            matching: find.byType(DistrictBackgroundMediaLayer),
+          ),
+          findsOneWidget,
+        );
+
+        expect(
+          find.descendant(
+            of: repaintBoundaryFinder,
+            matching: find.byType(DecoratedBox),
+          ),
+          findsOneWidget,
+        );
+
+        expect(
+          find.descendant(
+            of: repaintBoundaryFinder,
+            matching: find.text('Foreground Neon Content'),
+          ),
+          findsNothing,
+        );
+        expect(find.text('Foreground Neon Content'), findsOneWidget);
+      },
+    );
   });
 }

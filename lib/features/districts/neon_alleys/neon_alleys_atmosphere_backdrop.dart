@@ -26,41 +26,50 @@ class NeonAlleysAtmosphereBackdrop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          // 1. The district's backdrop media (image or video).
-          const Positioned.fill(
-            child: DistrictBackgroundMediaLayer(
-              media: _neonAlleysBackgroundMedia,
-            ),
-          ),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        // Background atmosphere layers isolated in their own RepaintBoundary
+        // so that foreground animations, timer ticks, and scroll events do
+        // not invalidate the expensive rasterization of the art, scrim, grain,
+        // and scanline overlays.
+        const RepaintBoundary(
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // 1. The district's backdrop media (image or video).
+              Positioned.fill(
+                child: DistrictBackgroundMediaLayer(
+                  media: _neonAlleysBackgroundMedia,
+                ),
+              ),
 
-          // 2. A scrim so foreground text/cards stay legible over the
-          // busy, high-contrast footage -- same treatment the temporary
-          // still-image experiment used.
-          const Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(color: Color(0x66070E10)),
-            ),
-          ),
+              // 2. A scrim so foreground text/cards stay legible over the
+              // busy, high-contrast footage -- same treatment the temporary
+              // still-image experiment used.
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: Color(0x66070E10)),
+                ),
+              ),
 
-          // 3. Analog film grain / CRT noise overlay for retro texture depth
-          const Positioned.fill(
-            child: NoiseGrainOverlay(opacity: 0.03, tint: Color(0xFF162B2B)),
-          ),
+              // 3. Analog film grain / CRT noise overlay for retro texture depth
+              Positioned.fill(
+                child: NoiseGrainOverlay(opacity: 0.03, tint: Color(0xFF162B2B)),
+              ),
 
-          // 4. Hard scanlines -- the other half of the CRT texture, sitting
-          // over the atmosphere but under actual screen content.
-          const Positioned.fill(
-            child: IgnorePointer(child: PixelScanlineOverlay()),
+              // 4. Hard scanlines -- the other half of the CRT texture, sitting
+              // over the atmosphere but under actual screen content.
+              Positioned.fill(
+                child: IgnorePointer(child: PixelScanlineOverlay()),
+              ),
+            ],
           ),
+        ),
 
-          // 5. Foreground content if provided
-          ?child,
-        ],
-      ),
+        // 5. Foreground content if provided (mounted outside the background repaint boundary)
+        ?child,
+      ],
     );
   }
 }

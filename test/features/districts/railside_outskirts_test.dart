@@ -141,5 +141,53 @@ void main() {
       expect(find.text('Bottom Controls'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
+
+    testWidgets(
+      'isolates background atmosphere layers inside RepaintBoundary separate from child',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: RailsideAtmosphereBackdrop(
+                child: Text('Foreground Railside Content'),
+              ),
+            ),
+          ),
+        );
+
+        final repaintBoundaryFinder = find.descendant(
+          of: find.byType(RailsideAtmosphereBackdrop),
+          matching: find.byType(RepaintBoundary),
+        );
+        expect(repaintBoundaryFinder, findsOneWidget);
+
+        // Backdrop layers are inside the RepaintBoundary
+        expect(
+          find.descendant(
+            of: repaintBoundaryFinder,
+            matching: find.byType(Image),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(
+            of: repaintBoundaryFinder,
+            matching: find.byType(DecoratedBox),
+          ),
+          findsOneWidget,
+        );
+
+        // Foreground child is mounted OUTSIDE the RepaintBoundary
+        expect(
+          find.descendant(
+            of: repaintBoundaryFinder,
+            matching: find.text('Foreground Railside Content'),
+          ),
+          findsNothing,
+        );
+        expect(find.text('Foreground Railside Content'), findsOneWidget);
+      },
+    );
   });
 }
+
