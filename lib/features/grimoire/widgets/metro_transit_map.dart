@@ -77,7 +77,13 @@ class MetroLineTheme {
             codePrefix: base.codePrefix,
             color: colors.foliageVibrant,
           ),
-        MovementPattern.rotation => base,
+        MovementPattern.rotation => MetroLineTheme(
+            lineNameEn: base.lineNameEn,
+            codePrefix: base.codePrefix,
+            color: colors.amberGlow != const Color(0xFFFFD269)
+                ? colors.amberGlow
+                : base.color,
+          ),
       };
     }
     return base;
