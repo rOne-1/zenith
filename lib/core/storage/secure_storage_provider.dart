@@ -254,15 +254,25 @@ class AesGcmSecureStorage implements SecureStorage {
     }
 
     // 1. Check OS/hardware-backed key store
+    final String? secureKeyBase64;
     try {
-      final secureKeyBase64 = await _keyStore.readMasterKey();
-      if (secureKeyBase64 != null && secureKeyBase64.isNotEmpty) {
+      secureKeyBase64 = await _keyStore.readMasterKey();
+    } catch (e) {
+      throw SecureStorageException(
+        'Failed to read master key from secure vault: $e',
+      );
+    }
+
+    if (secureKeyBase64 != null && secureKeyBase64.isNotEmpty) {
+      try {
         final key = SecretKey(base64Decode(secureKeyBase64));
         _cachedKey = key;
         return key;
+      } catch (e) {
+        throw SecureStorageException(
+          'Failed to decode master key from secure vault: $e',
+        );
       }
-    } catch (_) {
-      // Fall through to migration / generation if reading keyStore encountered an error
     }
 
     // 2. Seamless migration: check legacy unencrypted SharedPreferences key
