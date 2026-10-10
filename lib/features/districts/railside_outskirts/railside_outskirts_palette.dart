@@ -18,6 +18,7 @@ const railsideOutskirtsPalette = ZenithDistrictPalette(
   borderBright: Color(0xFF2D5552),
   amberAccent: Color(0xFFFFAE34),
   amberGlow: Color(0xFFFFD269),
+  accentSecondary: Color(0xFF2EE6D6),
   signalRed: Color(0xFFFF493A),
   foliageVibrant: Color(0xFF4B8E62),
   textPrimary: Color(0xFFE8F5F2),

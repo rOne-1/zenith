@@ -109,7 +109,7 @@ class SanctuaryScreen extends ConsumerWidget {
                     children: [
                       Icon(
                         Icons.nightlight_round,
-                        color: const Color(0xFF2EE6D6),
+                        color: colors.accentSecondary,
                         size: 16.0,
                       ),
                       const SizedBox(width: 8.0),
@@ -125,7 +125,7 @@ class SanctuaryScreen extends ConsumerWidget {
                                 fontSize: 11.0,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 1.0,
-                                color: const Color(0xFF2EE6D6),
+                                color: colors.accentSecondary,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,

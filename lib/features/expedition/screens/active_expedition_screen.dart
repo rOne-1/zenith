@@ -307,7 +307,7 @@ class _WarmUpView extends StatelessWidget {
           Text(
             '✓ ',
             style: TextStyle(
-              color: const Color(0xFF2EE6D6),
+              color: colors.accentSecondary,
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -399,7 +399,7 @@ class _CoolDownView extends StatelessWidget {
                               fontFamilyFallback: const ['monospace'],
                               fontSize: 12.0,
                               fontWeight: FontWeight.w700,
-                              color: const Color(0xFF2EE6D6),
+                              color: colors.accentSecondary,
                             ),
                           ),
                           const SizedBox(height: 14.0),

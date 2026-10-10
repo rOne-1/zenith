@@ -18,8 +18,15 @@ class ZenithDistrictColors extends ThemeExtension<ZenithDistrictColors> {
   // Accents & Signals
   final Color amberAccent;
   final Color amberGlow;
+  final Color accentSecondary;
   final Color signalRed;
   final Color foliageVibrant;
+
+  /// Canonical semantic alias for the primary accent token.
+  Color get accentPrimary => amberAccent;
+
+  /// Canonical semantic alias for the primary accent phosphor glow token.
+  Color get accentGlow => amberGlow;
 
   // Typography
   final Color textPrimary;
@@ -34,6 +41,7 @@ class ZenithDistrictColors extends ThemeExtension<ZenithDistrictColors> {
     required this.borderBright,
     required this.amberAccent,
     required this.amberGlow,
+    required this.accentSecondary,
     required this.signalRed,
     required this.foliageVibrant,
     required this.textPrimary,
@@ -50,6 +58,7 @@ class ZenithDistrictColors extends ThemeExtension<ZenithDistrictColors> {
     borderBright: Color(0xFF2D5552),
     amberAccent: Color(0xFFFFAE34),
     amberGlow: Color(0xFFFFD269),
+    accentSecondary: Color(0xFF2EE6D6),
     signalRed: Color(0xFFFF493A),
     foliageVibrant: Color(0xFF4B8E62),
     textPrimary: Color(0xFFE8F5F2),
@@ -66,6 +75,7 @@ class ZenithDistrictColors extends ThemeExtension<ZenithDistrictColors> {
     Color? borderBright,
     Color? amberAccent,
     Color? amberGlow,
+    Color? accentSecondary,
     Color? signalRed,
     Color? foliageVibrant,
     Color? textPrimary,
@@ -80,6 +90,7 @@ class ZenithDistrictColors extends ThemeExtension<ZenithDistrictColors> {
       borderBright: borderBright ?? this.borderBright,
       amberAccent: amberAccent ?? this.amberAccent,
       amberGlow: amberGlow ?? this.amberGlow,
+      accentSecondary: accentSecondary ?? this.accentSecondary,
       signalRed: signalRed ?? this.signalRed,
       foliageVibrant: foliageVibrant ?? this.foliageVibrant,
       textPrimary: textPrimary ?? this.textPrimary,
@@ -106,6 +117,7 @@ class ZenithDistrictColors extends ThemeExtension<ZenithDistrictColors> {
       borderBright: Color.lerp(borderBright, other.borderBright, t)!,
       amberAccent: Color.lerp(amberAccent, other.amberAccent, t)!,
       amberGlow: Color.lerp(amberGlow, other.amberGlow, t)!,
+      accentSecondary: Color.lerp(accentSecondary, other.accentSecondary, t)!,
       signalRed: Color.lerp(signalRed, other.signalRed, t)!,
       foliageVibrant: Color.lerp(foliageVibrant, other.foliageVibrant, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,

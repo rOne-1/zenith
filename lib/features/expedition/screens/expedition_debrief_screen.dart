@@ -137,7 +137,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                     fontFamilyFallback: const ['monospace'],
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w900,
-                                    color: const Color(0xFF2EE6D6),
+                                    color: colors.accentSecondary,
                                   ),
                                 ),
                               ],
@@ -263,9 +263,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                           else
                             ...state.adaptations.map((a) {
                               final Color actionColor = switch (a.action) {
-                                AutoregulationAction.increment => const Color(
-                                  0xFF2EE6D6,
-                                ),
+                                AutoregulationAction.increment =>
+                                  colors.accentSecondary,
                                 AutoregulationAction.regress =>
                                   colors.signalRed,
                                 AutoregulationAction.maintain =>

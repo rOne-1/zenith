@@ -287,12 +287,12 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                         ),
                         Text(
                           'TARGET RPE: ${set.targetRpe}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Silkscreen',
-                            fontFamilyFallback: ['monospace'],
+                            fontFamilyFallback: const ['monospace'],
                             fontSize: 12.0,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF2EE6D6),
+                            color: colors.accentSecondary,
                           ),
                         ),
                       ],
@@ -331,7 +331,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                                 ? '6s (ADV)'
                                 : '4s',
                             activeColor: set.variables.tempo == 2
-                                ? const Color(0xFF2EE6D6)
+                                ? colors.accentSecondary
                                 : null,
                           ),
                         ],

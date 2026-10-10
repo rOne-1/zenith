@@ -70,6 +70,18 @@ class _PixelButtonState extends State<PixelButton> {
 
   bool get _isInteractive => widget.enabled && widget.onPressed != null;
 
+  /// Dynamically derives a darkened bevel shade from [base] (reduced lightness).
+  static Color _deriveBevelColor(Color base) {
+    final hsl = HSLColor.fromColor(base);
+    return hsl.withLightness((hsl.lightness * 0.6).clamp(0.0, 1.0)).toColor();
+  }
+
+  /// Dynamically derives an illuminated border highlight from [base] (increased lightness).
+  static Color _deriveHighlightBorder(Color base) {
+    final hsl = HSLColor.fromColor(base);
+    return hsl.withLightness((hsl.lightness + 0.10).clamp(0.0, 1.0)).toColor();
+  }
+
   void _handleTapDown(TapDownDetails details) {
     if (!_isInteractive) return;
     HapticFeedback.selectionClick();
@@ -116,10 +128,10 @@ class _PixelButtonState extends State<PixelButton> {
     } else {
       switch (widget.variant) {
         case PixelButtonVariant.primary:
-          backgroundColor = colors.amberAccent;
+          backgroundColor = colors.accentPrimary;
           textColor = colors.backgroundVoid;
-          borderColor = colors.amberGlow;
-          bevelColor = const Color(0xFFB37410);
+          borderColor = colors.accentGlow;
+          bevelColor = _deriveBevelColor(backgroundColor);
           break;
         case PixelButtonVariant.secondary:
           backgroundColor = colors.surfaceElevated;
@@ -130,8 +142,8 @@ class _PixelButtonState extends State<PixelButton> {
         case PixelButtonVariant.danger:
           backgroundColor = colors.signalRed;
           textColor = colors.backgroundVoid;
-          borderColor = const Color(0xFFFF7A6E);
-          bevelColor = const Color(0xFF8B1810);
+          borderColor = _deriveHighlightBorder(backgroundColor);
+          bevelColor = _deriveBevelColor(backgroundColor);
           break;
       }
     }

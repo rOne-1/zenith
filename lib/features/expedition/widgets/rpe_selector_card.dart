@@ -64,7 +64,7 @@ class RpeSelectorCard extends StatelessWidget {
     required ZenithDistrictColors colors,
   }) {
     if (selectedRpe < targetRpe - 1) {
-      return const Color(0xFF2EE6D6); // Progression cyan
+      return colors.accentSecondary; // Progression secondary accent
     } else if (selectedRpe > targetRpe + 1) {
       return colors.signalRed; // Regression buffer
     } else {
@@ -129,8 +129,8 @@ class RpeSelectorCard extends StatelessWidget {
                 decoration: ShapeDecoration(
                   color: colors.backgroundVoid,
                   shape: SteppedPixelBorder(
-                    side: const BorderSide(
-                      color: Color(0xFF2EE6D6),
+                    side: BorderSide(
+                      color: colors.accentSecondary,
                       width: 1.0,
                     ),
                     stepSize: context.pixelMetrics.cornerStepSize,
@@ -138,12 +138,12 @@ class RpeSelectorCard extends StatelessWidget {
                 ),
                 child: Text(
                   'TARGET: $targetRpe RPE',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Silkscreen',
-                    fontFamilyFallback: ['monospace'],
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 9.0,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF2EE6D6),
+                    color: colors.accentSecondary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -297,7 +297,7 @@ class _RpeButtonState extends State<_RpeButton> {
         ? colors.backgroundVoid
         : (isTarget ? colors.amberAccent : colors.textPrimary);
     final Color borderColor = isTarget
-        ? const Color(0xFF2EE6D6)
+        ? colors.accentSecondary
         : (isSelected ? colors.amberAccent : colors.borderBright);
 
     return Semantics(
