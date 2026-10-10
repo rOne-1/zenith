@@ -35,6 +35,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
 
   Widget _buildContent(BuildContext context, MacrocycleState state) {
     final colors = context.colors;
+    final metrics = context.pixelMetrics;
     final phaseColor = _resolvePhaseColor(state.phase, colors);
 
     return Column(
@@ -61,32 +62,33 @@ class MacrocycleProgressCard extends ConsumerWidget {
             final isCurrent = weekNum == state.weekInCycle;
             return Expanded(
               child: Container(
-                margin: EdgeInsets.only(right: index < 4 ? 6.0 : 0.0),
+                margin: EdgeInsets.only(
+                  right: index < 4 ? ZenithSpacing.xs : 0.0,
+                ),
                 child: _buildWeekStepBlock(
                   colors: colors,
                   weekNum: weekNum,
                   isPast: isPast,
                   isCurrent: isCurrent,
                   phaseColor: phaseColor,
+                  cornerStepSize: metrics.cornerStepSize,
                 ),
               ),
             );
           }),
         ),
-        const SizedBox(height: 10.0),
+        const SizedBox(height: ZenithSpacing.sm),
 
         // Stepped text meter and Phase Chip
         Wrap(
           alignment: WrapAlignment.spaceBetween,
           crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 8.0,
-          runSpacing: 6.0,
+          spacing: ZenithSpacing.sm,
+          runSpacing: ZenithSpacing.xs,
           children: [
             Text(
               state.steppedMeterText,
-              style: TextStyle(
-                fontFamily: 'Silkscreen',
-                fontFamilyFallback: const ['monospace'],
+              style: zenithPixelDisplay(
                 fontSize: 11.0,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.0,
@@ -103,15 +105,18 @@ class MacrocycleProgressCard extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 14.0),
+        const SizedBox(height: ZenithSpacing.lg),
 
         // Restorative Guidance Callout
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
+          padding: ZenithSpacing.edgeInsetsMd,
+          decoration: ShapeDecoration(
             color: colors.backgroundVoid,
-            border: Border.all(color: colors.borderMuted, width: 1.0),
+            shape: SteppedPixelBorder(
+              side: BorderSide(color: colors.borderMuted, width: 1.0),
+              stepSize: metrics.cornerStepSize,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,9 +129,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 children: [
                   Text(
                     '>> RESTORATIVE GUIDANCE',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 10.0,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.8,
@@ -135,10 +138,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
                   ),
                   Text(
                     'TARGET: ${state.targetRpeGuidance}',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
-                      fontSize: 9.5,
+                    style: zenithPixelDisplay(
+                      fontSize: 9.0,
                       fontWeight: FontWeight.w800,
                       color: colors.textMuted,
                     ),
@@ -168,6 +169,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 label: 'WEEK SESSIONS',
                 value: '${state.completedSessionsInWeek}',
                 unit: 'DONE',
+                cornerStepSize: metrics.cornerStepSize,
               ),
             ),
             const SizedBox(width: 8.0),
@@ -177,6 +179,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 label: 'WEEK REPS',
                 value: '${state.totalRepsInWeek}',
                 unit: 'REPS',
+                cornerStepSize: metrics.cornerStepSize,
               ),
             ),
             const SizedBox(width: 8.0),
@@ -186,6 +189,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 label: 'LOAD VOLUME',
                 value: '${state.totalTonnageInWeek}',
                 unit: 'LV',
+                cornerStepSize: metrics.cornerStepSize,
               ),
             ),
           ],
@@ -200,6 +204,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
     required bool isPast,
     required bool isCurrent,
     required Color phaseColor,
+    required double cornerStepSize,
   }) {
     final String weekTag;
     if (weekNum <= 3) {
@@ -229,18 +234,19 @@ class MacrocycleProgressCard extends ConsumerWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.symmetric(vertical: ZenithSpacing.sm),
+      decoration: ShapeDecoration(
         color: bgColor,
-        border: Border.all(color: borderColor, width: isCurrent ? 2.0 : 1.0),
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: borderColor, width: isCurrent ? 2.0 : 1.0),
+          stepSize: cornerStepSize,
+        ),
       ),
       child: Column(
         children: [
           Text(
             weekTag,
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
+            style: zenithPixelDisplay(
               fontSize: 9.0,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.5,
@@ -250,7 +256,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
           const SizedBox(height: 2.0),
           Text(
             isPast ? '✓' : (isCurrent ? '●' : '○'),
-            style: TextStyle(fontSize: 8.0, color: textColor),
+            style: zenithPixelDisplay(fontSize: 9.0, color: textColor),
           ),
         ],
       ),
@@ -262,22 +268,24 @@ class MacrocycleProgressCard extends ConsumerWidget {
     required String label,
     required String value,
     required String unit,
+    required double cornerStepSize,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: colors.surfaceElevated,
-        border: Border.all(color: colors.borderMuted, width: 1.0),
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: colors.borderMuted, width: 1.0),
+          stepSize: cornerStepSize,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
-              fontSize: 8.5,
+            style: zenithPixelDisplay(
+              fontSize: 9.0,
               fontWeight: FontWeight.w700,
               color: colors.textMuted,
             ),
@@ -289,9 +297,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
             children: [
               Text(
                 value,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w900,
                   color: colors.textPrimary,
@@ -300,10 +306,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
               const SizedBox(width: 4.0),
               Text(
                 unit,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 8.0,
+                style: zenithPixelDisplay(
+                  fontSize: 9.0,
                   fontWeight: FontWeight.w700,
                   color: colors.amberGlow,
                 ),

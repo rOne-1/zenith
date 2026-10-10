@@ -94,9 +94,7 @@ class RpeSelectorCard extends StatelessWidget {
                   children: [
                     Text(
                       'HOW HARD DID THAT FEEL?',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 11.0,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.0,
@@ -107,10 +105,8 @@ class RpeSelectorCard extends StatelessWidget {
                     ),
                     Text(
                       'RATE YOUR EFFORT, 1-10',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 8.0,
+                      style: zenithPixelDisplay(
+                        fontSize: 9.0,
                         letterSpacing: 0.6,
                         color: colors.textMuted,
                       ),
@@ -138,9 +134,7 @@ class RpeSelectorCard extends StatelessWidget {
                 ),
                 child: Text(
                   'TARGET: $targetRpe RPE',
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
+                  style: zenithPixelDisplay(
                     fontSize: 9.0,
                     fontWeight: FontWeight.w700,
                     color: colors.accentSecondary,
@@ -201,9 +195,7 @@ class RpeSelectorCard extends StatelessWidget {
                   children: [
                     Text(
                       'RPE $selectedRpe: ',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 11.0,
                         fontWeight: FontWeight.w900,
                         color: colors.amberAccent,
@@ -227,9 +219,7 @@ class RpeSelectorCard extends StatelessWidget {
                     selectedRpe: selectedRpe,
                     targetRpe: targetRpe,
                   ),
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
+                  style: zenithPixelDisplay(
                     fontSize: 9.0,
                     fontWeight: FontWeight.w700,
                     color: _getFeedbackColor(
@@ -331,9 +321,7 @@ class _RpeButtonState extends State<_RpeButton> {
             child: Center(
               child: Text(
                 '$score',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 13.0,
                   fontWeight: FontWeight.w900,
                   color: textColor,

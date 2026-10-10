@@ -74,9 +74,7 @@ class RestScreen extends ConsumerWidget {
                         children: [
                           Text(
                             'REST & RECOVERY',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1.5,
@@ -88,9 +86,7 @@ class RestScreen extends ConsumerWidget {
                           const SizedBox(height: 2.0),
                           Text(
                             'METABOLIC CLEARANCE & RPE LOGGING',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 9.0,
                               letterSpacing: 0.8,
                               color: colors.textMuted,
@@ -104,9 +100,7 @@ class RestScreen extends ConsumerWidget {
                     const SizedBox(width: 8.0),
                     Text(
                       'SET ${state.currentSetIndex + 1} DONE',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 11.0,
                         fontWeight: FontWeight.w700,
                         color: colors.amberGlow,
@@ -147,9 +141,7 @@ class RestScreen extends ConsumerWidget {
                                   const SizedBox(width: 6.0),
                                   Text(
                                     'REST TIME REMAINING',
-                                    style: TextStyle(
-                                      fontFamily: 'Silkscreen',
-                                      fontFamilyFallback: const ['monospace'],
+                                    style: zenithPixelDisplay(
                                       fontSize: 10.0,
                                       fontWeight: FontWeight.w700,
                                       color: colors.textMuted,
@@ -212,9 +204,7 @@ class RestScreen extends ConsumerWidget {
                           children: [
                             Text(
                               '${nextMeta.stationCode} // ${nextExercise.name.toUpperCase()}',
-                              style: TextStyle(
-                                fontFamily: 'Silkscreen',
-                                fontFamilyFallback: const ['monospace'],
+                              style: zenithPixelDisplay(
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.w900,
                                 color: colors.textPrimary,
@@ -223,9 +213,7 @@ class RestScreen extends ConsumerWidget {
                             const SizedBox(height: 8.0),
                             Text(
                               'Prescribed: ${nextSet?.reps ?? 10} reps · Equipment: ${nextExercise.equipmentRequirements.map((e) => e.name.toUpperCase()).join(', ')}',
-                              style: TextStyle(
-                                fontFamily: 'Silkscreen',
-                                fontFamilyFallback: const ['monospace'],
+                              style: zenithPixelDisplay(
                                 fontSize: 10.0,
                                 color: colors.amberGlow,
                               ),

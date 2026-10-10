@@ -57,9 +57,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
         children: [
           Text(
             'SKIP SET',
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
+            style: zenithPixelDisplay(
               fontSize: 14.0,
               fontWeight: FontWeight.w900,
               color: colors.amberAccent,
@@ -69,9 +67,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
           Text(
             'Are you sure you want to skip this set? It will be logged with 0 reps.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
+            style: zenithBodyMono(
               fontSize: 12.0,
               color: colors.textPrimary,
             ),
@@ -181,9 +177,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                               ),
                               child: Text(
                                 lineTheme.lineNameEn,
-                                style: TextStyle(
-                                  fontFamily: 'Silkscreen',
-                                  fontFamilyFallback: const ['monospace'],
+                                style: zenithPixelDisplay(
                                   fontSize: 10.0,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 1.0,
@@ -212,9 +206,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                           ),
                           child: Text(
                             'SET ${state.currentSetIndex + 1} / ${state.totalSets}',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 11.0,
                               fontWeight: FontWeight.w900,
                               color: colors.amberAccent,
@@ -228,9 +220,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                     const SizedBox(height: 8.0),
                     Text(
                       '${meta?.stationCode ?? 'S01'} // ${(exercise?.name ?? set.exerciseId).toUpperCase()}',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.2,
@@ -240,9 +230,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                     const SizedBox(height: 6.0),
                     Text(
                       targetRepsText,
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 11.0,
                         fontWeight: FontWeight.w700,
                         color: colors.amberGlow,
@@ -275,9 +263,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                             const SizedBox(width: 6.0),
                             Text(
                               'WORK TIME: ${_formatTimer(_workSeconds)}',
-                              style: TextStyle(
-                                fontFamily: 'Silkscreen',
-                                fontFamilyFallback: const ['monospace'],
+                              style: zenithPixelDisplay(
                                 fontSize: 13.0,
                                 fontWeight: FontWeight.w700,
                                 color: colors.amberAccent,
@@ -287,9 +273,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                         ),
                         Text(
                           'TARGET RPE: ${set.targetRpe}',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 12.0,
                             fontWeight: FontWeight.w700,
                             color: colors.accentSecondary,
@@ -358,9 +342,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                               const SizedBox(width: 8.0),
                               Text(
                                 'FORM CUES',
-                                style: TextStyle(
-                                  fontFamily: 'Silkscreen',
-                                  fontFamilyFallback: const ['monospace'],
+                                style: zenithPixelDisplay(
                                   fontSize: 12.0,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 1.0,
@@ -382,7 +364,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                                 children: [
                                   Text(
                                     '■ ',
-                                    style: TextStyle(
+                                    style: zenithBodyMono(
                                       color: colors.amberAccent,
                                       fontSize: 11.0,
                                     ),
@@ -427,9 +409,7 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                           children: [
                             Text(
                               'REPS COMPLETED',
-                              style: TextStyle(
-                                fontFamily: 'Silkscreen',
-                                fontFamilyFallback: const ['monospace'],
+                              style: zenithPixelDisplay(
                                 fontSize: 11.0,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 1.0,
@@ -567,9 +547,7 @@ class _HoldTimerCard extends StatelessWidget {
         children: [
           Text(
             'HOLD TIME REMAINING',
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
+            style: zenithPixelDisplay(
               fontSize: 11.0,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.0,

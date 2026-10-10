@@ -63,9 +63,7 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                     },
                     child: Text(
                       '←',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 18.0,
                         color: colors.amberAccent,
                       ),
@@ -78,9 +76,7 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                       children: [
                         Text(
                           'THE ATLAS',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.5,
@@ -90,9 +86,7 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                         const SizedBox(height: 2.0),
                         Text(
                           'METRO TRANSIT MAP OF MOVEMENT PROGRESSIONS',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 9.0,
                             letterSpacing: 0.8,
                             color: colors.textMuted,
@@ -132,11 +126,14 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                         setState(() => _selectedPattern = null);
                       },
                     ),
-                    const SizedBox(width: 8.0),
+                    const SizedBox(width: ZenithSpacing.sm),
                     _FilterPill(
                       label: 'PUSH',
                       isSelected: _selectedPattern == MovementPattern.pushing,
-                      activeColor: const Color(0xFFFFAE34),
+                      activeColor: MetroLineTheme.forPattern(
+                        MovementPattern.pushing,
+                        colors,
+                      ).color,
                       onTap: () {
                         HapticFeedback.selectionClick();
                         setState(
@@ -144,11 +141,14 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                         );
                       },
                     ),
-                    const SizedBox(width: 8.0),
+                    const SizedBox(width: ZenithSpacing.sm),
                     _FilterPill(
                       label: 'PULL',
                       isSelected: _selectedPattern == MovementPattern.pulling,
-                      activeColor: colors.accentSecondary,
+                      activeColor: MetroLineTheme.forPattern(
+                        MovementPattern.pulling,
+                        colors,
+                      ).color,
                       onTap: () {
                         HapticFeedback.selectionClick();
                         setState(
@@ -156,12 +156,15 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                         );
                       },
                     ),
-                    const SizedBox(width: 8.0),
+                    const SizedBox(width: ZenithSpacing.sm),
                     _FilterPill(
                       label: 'BEND & LIFT',
                       isSelected:
                           _selectedPattern == MovementPattern.bendAndLift,
-                      activeColor: const Color(0xFFFF493A),
+                      activeColor: MetroLineTheme.forPattern(
+                        MovementPattern.bendAndLift,
+                        colors,
+                      ).color,
                       onTap: () {
                         HapticFeedback.selectionClick();
                         setState(
@@ -169,11 +172,14 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                         );
                       },
                     ),
-                    const SizedBox(width: 8.0),
+                    const SizedBox(width: ZenithSpacing.sm),
                     _FilterPill(
                       label: 'LEGS',
                       isSelected: _selectedPattern == MovementPattern.singleLeg,
-                      activeColor: const Color(0xFF4B8E62),
+                      activeColor: MetroLineTheme.forPattern(
+                        MovementPattern.singleLeg,
+                        colors,
+                      ).color,
                       onTap: () {
                         HapticFeedback.selectionClick();
                         setState(
@@ -181,11 +187,14 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                         );
                       },
                     ),
-                    const SizedBox(width: 8.0),
+                    const SizedBox(width: ZenithSpacing.sm),
                     _FilterPill(
                       label: 'ROTATION',
                       isSelected: _selectedPattern == MovementPattern.rotation,
-                      activeColor: const Color(0xFFD154EC),
+                      activeColor: MetroLineTheme.forPattern(
+                        MovementPattern.rotation,
+                        colors,
+                      ).color,
                       onTap: () {
                         HapticFeedback.selectionClick();
                         setState(
@@ -245,9 +254,7 @@ class _FilterPill extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontFamily: 'Silkscreen',
-            fontFamilyFallback: const ['monospace'],
+          style: zenithPixelDisplay(
             fontSize: 9.0,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.8,

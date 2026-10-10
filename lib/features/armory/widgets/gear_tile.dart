@@ -227,9 +227,7 @@ class _GearTileState extends State<GearTile>
                     ),
                     child: Text(
                       info.code,
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 10.0,
                         fontWeight: FontWeight.bold,
                         color: statusTextColor,
@@ -238,9 +236,7 @@ class _GearTileState extends State<GearTile>
                   ),
                   Text(
                     statusLabel,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 9.0,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5,
@@ -257,9 +253,7 @@ class _GearTileState extends State<GearTile>
                 children: [
                   Text(
                     info.displayName,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 13.0,
                       fontWeight: FontWeight.bold,
                       color: widget.isEquipped
@@ -272,9 +266,7 @@ class _GearTileState extends State<GearTile>
                   const SizedBox(height: 2.0),
                   Text(
                     info.categoryTag,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 9.0,
                       letterSpacing: 1.0,
                       color: colors.textMuted.withValues(alpha: 0.8),
@@ -287,7 +279,7 @@ class _GearTileState extends State<GearTile>
               // Bottom: Description snippet
               Text(
                 info.description,
-                style: TextStyle(
+                style: zenithBodyMono(
                   fontSize: 10.0,
                   height: 1.3,
                   color: colors.textMuted,

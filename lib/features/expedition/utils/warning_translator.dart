@@ -194,9 +194,7 @@ class SameDayAdvisoryDialog extends StatelessWidget {
             Expanded(
               child: Text(
                 WarningTranslator.sameDayAdvisoryTitle,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,

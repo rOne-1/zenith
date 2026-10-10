@@ -44,9 +44,7 @@ class OutpostScreen extends ConsumerWidget {
                       children: [
                         Text(
                           'THE OUTPOST',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 22.0,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.5,
@@ -56,9 +54,7 @@ class OutpostScreen extends ConsumerWidget {
                         const SizedBox(height: 2.0),
                         Text(
                           'DAILY BRIEFING & TRAINING STATUS',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 10.0,
                             letterSpacing: 1.0,
                             color: colors.textMuted,
@@ -77,9 +73,7 @@ class OutpostScreen extends ConsumerWidget {
                     },
                     child: Text(
                       '⟳',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 18.0,
                         color: colors.amberAccent,
                       ),
@@ -134,9 +128,7 @@ class _StreakCard extends StatelessWidget {
               children: [
                 Text(
                   'TRAINING STREAK',
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
+                  style: zenithPixelDisplay(
                     fontSize: 10.0,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
@@ -148,9 +140,7 @@ class _StreakCard extends StatelessWidget {
                   hasError
                       ? 'UNAVAILABLE'
                       : (streak == 1 ? 'CONSECUTIVE DAY' : 'CONSECUTIVE DAYS'),
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
+                  style: zenithPixelDisplay(
                     fontSize: 9.0,
                     color: hasError ? colors.signalRed : colors.textMuted,
                   ),
@@ -211,9 +201,7 @@ class _TodaySessionCard extends ConsumerWidget {
         ),
         error: (err, stack) => Text(
           'UNABLE TO LOAD TODAY\'S SESSION: $err',
-          style: TextStyle(
-            fontFamily: 'Silkscreen',
-            fontFamilyFallback: const ['monospace'],
+          style: zenithPixelDisplay(
             fontSize: 10.0,
             color: colors.signalRed,
           ),
@@ -222,9 +210,7 @@ class _TodaySessionCard extends ConsumerWidget {
           if (session == null) {
             return Text(
               'NO SESSION AVAILABLE -- CHECK YOUR DEPOT GEAR SELECTION.',
-              style: TextStyle(
-                fontFamily: 'Silkscreen',
-                fontFamilyFallback: const ['monospace'],
+              style: zenithPixelDisplay(
                 fontSize: 11.0,
                 color: colors.textMuted,
               ),
@@ -243,9 +229,7 @@ class _TodaySessionCard extends ConsumerWidget {
                       children: [
                         Text(
                           formatDayTypeHeader(session.dayType),
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w900,
                             color: colors.amberAccent,
@@ -254,9 +238,7 @@ class _TodaySessionCard extends ConsumerWidget {
                         const SizedBox(height: 2.0),
                         Text(
                           formatDayTypeSubtitle(session.dayType),
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 9.0,
                             color: colors.textMuted,
                           ),
@@ -278,9 +260,7 @@ class _TodaySessionCard extends ConsumerWidget {
                     ),
                     child: Text(
                       formatRmZone(session.dayType),
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 10.0,
                         fontWeight: FontWeight.w700,
                         color: colors.amberGlow,
@@ -292,9 +272,7 @@ class _TodaySessionCard extends ConsumerWidget {
               const SizedBox(height: 8.0),
               Text(
                 '${exerciseCountFor(session)} EXERCISES / ${session.sets.length} TOTAL SETS',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 10.0,
                   color: colors.textMuted,
                 ),
@@ -394,9 +372,7 @@ class _StatChip extends StatelessWidget {
         children: [
           Text(
             displayValue,
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
+            style: zenithPixelDisplay(
               fontSize: 16.0,
               fontWeight: FontWeight.w900,
               color: valueColor,
@@ -405,10 +381,8 @@ class _StatChip extends StatelessWidget {
           const SizedBox(height: 4.0),
           Text(
             label,
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
-              fontSize: 8.0,
+            style: zenithPixelDisplay(
+              fontSize: 9.0,
               letterSpacing: 0.6,
               color: colors.textMuted,
             ),

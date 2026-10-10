@@ -164,7 +164,7 @@ class _PixelButtonState extends State<PixelButton> {
             Flexible(
               child: Text(
                 widget.label ?? '',
-                style: TextStyle(
+                style: zenithPixelDisplay(
                   color: textColor,
                   fontWeight: FontWeight.w700,
                   fontSize: 13.0,

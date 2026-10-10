@@ -6,6 +6,7 @@ import 'package:zenith/app_shell.dart';
 import 'package:zenith/core/storage/storage.dart';
 import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/core/widgets/pixel_button.dart';
+import 'package:zenith/features/districts/neon_alleys/neon_alleys_theme.dart';
 import 'package:zenith/features/grimoire/grimoire.dart';
 
 void main() {
@@ -154,6 +155,74 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'GrimoireScreen filter pills resolve dynamic colors based on district theme',
+    (WidgetTester tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      // 1. Verify under District 01 (Railside Outskirts)
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+          child: MaterialApp(
+            theme: zenithThemeRegistry.defaultTheme.themeData,
+            home: const GrimoireScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('PUSH'));
+      await tester.pumpAndSettle();
+
+      final pushContainerD1 = tester.widget<Container>(
+        find.ancestor(
+          of: find.text('PUSH'),
+          matching: find.byType(Container),
+        ).first,
+      );
+      final d1PushDeco = pushContainerD1.decoration as BoxDecoration;
+      expect(d1PushDeco.color, const Color(0xFFFFAE34)); // District 01 accentPrimary
+
+      // 2. Verify under District 02 (Neon Alleys)
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+          child: MaterialApp(
+            theme: district02NeonAlleys.themeData,
+            home: const GrimoireScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('PUSH'));
+      await tester.pumpAndSettle();
+
+      final pushContainerD2 = tester.widget<Container>(
+        find.ancestor(
+          of: find.text('PUSH'),
+          matching: find.byType(Container),
+        ).first,
+      );
+      final d2PushDeco = pushContainerD2.decoration as BoxDecoration;
+      expect(d2PushDeco.color, const Color(0xFFFF2FA0)); // District 02 fuchsia accent
+
+      await tester.tap(find.text('PULL'));
+      await tester.pumpAndSettle();
+
+      final pullContainerD2 = tester.widget<Container>(
+        find.ancestor(
+          of: find.text('PULL'),
+          matching: find.byType(Container),
+        ).first,
+      );
+      final d2PullDeco = pullContainerD2.decoration as BoxDecoration;
+      expect(d2PullDeco.color, const Color(0xFF39C08A)); // District 02 fern accent
     },
   );
 }

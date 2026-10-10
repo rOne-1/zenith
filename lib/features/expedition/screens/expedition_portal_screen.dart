@@ -137,9 +137,7 @@ class _ExpeditionPortalScreenState
                       },
                       child: Text(
                         '←',
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
+                        style: zenithPixelDisplay(
                           fontSize: 18.0,
                           color: colors.amberAccent,
                         ),
@@ -152,9 +150,7 @@ class _ExpeditionPortalScreenState
                         children: [
                           Text(
                             'ZENITH',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 22.0,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 2.0,
@@ -166,9 +162,7 @@ class _ExpeditionPortalScreenState
                           const SizedBox(height: 2.0),
                           Text(
                             'PLATFORM 01 // ${district.displayName.toUpperCase()}',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 11.0,
                               letterSpacing: 1.5,
                               color: colors.textMuted,
@@ -200,9 +194,7 @@ class _ExpeditionPortalScreenState
                           ),
                           child: Text(
                             'SECTOR 01',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 10.0,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 1.2,
@@ -213,9 +205,7 @@ class _ExpeditionPortalScreenState
                         const SizedBox(height: 3.0),
                         Text(
                           _formatDepartureStamp(now),
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 9.0,
                             color: colors.textMuted,
                           ),
@@ -238,9 +228,7 @@ class _ExpeditionPortalScreenState
                       children: [
                         Text(
                           'SYNCHRONIZING TIMETABLE...',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 12.0,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 1.2,
@@ -269,9 +257,7 @@ class _ExpeditionPortalScreenState
                           const SizedBox(height: 12.0),
                           Text(
                             'DISPATCH COMPILATION ERROR',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w900,
                               color: colors.signalRed,
@@ -281,9 +267,7 @@ class _ExpeditionPortalScreenState
                           Text(
                             err.toString(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithBodyMono(
                               fontSize: 11.0,
                               color: colors.textMuted,
                             ),
@@ -307,9 +291,8 @@ class _ExpeditionPortalScreenState
                       return Center(
                         child: Text(
                           'NO DISPATCH AVAILABLE',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
+                            fontSize: 12.0,
                             color: colors.textMuted,
                           ),
                         ),
@@ -363,11 +346,7 @@ class _ExpeditionPortalScreenState
                                         Expanded(
                                           child: Text(
                                             'UNFINISHED EXPEDITION',
-                                            style: TextStyle(
-                                              fontFamily: 'Silkscreen',
-                                              fontFamilyFallback: const [
-                                                'monospace',
-                                              ],
+                                            style: zenithPixelDisplay(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.w900,
                                               letterSpacing: 1.0,
@@ -380,9 +359,7 @@ class _ExpeditionPortalScreenState
                                     const SizedBox(height: 8.0),
                                     Text(
                                       'An active workout was interrupted. You can resume your logged sets or discard the attempt to begin fresh.',
-                                      style: TextStyle(
-                                        fontFamily: 'Silkscreen',
-                                        fontFamilyFallback: const ['monospace'],
+                                      style: zenithBodyMono(
                                         fontSize: 11.0,
                                         color: colors.textPrimary,
                                       ),
@@ -437,9 +414,7 @@ class _ExpeditionPortalScreenState
                               padding: const EdgeInsets.all(14.0),
                               child: Text(
                                 'Failed to check for an interrupted session: $error',
-                                style: TextStyle(
-                                  fontFamily: 'Silkscreen',
-                                  fontFamilyFallback: const ['monospace'],
+                                style: zenithBodyMono(
                                   fontSize: 11.0,
                                   color: colors.signalRed,
                                 ),
@@ -469,11 +444,7 @@ class _ExpeditionPortalScreenState
                                       children: [
                                         Text(
                                           formatDayTypeHeader(session.dayType),
-                                          style: TextStyle(
-                                            fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const [
-                                              'monospace',
-                                            ],
+                                          style: zenithPixelDisplay(
                                             fontSize: 13.0,
                                             fontWeight: FontWeight.w900,
                                             letterSpacing: 1.2,
@@ -484,11 +455,7 @@ class _ExpeditionPortalScreenState
                                           formatDayTypeSubtitle(
                                             session.dayType,
                                           ),
-                                          style: TextStyle(
-                                            fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const [
-                                              'monospace',
-                                            ],
+                                          style: zenithPixelDisplay(
                                             fontSize: 9.0,
                                             letterSpacing: 0.6,
                                             color: colors.textMuted,
@@ -515,9 +482,7 @@ class _ExpeditionPortalScreenState
                                     ),
                                     child: Text(
                                       formatRmZone(session.dayType),
-                                      style: TextStyle(
-                                        fontFamily: 'Silkscreen',
-                                        fontFamilyFallback: const ['monospace'],
+                                      style: zenithPixelDisplay(
                                         fontSize: 10.0,
                                         fontWeight: FontWeight.w700,
                                         color: colors.amberGlow,
@@ -534,9 +499,7 @@ class _ExpeditionPortalScreenState
                                 children: [
                                   Text(
                                     'TARGET RPE: ${session.sets.isNotEmpty ? session.sets.first.targetRpe : 8}',
-                                    style: TextStyle(
-                                      fontFamily: 'Silkscreen',
-                                      fontFamilyFallback: const ['monospace'],
+                                    style: zenithPixelDisplay(
                                       fontSize: 11.0,
                                       fontWeight: FontWeight.w700,
                                       color: colors.accentSecondary,
@@ -544,13 +507,14 @@ class _ExpeditionPortalScreenState
                                   ),
                                   Text(
                                     '·',
-                                    style: TextStyle(color: colors.textMuted),
+                                    style: zenithBodyMono(
+                                      fontSize: 11.0,
+                                      color: colors.textMuted,
+                                    ),
                                   ),
                                   Text(
                                     '${setsByExercise.length} EXERCISES / ${session.sets.length} TOTAL SETS',
-                                    style: TextStyle(
-                                      fontFamily: 'Silkscreen',
-                                      fontFamilyFallback: const ['monospace'],
+                                    style: zenithPixelDisplay(
                                       fontSize: 11.0,
                                       color: colors.textMuted,
                                     ),
@@ -598,9 +562,7 @@ class _ExpeditionPortalScreenState
                               Flexible(
                                 child: Text(
                                   'EXPEDITION ITINERARY',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 11.0,
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: 1.2,
@@ -668,22 +630,22 @@ class _ExpeditionPortalScreenState
                                           horizontal: 6.0,
                                           vertical: 2.0,
                                         ),
-                                        decoration: BoxDecoration(
+                                        decoration: ShapeDecoration(
                                           color: lineTheme.color.withValues(
                                             alpha: 0.15,
                                           ),
-                                          border: Border.all(
-                                            color: lineTheme.color,
-                                            width: 1.0,
+                                          shape: SteppedPixelBorder(
+                                            side: BorderSide(
+                                              color: lineTheme.color,
+                                              width: 1.0,
+                                            ),
+                                            stepSize:
+                                                context.pixelMetrics.cornerStepSize,
                                           ),
                                         ),
                                         child: Text(
                                           lineTheme.lineNameEn,
-                                          style: TextStyle(
-                                            fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const [
-                                              'monospace',
-                                            ],
+                                          style: zenithPixelDisplay(
                                             fontSize: 9.0,
                                             fontWeight: FontWeight.w900,
                                             letterSpacing: 0.8,
@@ -693,11 +655,7 @@ class _ExpeditionPortalScreenState
                                       ),
                                       Text(
                                         '[T${exercise.difficultyTier}]',
-                                        style: TextStyle(
-                                          fontFamily: 'Silkscreen',
-                                          fontFamilyFallback: const [
-                                            'monospace',
-                                          ],
+                                        style: zenithPixelDisplay(
                                           fontSize: 11.0,
                                           fontWeight: FontWeight.w900,
                                           color: colors.amberGlow,
@@ -710,9 +668,7 @@ class _ExpeditionPortalScreenState
                                   // Station / Exercise Name
                                   Text(
                                     '${meta.stationCode} // ${exercise.name.toUpperCase()}',
-                                    style: TextStyle(
-                                      fontFamily: 'Silkscreen',
-                                      fontFamilyFallback: const ['monospace'],
+                                    style: zenithPixelDisplay(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w900,
                                       letterSpacing: 1.0,
@@ -730,11 +686,7 @@ class _ExpeditionPortalScreenState
                                     children: [
                                       Text(
                                         '${exerciseSets.length} SETS × $repText',
-                                        style: TextStyle(
-                                          fontFamily: 'Silkscreen',
-                                          fontFamilyFallback: const [
-                                            'monospace',
-                                          ],
+                                        style: zenithPixelDisplay(
                                           fontSize: 11.0,
                                           fontWeight: FontWeight.w700,
                                           color: colors.amberAccent,
@@ -742,15 +694,14 @@ class _ExpeditionPortalScreenState
                                       ),
                                       Text(
                                         '·',
-                                        style: TextStyle(
+                                        style: zenithBodyMono(
+                                          fontSize: 11.0,
                                           color: colors.textMuted,
                                         ),
                                       ),
                                       Text(
                                         '${restSeconds}s REST',
-                                        style: TextStyle(
-                                          fontFamily: 'Silkscreen',
-                                          fontFamilyFallback: ['monospace'],
+                                        style: zenithPixelDisplay(
                                           fontSize: 11.0,
                                           color: colors.accentSecondary,
                                         ),
@@ -769,21 +720,21 @@ class _ExpeditionPortalScreenState
                                               horizontal: 6.0,
                                               vertical: 2.0,
                                             ),
-                                            decoration: BoxDecoration(
+                                            decoration: ShapeDecoration(
                                               color: colors.backgroundVoid,
-                                              border: Border.all(
-                                                color: colors.borderMuted,
-                                                width: 1.0,
+                                              shape: SteppedPixelBorder(
+                                                side: BorderSide(
+                                                  color: colors.borderMuted,
+                                                  width: 1.0,
+                                                ),
+                                                stepSize:
+                                                    context.pixelMetrics.cornerStepSize,
                                               ),
                                             ),
                                             child: Text(
                                               eq.name.toUpperCase(),
-                                              style: TextStyle(
-                                                fontFamily: 'Silkscreen',
-                                                fontFamilyFallback: const [
-                                                  'monospace',
-                                                ],
-                                                fontSize: 8.0,
+                                              style: zenithPixelDisplay(
+                                                fontSize: 9.0,
                                                 color: colors.textMuted,
                                               ),
                                             ),
@@ -812,9 +763,7 @@ class _ExpeditionPortalScreenState
                   color: colors.surfaceDark,
                   child: Text(
                     _statusFeedback!,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 11.0,
                       fontWeight: FontWeight.w700,
                       color: colors.amberAccent,

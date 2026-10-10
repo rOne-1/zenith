@@ -87,7 +87,7 @@ class StationInspectorSheet extends StatelessWidget {
           child: SafeArea(
             top: false,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20.0),
+              padding: ZenithSpacing.edgeInsetsLg,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -99,33 +99,32 @@ class StationInspectorSheet extends StatelessWidget {
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                              vertical: 3.0,
+                              horizontal: ZenithSpacing.sm,
+                              vertical: ZenithSpacing.xs,
                             ),
-                            decoration: BoxDecoration(
+                            decoration: ShapeDecoration(
                               color: colors.backgroundVoid,
-                              border: Border.all(
-                                color: colors.amberAccent,
-                                width: 1.0,
+                              shape: SteppedPixelBorder(
+                                side: BorderSide(
+                                  color: colors.amberAccent,
+                                  width: 1.0,
+                                ),
+                                stepSize: metrics.cornerStepSize,
                               ),
                             ),
                             child: Text(
                               meta.stationCode,
-                              style: TextStyle(
-                                fontFamily: 'Silkscreen',
-                                fontFamilyFallback: const ['monospace'],
+                              style: zenithPixelDisplay(
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w900,
                                 color: colors.amberAccent,
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8.0),
+                          const SizedBox(width: ZenithSpacing.sm),
                           Text(
                             'STATION INSPECTION PASS',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 10.0,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.0,
@@ -136,18 +135,19 @@ class StationInspectorSheet extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 3.0,
+                          horizontal: ZenithSpacing.sm,
+                          vertical: ZenithSpacing.xs,
                         ),
-                        decoration: BoxDecoration(
+                        decoration: ShapeDecoration(
                           color: colors.backgroundVoid,
-                          border: Border.all(color: statusColor, width: 1.0),
+                          shape: SteppedPixelBorder(
+                            side: BorderSide(color: statusColor, width: 1.0),
+                            stepSize: metrics.cornerStepSize,
+                          ),
                         ),
                         child: Text(
                           statusBadgeText,
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 9.0,
                             fontWeight: FontWeight.bold,
                             color: statusColor,
@@ -161,9 +161,7 @@ class StationInspectorSheet extends StatelessWidget {
                   // Exercise Title
                   Text(
                     exercise.name,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w900,
                       color: colors.textPrimary,
@@ -197,9 +195,7 @@ class StationInspectorSheet extends StatelessWidget {
                   // Biomechanical Form Cues Terminal
                   Text(
                     'BIOMECHANICAL FORM SPECIFICATIONS',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 10.0,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
@@ -212,24 +208,25 @@ class StationInspectorSheet extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
+                    decoration: ShapeDecoration(
                       color: colors.backgroundVoid,
-                      border: Border.all(color: colors.borderMuted, width: 1.0),
+                      shape: SteppedPixelBorder(
+                        side: BorderSide(color: colors.borderMuted, width: 1.0),
+                        stepSize: metrics.cornerStepSize,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         for (int i = 0; i < exercise.defaultCues.length; i++)
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 6.0),
+                            padding: const EdgeInsets.only(bottom: ZenithSpacing.sm),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   '> ',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 11.0,
                                     fontWeight: FontWeight.bold,
                                     color: colors.amberAccent,
@@ -257,9 +254,7 @@ class StationInspectorSheet extends StatelessWidget {
                   // Kenneth Miller 5-Variable Segmented Gauges
                   Text(
                     'KENNETH MILLER PROGRESSION GAUGES',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 10.0,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
@@ -321,15 +316,16 @@ class _PillBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: Theme.of(context).colorScheme.surface,
-        border: Border.all(color: color, width: 1.0),
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: color, width: 1.0),
+          stepSize: context.pixelMetrics.cornerStepSize,
+        ),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontFamily: 'Silkscreen',
-          fontFamilyFallback: const ['monospace'],
+        style: zenithPixelDisplay(
           fontSize: 9.0,
           fontWeight: FontWeight.bold,
           letterSpacing: 0.5,

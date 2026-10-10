@@ -85,9 +85,7 @@ class PixelToastHostState extends State<PixelToastHost> {
                     ),
                     child: Text(
                       _message ?? '',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 12.0,
                         color: colors.textPrimary,
                       ),
