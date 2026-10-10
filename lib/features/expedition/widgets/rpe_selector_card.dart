@@ -148,36 +148,43 @@ class RpeSelectorCard extends StatelessWidget {
           const SizedBox(height: 14.0),
 
           // 1–10 RPE Selector Grid (Row 1: 1-5, Row 2: 6-10)
-          Row(
-            children: List.generate(5, (index) {
-              final score = index + 1;
-              final isSelected = selectedRpe == score;
-              final isTarget = targetRpe == score;
-              return Expanded(
-                child: _RpeButton(
-                  score: score,
-                  isSelected: isSelected,
-                  isTarget: isTarget,
-                  onTap: () => onSelect(score),
+          MediaQuery.withClampedTextScaling(
+            maxScaleFactor: 1.3,
+            child: Column(
+              children: [
+                Row(
+                  children: List.generate(5, (index) {
+                    final score = index + 1;
+                    final isSelected = selectedRpe == score;
+                    final isTarget = targetRpe == score;
+                    return Expanded(
+                      child: _RpeButton(
+                        score: score,
+                        isSelected: isSelected,
+                        isTarget: isTarget,
+                        onTap: () => onSelect(score),
+                      ),
+                    );
+                  }),
                 ),
-              );
-            }),
-          ),
-          const SizedBox(height: 6.0),
-          Row(
-            children: List.generate(5, (index) {
-              final score = index + 6;
-              final isSelected = selectedRpe == score;
-              final isTarget = targetRpe == score;
-              return Expanded(
-                child: _RpeButton(
-                  score: score,
-                  isSelected: isSelected,
-                  isTarget: isTarget,
-                  onTap: () => onSelect(score),
+                const SizedBox(height: 6.0),
+                Row(
+                  children: List.generate(5, (index) {
+                    final score = index + 6;
+                    final isSelected = selectedRpe == score;
+                    final isTarget = targetRpe == score;
+                    return Expanded(
+                      child: _RpeButton(
+                        score: score,
+                        isSelected: isSelected,
+                        isTarget: isTarget,
+                        onTap: () => onSelect(score),
+                      ),
+                    );
+                  }),
                 ),
-              );
-            }),
+              ],
+            ),
           ),
           const SizedBox(height: 14.0),
 

@@ -196,9 +196,12 @@ class _PixelButtonState extends State<PixelButton> {
               ? const Duration(milliseconds: 60)
               : zenithMotionDuration,
           curve: zenithMotionCurve,
-          child: SizedBox(
-            width: widget.width,
-            height: widget.height != null ? widget.height! + bevelDepth : null,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: widget.width ?? 0.0,
+              maxWidth: widget.width ?? double.infinity,
+              minHeight: widget.height != null ? widget.height! + bevelDepth : 0.0,
+            ),
             child: CustomPaint(
               painter: _PixelButtonPainter(
                 backgroundColor: backgroundColor,
