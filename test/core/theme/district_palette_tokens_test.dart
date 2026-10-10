@@ -31,10 +31,10 @@ void main() {
       expect(neonAlleysPalette.amberGlow, const Color(0xFFFF8EC9));
       expect(neonAlleysPalette.accentGlow, const Color(0xFFFF8EC9));
       expect(neonAlleysPalette.accentSecondary, const Color(0xFF39C08A));
-      expect(neonAlleysPalette.signalRed, const Color(0xFFFF493A));
+      expect(neonAlleysPalette.signalRed, const Color(0xFFFF4433));
       expect(neonAlleysPalette.foliageVibrant, const Color(0xFF4B8E62));
-      expect(neonAlleysPalette.textPrimary, const Color(0xFFE8F5F2));
-      expect(neonAlleysPalette.textMuted, const Color(0xFF7D9B98));
+      expect(neonAlleysPalette.textPrimary, const Color(0xFFEAF3FF));
+      expect(neonAlleysPalette.textMuted, const Color(0xFF7C8CB8));
 
       final theme = zenithThemeRegistry.byId('neon_alleys');
       final colors = theme.colors;

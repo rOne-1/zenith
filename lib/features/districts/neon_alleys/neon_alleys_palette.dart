@@ -20,10 +20,10 @@ const neonAlleysPalette = ZenithDistrictPalette(
   amberAccent: Color(0xFFFF2FA0),
   amberGlow: Color(0xFFFF8EC9),
   accentSecondary: Color(0xFF39C08A),
-  signalRed: Color(0xFFFF493A),
+  signalRed: Color(0xFFFF4433),
   foliageVibrant: Color(0xFF4B8E62),
-  textPrimary: Color(0xFFE8F5F2),
-  textMuted: Color(0xFF7D9B98),
+  textPrimary: Color(0xFFEAF3FF),
+  textMuted: Color(0xFF7C8CB8),
   atmosphericMotif: _buildNeonAlleysBackdrop,
 );
 
