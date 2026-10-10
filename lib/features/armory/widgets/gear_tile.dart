@@ -184,11 +184,16 @@ class _GearTileState extends State<GearTile>
             : (1.0 - _springAnimation.value) * 1.5;
         return Transform.translate(offset: Offset(0, dropOffset), child: child);
       },
-      child: GestureDetector(
-        onTapDown: _handleTapDown,
-        onTapUp: _handleTapUp,
-        onTapCancel: _handleTapCancel,
-        behavior: HitTestBehavior.opaque,
+      child: Semantics(
+        button: true,
+        checked: widget.isEquipped,
+        label: '${info.displayName} equipment',
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTapDown: _handleTapDown,
+          onTapUp: _handleTapUp,
+          onTapCancel: _handleTapCancel,
+          behavior: HitTestBehavior.opaque,
         child: Container(
           decoration: ShapeDecoration(
             color: widget.isEquipped
@@ -294,6 +299,7 @@ class _GearTileState extends State<GearTile>
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

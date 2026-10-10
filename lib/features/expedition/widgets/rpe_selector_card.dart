@@ -64,7 +64,7 @@ class RpeSelectorCard extends StatelessWidget {
     required ZenithDistrictColors colors,
   }) {
     if (selectedRpe < targetRpe - 1) {
-      return const Color(0xFF2EE6D6); // Progression cyan
+      return colors.accentSecondary; // Progression secondary accent
     } else if (selectedRpe > targetRpe + 1) {
       return colors.signalRed; // Regression buffer
     } else {
@@ -129,8 +129,8 @@ class RpeSelectorCard extends StatelessWidget {
                 decoration: ShapeDecoration(
                   color: colors.backgroundVoid,
                   shape: SteppedPixelBorder(
-                    side: const BorderSide(
-                      color: Color(0xFF2EE6D6),
+                    side: BorderSide(
+                      color: colors.accentSecondary,
                       width: 1.0,
                     ),
                     stepSize: context.pixelMetrics.cornerStepSize,
@@ -138,12 +138,12 @@ class RpeSelectorCard extends StatelessWidget {
                 ),
                 child: Text(
                   'TARGET: $targetRpe RPE',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Silkscreen',
-                    fontFamilyFallback: ['monospace'],
+                    fontFamilyFallback: const ['monospace'],
                     fontSize: 9.0,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF2EE6D6),
+                    color: colors.accentSecondary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -297,41 +297,47 @@ class _RpeButtonState extends State<_RpeButton> {
         ? colors.backgroundVoid
         : (isTarget ? colors.amberAccent : colors.textPrimary);
     final Color borderColor = isTarget
-        ? const Color(0xFF2EE6D6)
+        ? colors.accentSecondary
         : (isSelected ? colors.amberAccent : colors.borderBright);
 
-    return GestureDetector(
-      onTapDown: _handleTapDown,
-      onTapUp: _handleTapUp,
-      onTapCancel: _handleTapCancel,
-      child: AnimatedScale(
-        scale: _isPressed ? 0.9 : 1.0,
-        duration: _isPressed
-            ? const Duration(milliseconds: 60)
-            : zenithMotionDuration,
-        curve: zenithMotionCurve,
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 2.0),
-          height: 38.0,
-          decoration: ShapeDecoration(
-            color: bgColor,
-            shape: SteppedPixelBorder(
-              side: BorderSide(
-                color: borderColor,
-                width: isTarget || isSelected ? 1.5 : 1.0,
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: 'RPE $score',
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTapDown: _handleTapDown,
+        onTapUp: _handleTapUp,
+        onTapCancel: _handleTapCancel,
+        child: AnimatedScale(
+          scale: _isPressed ? 0.9 : 1.0,
+          duration: _isPressed
+              ? const Duration(milliseconds: 60)
+              : zenithMotionDuration,
+          curve: zenithMotionCurve,
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 2.0),
+            height: 48.0,
+            decoration: ShapeDecoration(
+              color: bgColor,
+              shape: SteppedPixelBorder(
+                side: BorderSide(
+                  color: borderColor,
+                  width: isTarget || isSelected ? 1.5 : 1.0,
+                ),
+                stepSize: metrics.cornerStepSize,
               ),
-              stepSize: metrics.cornerStepSize,
             ),
-          ),
-          child: Center(
-            child: Text(
-              '$score',
-              style: TextStyle(
-                fontFamily: 'Silkscreen',
-                fontFamilyFallback: const ['monospace'],
-                fontSize: 13.0,
-                fontWeight: FontWeight.w900,
-                color: textColor,
+            child: Center(
+              child: Text(
+                '$score',
+                style: TextStyle(
+                  fontFamily: 'Silkscreen',
+                  fontFamilyFallback: const ['monospace'],
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.w900,
+                  color: textColor,
+                ),
               ),
             ),
           ),

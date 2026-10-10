@@ -14,10 +14,17 @@ class ZenithDistrictPalette {
   final Color borderBright;
   final Color amberAccent;
   final Color amberGlow;
+  final Color accentSecondary;
   final Color signalRed;
   final Color foliageVibrant;
   final Color textPrimary;
   final Color textMuted;
+
+  /// Canonical semantic alias for the primary accent token.
+  Color get accentPrimary => amberAccent;
+
+  /// Canonical semantic alias for the primary accent phosphor glow token.
+  Color get accentGlow => amberGlow;
 
   /// Atmospheric background backdrop builder (passing train, rain, lanterns).
   final WidgetBuilder? atmosphericMotif;
@@ -34,6 +41,7 @@ class ZenithDistrictPalette {
     required this.borderBright,
     required this.amberAccent,
     required this.amberGlow,
+    required this.accentSecondary,
     required this.signalRed,
     required this.foliageVibrant,
     required this.textPrimary,

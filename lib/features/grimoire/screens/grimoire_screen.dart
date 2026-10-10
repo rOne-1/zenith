@@ -148,7 +148,7 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                     _FilterPill(
                       label: 'PULL',
                       isSelected: _selectedPattern == MovementPattern.pulling,
-                      activeColor: const Color(0xFF2EE6D6),
+                      activeColor: colors.accentSecondary,
                       onTap: () {
                         HapticFeedback.selectionClick();
                         setState(

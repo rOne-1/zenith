@@ -6,14 +6,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/storage/storage.dart';
 import '../models/user_profile.dart';
 
-/// Storage key for persisting the user's armory profile.
+/// Storage key for persisting non-sensitive user profile settings in unencrypted SharedPreferences.
 const String kUserProfileStorageKey = 'zenith_user_profile';
+
+/// Storage key for persisting sensitive physiological telemetry in encrypted SecureStorage.
+const String kSensitiveHealthStorageKey = 'zenith_secure_health_profile';
 
 /// StateNotifier that manages user inventory and physiological adaptation settings.
 class UserProfileNotifier extends StateNotifier<UserProfile> {
   final SharedPreferences _prefs;
+  final SecureStorage _secureStorage;
+  late final Future<void> _initFuture;
+  bool _hasMutated = false;
 
-  UserProfileNotifier(this._prefs) : super(_loadInitialProfile(_prefs));
+  /// Completes when asynchronous migration and secure storage hydration finishes.
+  Future<void> get initialized => _initFuture;
+
+  UserProfileNotifier(
+    this._prefs, [
+    SecureStorage? secureStorage,
+  ])  : _secureStorage = secureStorage ?? AesGcmSecureStorage(_prefs),
+        super(_loadInitialProfile(_prefs)) {
+    _initFuture = _hydrateAndMigrate();
+  }
 
   static UserProfile _loadInitialProfile(SharedPreferences prefs) {
     final rawJson = prefs.getString(kUserProfileStorageKey);
@@ -28,10 +43,81 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
     return UserProfile.baseline;
   }
 
+  Future<void> _hydrateAndMigrate() async {
+    try {
+      final rawPrefsJson = _prefs.getString(kUserProfileStorageKey);
+      Map<String, dynamic>? legacyDecoded;
+      bool isLegacy = false;
+
+      if (rawPrefsJson != null) {
+        try {
+          final decoded = jsonDecode(rawPrefsJson) as Map<String, dynamic>;
+          if (decoded.containsKey('femaleProfile') ||
+              decoded.containsKey('hasJointPain')) {
+            isLegacy = true;
+            legacyDecoded = decoded;
+          }
+        } catch (_) {}
+      }
+
+      final hasSecure =
+          await _secureStorage.containsKey(kSensitiveHealthStorageKey);
+
+      if (isLegacy && legacyDecoded != null) {
+        // Transparent migration:
+        // 1. If secure storage has not yet captured sensitive telemetry, write it now.
+        if (!hasSecure) {
+          final sensitiveData = {
+            'hasJointPain': legacyDecoded['hasJointPain'] as bool? ?? false,
+            'femaleProfile': legacyDecoded['femaleProfile'],
+          };
+          await _secureStorage.write(
+            kSensitiveHealthStorageKey,
+            jsonEncode(sensitiveData),
+          );
+        } else {
+          // Secure storage already exists; hydrate from encrypted store.
+          final secureRaw =
+              await _secureStorage.read(kSensitiveHealthStorageKey);
+          if (secureRaw != null && !_hasMutated) {
+            final sensitiveDecoded =
+                jsonDecode(secureRaw) as Map<String, dynamic>;
+            state = state.mergeSensitiveJson(sensitiveDecoded);
+          }
+        }
+
+        // 2. Strip sensitive keys from plaintext SharedPreferences.
+        final nonSensitive = state.toNonSensitiveJson();
+        await _prefs.setString(
+          kUserProfileStorageKey,
+          jsonEncode(nonSensitive),
+        );
+      } else if (hasSecure) {
+        // Standard hydration: read encrypted sensitive health data.
+        final secureRaw =
+            await _secureStorage.read(kSensitiveHealthStorageKey);
+        if (secureRaw != null && !_hasMutated) {
+          final sensitiveDecoded =
+              jsonDecode(secureRaw) as Map<String, dynamic>;
+          state = state.mergeSensitiveJson(sensitiveDecoded);
+        }
+      }
+    } catch (_) {
+      // Gracefully maintain current state on hydration error
+    }
+  }
+
   Future<void> _persist(UserProfile profile) async {
+    _hasMutated = true;
     state = profile;
-    final jsonString = jsonEncode(profile.toJson());
-    await _prefs.setString(kUserProfileStorageKey, jsonString);
+
+    // 1. Non-sensitive settings in SharedPreferences for instantaneous synchronous cold-start
+    final nonSensitiveJson = jsonEncode(profile.toNonSensitiveJson());
+    await _prefs.setString(kUserProfileStorageKey, nonSensitiveJson);
+
+    // 2. Sensitive health telemetry encrypted at rest via SecureStorage
+    final sensitiveJson = jsonEncode(profile.toSensitiveJson());
+    await _secureStorage.write(kSensitiveHealthStorageKey, sensitiveJson);
   }
 
   /// Toggles an equipment piece in the user's inventory.
@@ -123,5 +209,6 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
 final userProfileProvider =
     StateNotifierProvider<UserProfileNotifier, UserProfile>((ref) {
       final prefs = ref.watch(sharedPreferencesProvider);
-      return UserProfileNotifier(prefs);
+      final secureStorage = ref.watch(secureStorageProvider);
+      return UserProfileNotifier(prefs, secureStorage);
     });

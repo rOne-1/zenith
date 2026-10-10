@@ -55,55 +55,61 @@ class _CollapsibleCardState extends State<CollapsibleCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(widget.icon, color: accent, size: 16.0),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 11.0,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.8,
-                        color: accent,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (widget.subtitle != null)
+          Semantics(
+            button: true,
+            expanded: _expanded,
+            label: widget.title,
+            excludeSemantics: true,
+            child: Row(
+              children: [
+                Icon(widget.icon, color: accent, size: 16.0),
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        widget.subtitle!,
+                        widget.title,
                         style: TextStyle(
                           fontFamily: 'Silkscreen',
                           fontFamilyFallback: const ['monospace'],
-                          fontSize: 8.0,
-                          letterSpacing: 0.5,
-                          color: colors.textMuted,
+                          fontSize: 11.0,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.8,
+                          color: accent,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                  ],
+                      if (widget.subtitle != null)
+                        Text(
+                          widget.subtitle!,
+                          style: TextStyle(
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
+                            fontSize: 8.0,
+                            letterSpacing: 0.5,
+                            color: colors.textMuted,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8.0),
-              AnimatedRotation(
-                turns: _expanded ? 0.5 : 0.0,
-                duration: zenithMotionDuration,
-                curve: zenithMotionCurve,
-                child: Icon(
-                  Icons.expand_more,
-                  color: colors.textMuted,
-                  size: 18.0,
+                const SizedBox(width: 8.0),
+                AnimatedRotation(
+                  turns: _expanded ? 0.5 : 0.0,
+                  duration: zenithMotionDuration,
+                  curve: zenithMotionCurve,
+                  child: Icon(
+                    Icons.expand_more,
+                    color: colors.textMuted,
+                    size: 18.0,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           AnimatedSize(
             duration: zenithMotionDuration,

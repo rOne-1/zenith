@@ -2,6 +2,24 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.6.4] — 2026-10-10
+
+### Security & Platform Hardening
+- **Sensitive health telemetry encryption** — introduced pure-Dart AES-256-GCM encrypted storage for sensitive physiological fields (`femaleProfile`, `hasJointPain`) with automatic migration and purging of legacy plaintext preferences (SEC-1).
+- **Disabled insecure Android application backup** — enforced `android:allowBackup="false"` in `AndroidManifest.xml` preventing local ADB database extraction (SEC-2).
+- **Web Content Security Policy** — added restrictive Content Security Policy `<meta>` header for web builds supporting Drift SQLite WASM workers, Google Fonts, and local assets (SEC-3).
+
+### Accessibility (WCAG AA)
+- **Screen reader semantics** — added descriptive `Semantics` wrappers across navigation tabs, collapsible cards, gear inventory tiles, RPE buttons, and Miller variable gauges, eliminating raw glyph reading (A11Y-1).
+- **WCAG AA contrast compliance** — inverted danger button text color to `backgroundVoid`, achieving 5.8:1 contrast against signal red (A11Y-2).
+- **Expanded touch targets** — expanded RPE rating buttons to minimum 48dp height with responsive scaling for narrow 320px viewports (A11Y-3).
+
+### Design Tokens & Theming
+- **Official secondary accent token** — introduced `accentSecondary` to `ZenithDistrictColors` and `ZenithDistrictPalette`, replacing all 20 hardcoded `0xFF2EE6D6` literals across feature files (DES-1).
+- **Semantic token aliases** — added `accentPrimary` and `accentGlow` getters aliasing `amberAccent` and `amberGlow` for cross-district semantic clarity (DES-3).
+- **Canonical Neon Alleys palette** — wired authentic Japanese cyberpunk chromatic DNA for District 02 (deep indigo void `#060814`, vibrant fuchsia `#FF2FA0`, stairwell fern `#39C08A`) (DES-2).
+- **Dynamic button bevels** — replaced hardcoded amber and red bevels with dynamic HSL lightness derivation matching active district themes (DES-5).
+
 ## [0.6.3] — 2026-10-10
 
 ### Fixed

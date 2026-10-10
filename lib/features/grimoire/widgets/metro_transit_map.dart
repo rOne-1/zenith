@@ -17,7 +17,7 @@ class MetroLineTheme {
     required this.color,
   });
 
-  static const Map<MovementPattern, MetroLineTheme> configs = {
+  static final Map<MovementPattern, MetroLineTheme> configs = {
     MovementPattern.pushing: MetroLineTheme(
       lineNameEn: 'PUSH LINE',
       codePrefix: 'P',
@@ -26,7 +26,7 @@ class MetroLineTheme {
     MovementPattern.pulling: MetroLineTheme(
       lineNameEn: 'PULL LINE',
       codePrefix: 'L',
-      color: Color(0xFF2EE6D6),
+      color: ZenithDistrictColors.fallback.accentSecondary,
     ),
     MovementPattern.bendAndLift: MetroLineTheme(
       lineNameEn: 'BEND & LIFT LINE',
@@ -45,13 +45,42 @@ class MetroLineTheme {
     ),
   };
 
-  static MetroLineTheme forPattern(MovementPattern pattern) {
-    return configs[pattern] ??
+  static MetroLineTheme forPattern(
+    MovementPattern pattern, [
+    ZenithDistrictColors? colors,
+  ]) {
+    final base = configs[pattern] ??
         MetroLineTheme(
           lineNameEn: pattern.name.toUpperCase(),
           codePrefix: pattern.name.substring(0, 1).toUpperCase(),
-          color: const Color(0xFFFFAE34),
+          color: colors?.accentPrimary ?? ZenithDistrictColors.fallback.accentPrimary,
         );
+    if (colors != null) {
+      return switch (pattern) {
+        MovementPattern.pushing => MetroLineTheme(
+            lineNameEn: base.lineNameEn,
+            codePrefix: base.codePrefix,
+            color: colors.accentPrimary,
+          ),
+        MovementPattern.pulling => MetroLineTheme(
+            lineNameEn: base.lineNameEn,
+            codePrefix: base.codePrefix,
+            color: colors.accentSecondary,
+          ),
+        MovementPattern.bendAndLift => MetroLineTheme(
+            lineNameEn: base.lineNameEn,
+            codePrefix: base.codePrefix,
+            color: colors.signalRed,
+          ),
+        MovementPattern.singleLeg => MetroLineTheme(
+            lineNameEn: base.lineNameEn,
+            codePrefix: base.codePrefix,
+            color: colors.foliageVibrant,
+          ),
+        MovementPattern.rotation => base,
+      };
+    }
+    return base;
   }
 }
 
@@ -80,7 +109,7 @@ class MetroTransitMap extends StatelessWidget {
       itemCount: patternsToRender.length,
       itemBuilder: (context, index) {
         final pattern = patternsToRender[index];
-        final lineTheme = MetroLineTheme.forPattern(pattern);
+        final lineTheme = MetroLineTheme.forPattern(pattern, context.colors);
         final lineExercises =
             expandedExercises
                 .where((e) => e.movementPattern == pattern)

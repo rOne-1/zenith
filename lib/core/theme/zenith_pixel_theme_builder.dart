@@ -137,6 +137,7 @@ class ZenithPixelThemeBuilder {
       borderBright: palette.borderBright,
       amberAccent: palette.amberAccent,
       amberGlow: palette.amberGlow,
+      accentSecondary: palette.accentSecondary,
       signalRed: palette.signalRed,
       foliageVibrant: palette.foliageVibrant,
       textPrimary: palette.textPrimary,

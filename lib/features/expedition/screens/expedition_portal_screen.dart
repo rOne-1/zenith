@@ -534,12 +534,12 @@ class _ExpeditionPortalScreenState
                                 children: [
                                   Text(
                                     'TARGET RPE: ${session.sets.isNotEmpty ? session.sets.first.targetRpe : 8}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontFamily: 'Silkscreen',
-                                      fontFamilyFallback: ['monospace'],
+                                      fontFamilyFallback: const ['monospace'],
                                       fontSize: 11.0,
                                       fontWeight: FontWeight.w700,
-                                      color: Color(0xFF2EE6D6),
+                                      color: colors.accentSecondary,
                                     ),
                                   ),
                                   Text(
@@ -567,10 +567,10 @@ class _ExpeditionPortalScreenState
                           ...notices.map((notice) {
                             final Color noticeColor =
                                 notice.type == CoachingNoticeType.recovery
-                                ? const Color(0xFF2EE6D6)
-                                : (notice.type == CoachingNoticeType.postural
-                                      ? colors.amberAccent
-                                      : colors.amberGlow);
+                                    ? colors.accentSecondary
+                                    : (notice.type == CoachingNoticeType.postural
+                                        ? colors.amberAccent
+                                        : colors.amberGlow);
 
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 12.0),
@@ -748,11 +748,11 @@ class _ExpeditionPortalScreenState
                                       ),
                                       Text(
                                         '${restSeconds}s REST',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontFamily: 'Silkscreen',
                                           fontFamilyFallback: ['monospace'],
                                           fontSize: 11.0,
-                                          color: Color(0xFF2EE6D6),
+                                          color: colors.accentSecondary,
                                         ),
                                       ),
                                     ],

@@ -41,50 +41,54 @@ class MillerVariableGauge extends StatelessWidget {
     final effectiveActive = activeColor ?? colors.amberAccent;
     final effectiveInactive = inactiveColor ?? colors.backgroundVoid;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
-              fontSize: 10.0,
-              fontWeight: FontWeight.w600,
-              color: colors.textPrimary,
+    return Semantics(
+      label: '$label: $score of $maxScore',
+      excludeSemantics: true,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontFamily: 'Silkscreen',
+                fontFamilyFallback: const ['monospace'],
+                fontSize: 10.0,
+                fontWeight: FontWeight.w600,
+                color: colors.textPrimary,
+              ),
             ),
-          ),
-          Row(
-            children: [
-              for (int i = 1; i <= maxScore; i++)
-                Container(
-                  width: 14.0,
-                  height: 8.0,
-                  margin: const EdgeInsets.only(left: 3.0),
-                  decoration: BoxDecoration(
-                    color: i <= score ? effectiveActive : effectiveInactive,
-                    border: Border.all(
-                      color: effectiveActive.withValues(alpha: 0.7),
-                      width: 1.0,
+            Row(
+              children: [
+                for (int i = 1; i <= maxScore; i++)
+                  Container(
+                    width: 14.0,
+                    height: 8.0,
+                    margin: const EdgeInsets.only(left: 3.0),
+                    decoration: BoxDecoration(
+                      color: i <= score ? effectiveActive : effectiveInactive,
+                      border: Border.all(
+                        color: effectiveActive.withValues(alpha: 0.7),
+                        width: 1.0,
+                      ),
                     ),
                   ),
+                const SizedBox(width: 6.0),
+                Text(
+                  displayValueOverride ?? '$score/$maxScore',
+                  style: TextStyle(
+                    fontFamily: 'Silkscreen',
+                    fontFamilyFallback: const ['monospace'],
+                    fontSize: 10.0,
+                    fontWeight: FontWeight.bold,
+                    color: effectiveActive,
+                  ),
                 ),
-              const SizedBox(width: 6.0),
-              Text(
-                displayValueOverride ?? '$score/$maxScore',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.bold,
-                  color: effectiveActive,
-                ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
