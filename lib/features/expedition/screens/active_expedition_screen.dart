@@ -81,10 +81,12 @@ class _ActiveExpeditionScreenState
     );
 
     if (confirm == true && mounted) {
-      await ref.read(activeSessionControllerProvider.notifier).abortSession();
-      if (mounted && Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
+      final navigator = Navigator.of(context);
+      final controller = ref.read(activeSessionControllerProvider.notifier);
+      if (navigator.canPop()) {
+        navigator.pop();
       }
+      await controller.abortSession();
     }
   }
 
