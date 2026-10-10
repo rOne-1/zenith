@@ -87,6 +87,67 @@ class UserProfile {
     };
   }
 
+  /// Serializes only non-sensitive configuration (equipment, experience level)
+  /// safe for unencrypted storage in SharedPreferences.
+  Map<String, dynamic> toNonSensitiveJson() {
+    return {
+      'availableEquipment': availableEquipment.map((e) => e.name).toList(),
+      'experienceLevel': experienceLevel?.name,
+    };
+  }
+
+  /// Serializes sensitive physiological telemetry (cycle tracking, joint discomfort)
+  /// requiring encryption at rest via SecureStorage.
+  Map<String, dynamic> toSensitiveJson() {
+    return {
+      'hasJointPain': hasJointPain,
+      'femaleProfile': femaleProfile != null
+          ? {
+              'userStatus': femaleProfile!.userStatus,
+              'cycleDay': femaleProfile!.cycleDay,
+              'hasKneeDiscomfort': femaleProfile!.hasKneeDiscomfort,
+              'age': femaleProfile!.age,
+              'hasJointPain': femaleProfile!.hasJointPain,
+            }
+          : null,
+    };
+  }
+
+  /// Merges sensitive physiological telemetry from a decrypted JSON map.
+  UserProfile mergeSensitiveJson(Map<String, dynamic> json) {
+    FemaleProfile? femaleProf;
+    final rawFemale = json['femaleProfile'] as Map<String, dynamic>?;
+    if (rawFemale != null) {
+      femaleProf = FemaleProfile(
+        userStatus: rawFemale['userStatus'] as String? ?? 'Untrained_Female',
+        cycleDay: rawFemale['cycleDay'] as int? ?? 1,
+        hasKneeDiscomfort: rawFemale['hasKneeDiscomfort'] as bool? ?? false,
+        age: rawFemale['age'] as int? ?? 28,
+        hasJointPain: rawFemale['hasJointPain'] as bool? ?? false,
+      );
+    }
+
+    final hasFpKey = json.containsKey('femaleProfile');
+    return copyWith(
+      hasJointPain: json.containsKey('hasJointPain')
+          ? (json['hasJointPain'] as bool? ?? false)
+          : hasJointPain,
+      femaleProfile: hasFpKey ? () => femaleProf : null,
+    );
+  }
+
+  /// Deserializes a profile composed from separate non-sensitive and sensitive JSON maps.
+  factory UserProfile.fromSplitJson({
+    required Map<String, dynamic> nonSensitive,
+    Map<String, dynamic>? sensitive,
+  }) {
+    final base = UserProfile.fromJson(nonSensitive);
+    if (sensitive != null && sensitive.isNotEmpty) {
+      return base.mergeSensitiveJson(sensitive);
+    }
+    return base;
+  }
+
   /// Deserializes profile data from a JSON map.
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     final rawEquipment = json['availableEquipment'] as List<dynamic>? ?? [];
