@@ -42,25 +42,32 @@ class ZenithAppShell extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colors.backgroundVoid,
-      body: GestureDetector(
-        key: const Key('zenithTabSwipeDetector'),
-        behavior: HitTestBehavior.translucent,
-        onHorizontalDragEnd: (details) {
-          final velocity = details.primaryVelocity ?? 0.0;
-          if (velocity.abs() < _kTabSwipeVelocityThreshold) return;
-          // A negative velocity is a right-to-left swipe (finger moving
-          // toward negative x) -- that advances to the next tab.
-          final direction = velocity < 0 ? 1 : -1;
-          final nextIndex = (currentIndex + direction).clamp(
-            0,
-            _screens.length - 1,
-          );
-          if (nextIndex != currentIndex) {
-            ref.read(activeNavigationTabIndexProvider.notifier).state =
-                nextIndex;
-          }
-        },
-        child: IndexedStack(index: currentIndex, children: _screens),
+      // The district backdrop renders exactly once here, behind every tab,
+      // instead of each tab screen mounting its own copy -- IndexedStack
+      // keeps all 4 tabs mounted simultaneously for the app's whole
+      // lifetime, so a per-screen backdrop meant N co-mounted media players
+      // competing for the same asset, of which only one actually rendered.
+      body: DistrictAtmosphereBackdrop(
+        child: GestureDetector(
+          key: const Key('zenithTabSwipeDetector'),
+          behavior: HitTestBehavior.translucent,
+          onHorizontalDragEnd: (details) {
+            final velocity = details.primaryVelocity ?? 0.0;
+            if (velocity.abs() < _kTabSwipeVelocityThreshold) return;
+            // A negative velocity is a right-to-left swipe (finger moving
+            // toward negative x) -- that advances to the next tab.
+            final direction = velocity < 0 ? 1 : -1;
+            final nextIndex = (currentIndex + direction).clamp(
+              0,
+              _screens.length - 1,
+            );
+            if (nextIndex != currentIndex) {
+              ref.read(activeNavigationTabIndexProvider.notifier).state =
+                  nextIndex;
+            }
+          },
+          child: IndexedStack(index: currentIndex, children: _screens),
+        ),
       ),
       bottomNavigationBar: ZenithNavigationBar(
         currentIndex: currentIndex,

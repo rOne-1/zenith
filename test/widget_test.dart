@@ -9,6 +9,7 @@ import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/features/armory/armory.dart';
 import 'package:zenith/core/widgets/widgets.dart';
 import 'package:zenith/engine/engine.dart';
+import 'package:zenith/features/districts/neon_alleys/neon_alleys_atmosphere_backdrop.dart';
 import 'package:zenith/features/expedition/expedition.dart';
 import 'package:zenith/features/onboarding/providers/onboarding_provider.dart';
 import 'package:zenith/features/onboarding/screens/onboarding_flow_screen.dart';
@@ -115,6 +116,59 @@ void main() {
           ),
           findsOneWidget,
         );
+      } finally {
+        await db.close();
+      }
+    },
+  );
+
+  testWidgets(
+    'the district backdrop mounts exactly once across all 4 tabs, not once per tab',
+    (WidgetTester tester) async {
+      // Regression coverage: each tab screen used to wrap itself in its own
+      // DistrictAtmosphereBackdrop, and since IndexedStack keeps all 4 tabs
+      // mounted simultaneously, Neon Alleys' video backdrop ended up with
+      // 4 co-mounted players competing for the same asset -- only the
+      // active tab's ever actually rendered. The fix hoists the backdrop
+      // to mount once in ZenithAppShell, behind the IndexedStack.
+      SharedPreferences.setMockInitialValues({
+        kHasCompletedOnboardingKey: true,
+      });
+      final prefs = await SharedPreferences.getInstance();
+      final db = SbeeDatabase(NativeDatabase.memory());
+
+      try {
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              sharedPreferencesProvider.overrideWithValue(prefs),
+              sbeeDatabaseProvider.overrideWithValue(db),
+            ],
+            child: const ZenithApp(),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final container = ProviderScope.containerOf(
+          tester.element(find.byType(ZenithAppShell)),
+        );
+        await container
+            .read(themeControllerProvider)
+            .setThemeById('neon_alleys');
+        await tester.pumpAndSettle();
+
+        expect(find.byType(NeonAlleysAtmosphereBackdrop), findsOneWidget);
+
+        for (final tabLabel in ['DEPOT', 'ATLAS', 'SANCTUARY', 'OUTPOST']) {
+          await tester.tap(
+            find.descendant(
+              of: find.byType(ZenithNavigationBar),
+              matching: find.text(tabLabel),
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(find.byType(NeonAlleysAtmosphereBackdrop), findsOneWidget);
+        }
       } finally {
         await db.close();
       }

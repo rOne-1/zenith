@@ -22,207 +22,202 @@ class SanctuaryScreen extends ConsumerWidget {
     final district = themeController.current;
 
     return Scaffold(
-      backgroundColor: colors.backgroundVoid,
-      body: DistrictAtmosphereBackdrop(
-        child: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 20.0,
-            ),
-            children: [
-              // Chamber Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'SANCTUARY',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 2.0,
-                            color: colors.amberAccent,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          children: [
+            // Chamber Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'SANCTUARY',
+                        style: TextStyle(
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 2.0,
+                          color: colors.amberAccent,
                         ),
-                        const SizedBox(height: 4.0),
-                        Text(
-                          'REST & PHYSIOLOGICAL ADAPTATION CHAMBER',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.2,
-                            color: colors.textMuted,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4.0),
+                      Text(
+                        'REST & PHYSIOLOGICAL ADAPTATION CHAMBER',
+                        style: TextStyle(
+                          fontFamily: 'Silkscreen',
+                          fontFamilyFallback: const ['monospace'],
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                          color: colors.textMuted,
                         ),
-                      ],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8.0),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
+                  decoration: ShapeDecoration(
+                    color: colors.surfaceDark,
+                    shape: SteppedPixelBorder(
+                      side: BorderSide(color: colors.amberAccent, width: 1.5),
+                      stepSize: context.pixelMetrics.cornerStepSize,
                     ),
                   ),
-                  const SizedBox(width: 8.0),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
+                  child: Text(
+                    'STATUS: NOMINAL',
+                    style: TextStyle(
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
+                      fontSize: 9.5,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1.0,
+                      color: colors.amberAccent,
                     ),
-                    decoration: ShapeDecoration(
-                      color: colors.surfaceDark,
-                      shape: SteppedPixelBorder(
-                        side: BorderSide(color: colors.amberAccent, width: 1.5),
-                        stepSize: context.pixelMetrics.cornerStepSize,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18.0),
+
+            // Atmospheric Sanctuary Supercompensation Banner
+            PixelCard(
+              backgroundColor: colors.surfaceDark,
+              borderColor: colors.borderBright,
+              bevelColor: colors.borderMuted,
+              padding: const EdgeInsets.all(14.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.nightlight_round,
+                        color: const Color(0xFF2EE6D6),
+                        size: 16.0,
                       ),
-                    ),
-                    child: Text(
-                      'STATUS: NOMINAL',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 9.5,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.0,
-                        color: colors.amberAccent,
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'REST BUILDS YOU BACK STRONGER',
+                              style: TextStyle(
+                                fontFamily: 'Silkscreen',
+                                fontFamilyFallback: const ['monospace'],
+                                fontSize: 11.0,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1.0,
+                                color: const Color(0xFF2EE6D6),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              'NEUROMUSCULAR SUPERCOMPENSATION',
+                              style: TextStyle(
+                                fontFamily: 'Silkscreen',
+                                fontFamilyFallback: const ['monospace'],
+                                fontSize: 8.0,
+                                letterSpacing: 0.6,
+                                color: colors.textMuted,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    ],
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    'Musculoskeletal remodeling, collagen repair, and CNS resensitization occur during downtime. Honor cooldown timers and periodization deloads to consolidate progress.',
+                    style: zenithBodyMono(
+                      fontSize: 11.0,
+                      height: 1.4,
+                      color: colors.textPrimary,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 18.0),
+            ),
+            const SizedBox(height: 16.0),
 
-              // Atmospheric Sanctuary Supercompensation Banner
-              PixelCard(
-                backgroundColor: colors.surfaceDark,
-                borderColor: colors.borderBright,
-                bevelColor: colors.borderMuted,
-                padding: const EdgeInsets.all(14.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.nightlight_round,
-                          color: const Color(0xFF2EE6D6),
-                          size: 16.0,
-                        ),
-                        const SizedBox(width: 8.0),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'REST BUILDS YOU BACK STRONGER',
-                                style: TextStyle(
-                                  fontFamily: 'Silkscreen',
-                                  fontFamilyFallback: const ['monospace'],
-                                  fontSize: 11.0,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.0,
-                                  color: const Color(0xFF2EE6D6),
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                'NEUROMUSCULAR SUPERCOMPENSATION',
-                                style: TextStyle(
-                                  fontFamily: 'Silkscreen',
-                                  fontFamilyFallback: const ['monospace'],
-                                  fontSize: 8.0,
-                                  letterSpacing: 0.6,
-                                  color: colors.textMuted,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+            // 1. Neuromuscular Recovery Radar (48h Lock HUD)
+            const PatternRecoveryGrid(),
+            const SizedBox(height: 16.0),
+
+            // 2. Deload Macrocycle Tracker & Periodization Block
+            const MacrocycleProgressCard(),
+            const SizedBox(height: 16.0),
+
+            // 3. Kenneth Miller Adaptation History Ledger
+            const AdaptationLedgerCard(),
+            const SizedBox(height: 16.0),
+
+            // District Ambient Telemetry
+            PixelCard(
+              backgroundColor: colors.surfaceDark,
+              borderColor: colors.borderMuted,
+              padding: const EdgeInsets.all(14.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'DISTRICT ATMOSPHERE',
+                    style: TextStyle(
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.0,
+                      color: colors.textMuted,
                     ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      'Musculoskeletal remodeling, collagen repair, and CNS resensitization occur during downtime. Honor cooldown timers and periodization deloads to consolidate progress.',
-                      style: zenithBodyMono(
-                        fontSize: 11.0,
-                        height: 1.4,
-                        color: colors.textPrimary,
-                      ),
+                  ),
+                  const SizedBox(height: 6.0),
+                  Text(
+                    district.displayName,
+                    style: TextStyle(
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.w900,
+                      color: colors.amberAccent,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 4.0),
+                  Text(
+                    'Rainfall frequency: 72% · Ambient Temp: 14°C · Line Voltage: 1500V DC · Platform Hum: 48Hz',
+                    style: TextStyle(
+                      fontFamily: 'Silkscreen',
+                      fontFamilyFallback: const ['monospace'],
+                      fontSize: 9.5,
+                      color: colors.textMuted,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16.0),
-
-              // 1. Neuromuscular Recovery Radar (48h Lock HUD)
-              const PatternRecoveryGrid(),
-              const SizedBox(height: 16.0),
-
-              // 2. Deload Macrocycle Tracker & Periodization Block
-              const MacrocycleProgressCard(),
-              const SizedBox(height: 16.0),
-
-              // 3. Kenneth Miller Adaptation History Ledger
-              const AdaptationLedgerCard(),
-              const SizedBox(height: 16.0),
-
-              // District Ambient Telemetry
-              PixelCard(
-                backgroundColor: colors.surfaceDark,
-                borderColor: colors.borderMuted,
-                padding: const EdgeInsets.all(14.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'DISTRICT ATMOSPHERE',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1.0,
-                        color: colors.textMuted,
-                      ),
-                    ),
-                    const SizedBox(height: 6.0),
-                    Text(
-                      district.displayName,
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.w900,
-                        color: colors.amberAccent,
-                      ),
-                    ),
-                    const SizedBox(height: 4.0),
-                    Text(
-                      'Rainfall frequency: 72% · Ambient Temp: 14°C · Line Voltage: 1500V DC · Platform Hum: 48Hz',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 9.5,
-                        color: colors.textMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24.0),
-            ],
-          ),
+            ),
+            const SizedBox(height: 24.0),
+          ],
         ),
       ),
     );

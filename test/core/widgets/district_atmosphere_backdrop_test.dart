@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenith/core/theme/theme.dart';
+import 'package:zenith/core/widgets/district_background_media_layer.dart';
 import 'package:zenith/core/widgets/widgets.dart';
 import 'package:zenith/features/districts/neon_alleys/neon_alleys_atmosphere_backdrop.dart';
 import 'package:zenith/features/districts/railside_outskirts/railside_atmosphere_backdrop.dart';
+
+const _neonAlleysVideoAsset = 'assets/backgrounds/neon_alleys_loop.mp4';
 
 void main() {
   group('DistrictAtmosphereBackdrop', () {
@@ -63,22 +66,18 @@ void main() {
       },
     );
 
-    testWidgets('multiple simultaneously-mounted NeonAlleysAtmosphereBackdrop '
-        'widgets share one neonAlleysVideoControllerProvider instance', (
+    testWidgets('multiple simultaneously-mounted consumers of the same video '
+        'asset share one districtVideoControllerProvider instance', (
       tester,
     ) async {
-      // Regression coverage: IndexedStack keeps Outpost/Atlas/Depot/
-      // Sanctuary mounted at the same time, so switching to Neon Alleys
-      // used to construct one independent VideoPlayerController per
-      // screen -- 4 simultaneous decoders for the same asset, of which
-      // only the visible one actually played; the rest stalled on their
-      // first frame and read as a static image. video_player has no
-      // platform implementation under `flutter test` (isTestEnvironment
-      // makes the provider return null here), so this can't assert on
-      // real playback -- what it does assert is the architectural fix:
-      // reading the provider from two independently-mounted consumers in
-      // the same container resolves to the exact same value, proving
-      // there's one shared instance rather than one per widget.
+      // Regression coverage for the underlying sharing mechanism: any two
+      // widgets reading districtVideoControllerProvider for the same asset
+      // path -- whether that's two NeonAlleysAtmosphereBackdrop instances,
+      // or a pushed route sitting on top of a still-mounted caller -- must
+      // resolve to the exact same controller instance, not one each.
+      // video_player has no platform implementation under `flutter test`
+      // (isTestEnvironment makes the provider return null here), so this
+      // can't assert on real playback -- it asserts the sharing contract.
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
 
@@ -113,12 +112,16 @@ void main() {
       expect(find.byType(NeonAlleysAtmosphereBackdrop), findsNWidgets(2));
       expect(
         identical(
-          container.read(neonAlleysVideoControllerProvider),
-          container.read(neonAlleysVideoControllerProvider),
+          container.read(
+            districtVideoControllerProvider(_neonAlleysVideoAsset),
+          ),
+          container.read(
+            districtVideoControllerProvider(_neonAlleysVideoAsset),
+          ),
         ),
         isTrue,
         reason:
-            'both mounted backdrops must resolve the exact same '
+            'both mounted consumers must resolve the exact same '
             'controller instance from the shared container, not one each',
       );
     });

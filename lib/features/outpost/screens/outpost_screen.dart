@@ -28,84 +28,82 @@ class OutpostScreen extends ConsumerWidget {
     final macrocycleAsync = ref.watch(macrocycleProvider);
 
     return Scaffold(
-      backgroundColor: colors.backgroundVoid,
-      body: DistrictAtmosphereBackdrop(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20.0, 14.0, 20.0, 0.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'THE OUTPOST',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1.5,
-                              color: colors.amberAccent,
-                            ),
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 14.0, 20.0, 0.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'THE OUTPOST',
+                          style: TextStyle(
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.5,
+                            color: colors.amberAccent,
                           ),
-                          const SizedBox(height: 2.0),
-                          Text(
-                            'DAILY BRIEFING & TRAINING STATUS',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
-                              fontSize: 10.0,
-                              letterSpacing: 1.0,
-                              color: colors.textMuted,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                    PixelButton(
-                      variant: PixelButtonVariant.secondary,
-                      padding: const EdgeInsets.all(8.0),
-                      semanticLabel: 'Change district theme',
-                      onPressed: () {
-                        ref.read(themeControllerProvider).next();
-                      },
-                      child: Text(
-                        '⟳',
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
-                          fontSize: 18.0,
-                          color: colors.amberAccent,
                         ),
+                        const SizedBox(height: 2.0),
+                        Text(
+                          'DAILY BRIEFING & TRAINING STATUS',
+                          style: TextStyle(
+                            fontFamily: 'Silkscreen',
+                            fontFamilyFallback: const ['monospace'],
+                            fontSize: 10.0,
+                            letterSpacing: 1.0,
+                            color: colors.textMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10.0),
+                  PixelButton(
+                    variant: PixelButtonVariant.secondary,
+                    padding: const EdgeInsets.all(8.0),
+                    semanticLabel: 'Change district theme',
+                    onPressed: () {
+                      ref.read(themeControllerProvider).next();
+                    },
+                    child: Text(
+                      '⟳',
+                      style: TextStyle(
+                        fontFamily: 'Silkscreen',
+                        fontFamilyFallback: const ['monospace'],
+                        fontSize: 18.0,
+                        color: colors.amberAccent,
                       ),
                     ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _StreakCard(streakAsync: streakAsync),
+                    const SizedBox(height: 16.0),
+                    _TodaySessionCard(previewAsync: previewAsync),
+                    const SizedBox(height: 16.0),
+                    _WeeklyStatsRow(macrocycleAsync: macrocycleAsync),
                   ],
                 ),
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _StreakCard(streakAsync: streakAsync),
-                      const SizedBox(height: 16.0),
-                      _TodaySessionCard(previewAsync: previewAsync),
-                      const SizedBox(height: 16.0),
-                      _WeeklyStatsRow(macrocycleAsync: macrocycleAsync),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
