@@ -84,9 +84,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
           children: [
             Text(
               state.steppedMeterText,
-              style: TextStyle(
-                fontFamily: 'Silkscreen',
-                fontFamilyFallback: const ['monospace'],
+              style: zenithPixelDisplay(
                 fontSize: 11.0,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.0,
@@ -124,9 +122,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 children: [
                   Text(
                     '>> RESTORATIVE GUIDANCE',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 10.0,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.8,
@@ -135,10 +131,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
                   ),
                   Text(
                     'TARGET: ${state.targetRpeGuidance}',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
-                      fontSize: 9.5,
+                    style: zenithPixelDisplay(
+                      fontSize: 9.0,
                       fontWeight: FontWeight.w800,
                       color: colors.textMuted,
                     ),
@@ -238,9 +232,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
         children: [
           Text(
             weekTag,
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
+            style: zenithPixelDisplay(
               fontSize: 9.0,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.5,
@@ -250,7 +242,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
           const SizedBox(height: 2.0),
           Text(
             isPast ? '✓' : (isCurrent ? '●' : '○'),
-            style: TextStyle(fontSize: 8.0, color: textColor),
+            style: zenithPixelDisplay(fontSize: 9.0, color: textColor),
           ),
         ],
       ),
@@ -274,10 +266,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
-              fontSize: 8.5,
+            style: zenithPixelDisplay(
+              fontSize: 9.0,
               fontWeight: FontWeight.w700,
               color: colors.textMuted,
             ),
@@ -289,9 +279,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
             children: [
               Text(
                 value,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w900,
                   color: colors.textPrimary,
@@ -300,10 +288,8 @@ class MacrocycleProgressCard extends ConsumerWidget {
               const SizedBox(width: 4.0),
               Text(
                 unit,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
-                  fontSize: 8.0,
+                style: zenithPixelDisplay(
+                  fontSize: 9.0,
                   fontWeight: FontWeight.w700,
                   color: colors.amberGlow,
                 ),

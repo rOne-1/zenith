@@ -111,9 +111,7 @@ class StationInspectorSheet extends StatelessWidget {
                             ),
                             child: Text(
                               meta.stationCode,
-                              style: TextStyle(
-                                fontFamily: 'Silkscreen',
-                                fontFamilyFallback: const ['monospace'],
+                              style: zenithPixelDisplay(
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w900,
                                 color: colors.amberAccent,
@@ -123,9 +121,7 @@ class StationInspectorSheet extends StatelessWidget {
                           const SizedBox(width: 8.0),
                           Text(
                             'STATION INSPECTION PASS',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 10.0,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.0,
@@ -145,9 +141,7 @@ class StationInspectorSheet extends StatelessWidget {
                         ),
                         child: Text(
                           statusBadgeText,
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 9.0,
                             fontWeight: FontWeight.bold,
                             color: statusColor,
@@ -161,9 +155,7 @@ class StationInspectorSheet extends StatelessWidget {
                   // Exercise Title
                   Text(
                     exercise.name,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w900,
                       color: colors.textPrimary,
@@ -197,9 +189,7 @@ class StationInspectorSheet extends StatelessWidget {
                   // Biomechanical Form Cues Terminal
                   Text(
                     'BIOMECHANICAL FORM SPECIFICATIONS',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 10.0,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
@@ -227,9 +217,7 @@ class StationInspectorSheet extends StatelessWidget {
                               children: [
                                 Text(
                                   '> ',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 11.0,
                                     fontWeight: FontWeight.bold,
                                     color: colors.amberAccent,
@@ -257,9 +245,7 @@ class StationInspectorSheet extends StatelessWidget {
                   // Kenneth Miller 5-Variable Segmented Gauges
                   Text(
                     'KENNETH MILLER PROGRESSION GAUGES',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 10.0,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
@@ -327,9 +313,7 @@ class _PillBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontFamily: 'Silkscreen',
-          fontFamilyFallback: const ['monospace'],
+        style: zenithPixelDisplay(
           fontSize: 9.0,
           fontWeight: FontWeight.bold,
           letterSpacing: 0.5,

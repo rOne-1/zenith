@@ -83,9 +83,7 @@ class PatternRecoveryGrid extends ConsumerWidget {
               padding: const EdgeInsets.all(12.0),
               child: Text(
                 'RADAR TELEMETRY OFFLINE: $err',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 11.0,
                   color: colors.signalRed,
                 ),
@@ -153,9 +151,7 @@ class _PatternRecoveryRow extends StatelessWidget {
                       ),
                       child: Text(
                         lineTheme.codePrefix,
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
+                        style: zenithPixelDisplay(
                           fontSize: 11.0,
                           fontWeight: FontWeight.w900,
                           color: lineTheme.color,
@@ -166,9 +162,7 @@ class _PatternRecoveryRow extends StatelessWidget {
                     Expanded(
                       child: Text(
                         lineTheme.lineNameEn,
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
+                        style: zenithPixelDisplay(
                           fontSize: 11.0,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 0.8,
@@ -215,9 +209,7 @@ class _PatternRecoveryRow extends StatelessWidget {
                     ],
                     Text(
                       status.statusChipLabel,
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 9.0,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 0.5,
@@ -254,9 +246,7 @@ class _PatternRecoveryRow extends StatelessWidget {
               const SizedBox(width: 8.0),
               Text(
                 '${(progress * 100).toInt()}%',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 9.0,
                   fontWeight: FontWeight.w700,
                   color: statusColor,

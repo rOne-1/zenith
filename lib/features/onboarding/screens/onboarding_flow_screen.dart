@@ -65,9 +65,7 @@ class _OnboardingFlowScreenState extends ConsumerState<OnboardingFlowScreen> {
                     children: [
                       Text(
                         'SETUP ${_step + 1}/$_stepCount',
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
+                        style: zenithPixelDisplay(
                           fontSize: 10.0,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.0,
@@ -115,9 +113,7 @@ class _StepScaffold extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,
@@ -176,9 +172,7 @@ class _WelcomeStep extends StatelessWidget {
           children: [
             Text(
               'WELCOME TO ZENITH',
-              style: TextStyle(
-                fontFamily: 'Silkscreen',
-                fontFamilyFallback: const ['monospace'],
+              style: zenithPixelDisplay(
                 fontSize: 26.0,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.5,
@@ -299,9 +293,7 @@ class _PhysiologyStep extends ConsumerWidget {
                 children: [
                   Text(
                     'JOINT PROTECTION',
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 12.0,
                       fontWeight: FontWeight.w900,
                       color: colors.textPrimary,
@@ -320,9 +312,7 @@ class _PhysiologyStep extends ConsumerWidget {
             ),
             Text(
               userProfile.hasJointPain ? 'ON  ●' : 'OFF ○',
-              style: TextStyle(
-                fontFamily: 'Silkscreen',
-                fontFamilyFallback: const ['monospace'],
+              style: zenithPixelDisplay(
                 fontSize: 11.0,
                 fontWeight: FontWeight.w700,
                 color: userProfile.hasJointPain
@@ -415,9 +405,7 @@ class _ExperienceStepState extends ConsumerState<_ExperienceStep> {
                       children: [
                         Text(
                           option.label,
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 12.0,
                             fontWeight: FontWeight.w900,
                             color: _selected == option.level
@@ -439,7 +427,7 @@ class _ExperienceStepState extends ConsumerState<_ExperienceStep> {
                   if (_selected == option.level)
                     Text(
                       '●',
-                      style: TextStyle(
+                      style: zenithPixelDisplay(
                         fontSize: 16.0,
                         color: colors.amberAccent,
                       ),

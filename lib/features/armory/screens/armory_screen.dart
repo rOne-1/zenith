@@ -64,9 +64,7 @@ class ArmoryScreen extends ConsumerWidget {
                       },
                       child: Text(
                         '←',
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
+                        style: zenithPixelDisplay(
                           fontSize: 18.0,
                           color: colors.amberAccent,
                         ),
@@ -82,9 +80,7 @@ class ArmoryScreen extends ConsumerWidget {
                               Flexible(
                                 child: Text(
                                   'THE DEPOT',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: 1.5,
@@ -109,9 +105,7 @@ class ArmoryScreen extends ConsumerWidget {
                                 ),
                                 child: Text(
                                   'SAVED ✓',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 9.0,
                                     fontWeight: FontWeight.bold,
                                     color: colors.amberGlow,
@@ -123,9 +117,7 @@ class ArmoryScreen extends ConsumerWidget {
                           const SizedBox(height: 2.0),
                           Text(
                             'SELECT AVAILABLE GEAR TO UNLOCK EXERCISE ROUTES',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 9.0,
                               letterSpacing: 0.8,
                               color: colors.textMuted,
@@ -161,9 +153,7 @@ class ArmoryScreen extends ConsumerWidget {
                           const SizedBox(width: 8.0),
                           Text(
                             'EQUIPMENT INVENTORY',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 11.0,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.2,
@@ -216,9 +206,7 @@ class ArmoryScreen extends ConsumerWidget {
                           const SizedBox(width: 8.0),
                           Text(
                             'PHYSIOLOGY ACCOMMODATIONS',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 11.0,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.2,
@@ -266,9 +254,7 @@ class ArmoryScreen extends ConsumerWidget {
                           const SizedBox(width: 8.0),
                           Text(
                             'ATTRIBUTION',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 11.0,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1.2,
@@ -317,9 +303,7 @@ class ArmoryScreen extends ConsumerWidget {
                         '$equippedCount of 6 gear routes equipped · '
                         'joint protection ${userProfile.hasJointPain ? 'ON' : 'OFF'}'
                         '${userProfile.hasCycleAutoregulation ? ' · cycle autoreg ON' : ''}',
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
+                        style: zenithPixelDisplay(
                           fontSize: 10.0,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.5,
@@ -382,9 +366,7 @@ class _PhysiologyToggleTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 12.0,
                       fontWeight: FontWeight.bold,
                       color: isActive ? colors.textPrimary : colors.textMuted,
@@ -393,7 +375,10 @@ class _PhysiologyToggleTile extends StatelessWidget {
                   const SizedBox(height: 2.0),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 11.0, color: colors.textMuted),
+                    style: zenithBodyMono(
+                      fontSize: 11.0,
+                      color: colors.textMuted,
+                    ),
                   ),
                 ],
               ),
@@ -413,9 +398,7 @@ class _PhysiologyToggleTile extends StatelessWidget {
               ),
               child: Text(
                 isActive ? 'ON  ●' : 'OFF ○',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 10.0,
                   fontWeight: FontWeight.w900,
                   color: isActive ? colors.surfaceDark : colors.textMuted,

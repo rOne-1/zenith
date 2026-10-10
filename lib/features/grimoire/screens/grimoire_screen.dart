@@ -63,9 +63,7 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                     },
                     child: Text(
                       '←',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 18.0,
                         color: colors.amberAccent,
                       ),
@@ -78,9 +76,7 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                       children: [
                         Text(
                           'THE ATLAS',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.5,
@@ -90,9 +86,7 @@ class _GrimoireScreenState extends ConsumerState<GrimoireScreen> {
                         const SizedBox(height: 2.0),
                         Text(
                           'METRO TRANSIT MAP OF MOVEMENT PROGRESSIONS',
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 9.0,
                             letterSpacing: 0.8,
                             color: colors.textMuted,
@@ -245,9 +239,7 @@ class _FilterPill extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontFamily: 'Silkscreen',
-            fontFamilyFallback: const ['monospace'],
+          style: zenithPixelDisplay(
             fontSize: 9.0,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.8,

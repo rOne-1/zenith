@@ -160,9 +160,7 @@ class _TicketTabItem extends StatelessWidget {
                 children: [
                   Text(
                     item.glyph,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 15.0,
                       color: isSelected ? activeTextColor : inactiveTextColor,
                     ),
@@ -170,9 +168,7 @@ class _TicketTabItem extends StatelessWidget {
                   const SizedBox(width: 4.0),
                   Text(
                     item.indexLabel,
-                    style: TextStyle(
-                      fontFamily: 'Silkscreen',
-                      fontFamilyFallback: const ['monospace'],
+                    style: zenithPixelDisplay(
                       fontSize: 10.0,
                       fontWeight: FontWeight.w700,
                       color: isSelected ? activeTextColor : inactiveTextColor,
@@ -185,9 +181,7 @@ class _TicketTabItem extends StatelessWidget {
                 item.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 9.0,
                   fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
                   letterSpacing: 0.8,

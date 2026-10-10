@@ -37,9 +37,7 @@ class PixelBadge extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontFamily: 'Silkscreen',
-          fontFamilyFallback: const ['monospace'],
+        style: zenithPixelDisplay(
           fontSize: fontSize,
           fontWeight: fontWeight,
           letterSpacing: letterSpacing,

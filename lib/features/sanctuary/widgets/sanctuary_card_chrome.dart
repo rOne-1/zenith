@@ -38,9 +38,7 @@ class SanctuaryCardHeader extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 12.0,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.0,
@@ -51,10 +49,8 @@ class SanctuaryCardHeader extends StatelessWidget {
                     ),
                     Text(
                       subtitle,
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
-                        fontSize: 8.0,
+                      style: zenithPixelDisplay(
+                        fontSize: 9.0,
                         letterSpacing: 0.5,
                         color: colors.textMuted,
                       ),
@@ -87,9 +83,7 @@ class SanctuaryCardLoadingMessage extends StatelessWidget {
       child: Center(
         child: Text(
           message,
-          style: TextStyle(
-            fontFamily: 'Silkscreen',
-            fontFamilyFallback: const ['monospace'],
+          style: zenithPixelDisplay(
             fontSize: 11.0,
             fontWeight: FontWeight.w700,
             letterSpacing: 1.2,
@@ -113,9 +107,7 @@ class SanctuaryCardErrorMessage extends StatelessWidget {
       padding: const EdgeInsets.all(12.0),
       child: Text(
         message,
-        style: TextStyle(
-          fontFamily: 'Silkscreen',
-          fontFamilyFallback: const ['monospace'],
+        style: zenithPixelDisplay(
           fontSize: 11.0,
           color: context.colors.signalRed,
         ),

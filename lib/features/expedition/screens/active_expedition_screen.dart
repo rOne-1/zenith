@@ -41,9 +41,7 @@ class _ActiveExpeditionScreenState
         children: [
           Text(
             'ABORT EXPEDITION',
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
+            style: zenithPixelDisplay(
               fontSize: 14.0,
               fontWeight: FontWeight.w900,
               color: colors.signalRed,
@@ -53,9 +51,7 @@ class _ActiveExpeditionScreenState
           Text(
             'Are you sure you want to abort? All in-progress sets will be discarded from persistence.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
+            style: zenithBodyMono(
               fontSize: 12.0,
               color: colors.textPrimary,
             ),
@@ -166,9 +162,7 @@ class _ActiveExpeditionScreenState
                     Flexible(
                       child: Text(
                         'ACTIVE EXPEDITION',
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
+                        style: zenithPixelDisplay(
                           fontSize: 12.0,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
@@ -186,9 +180,7 @@ class _ActiveExpeditionScreenState
                       onPressed: _handleAbort,
                       child: Text(
                         '✕',
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
+                        style: zenithPixelDisplay(
                           fontSize: 16.0,
                           color: colors.signalRed,
                         ),
@@ -224,9 +216,7 @@ class _WarmUpView extends StatelessWidget {
             children: [
               Text(
                 'WARM-UP MOBILIZATION',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5,
@@ -236,9 +226,7 @@ class _WarmUpView extends StatelessWidget {
               const SizedBox(height: 6.0),
               Text(
                 'DYNAMIC RANGE OF MOTION & TISSUE PREPARATION',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 11.0,
                   color: colors.textMuted,
                 ),
@@ -254,9 +242,7 @@ class _WarmUpView extends StatelessWidget {
                     children: [
                       Text(
                         'PRE-EXPEDITION CHECKLIST:',
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
+                        style: zenithPixelDisplay(
                           fontSize: 12.0,
                           fontWeight: FontWeight.w700,
                           color: colors.amberGlow,
@@ -306,7 +292,8 @@ class _WarmUpView extends StatelessWidget {
         children: [
           Text(
             '✓ ',
-            style: TextStyle(
+            style: zenithBodyMono(
+              fontSize: 12.0,
               color: colors.accentSecondary,
               fontWeight: FontWeight.w900,
             ),
@@ -355,9 +342,7 @@ class _CoolDownView extends StatelessWidget {
             children: [
               Text(
                 'COOL-DOWN DOWNSHIFT',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5,
@@ -367,9 +352,7 @@ class _CoolDownView extends StatelessWidget {
               const SizedBox(height: 6.0),
               Text(
                 'PARASYMPATHETIC RECOVERY & DIAPHRAGMATIC PACING',
-                style: TextStyle(
-                  fontFamily: 'Silkscreen',
-                  fontFamilyFallback: const ['monospace'],
+                style: zenithPixelDisplay(
                   fontSize: 11.0,
                   color: colors.textMuted,
                 ),
@@ -394,9 +377,7 @@ class _CoolDownView extends StatelessWidget {
                         children: [
                           Text(
                             'RESTORATIVE PROTOCOL:',
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 12.0,
                               fontWeight: FontWeight.w700,
                               color: colors.accentSecondary,

@@ -67,10 +67,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
               children: [
                 Text(
                   '>> RECENT AUTOREGULATION PROMOTIONS',
-                  style: TextStyle(
-                    fontFamily: 'Silkscreen',
-                    fontFamilyFallback: const ['monospace'],
-                    fontSize: 9.5,
+                  style: zenithPixelDisplay(
+                    fontSize: 9.0,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.8,
                     color: colors.amberGlow,
@@ -86,9 +84,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
                         Expanded(
                           child: Text(
                             promo.exerciseName.toUpperCase(),
-                            style: TextStyle(
-                              fontFamily: 'Silkscreen',
-                              fontFamilyFallback: const ['monospace'],
+                            style: zenithPixelDisplay(
                               fontSize: 10.0,
                               fontWeight: FontWeight.w800,
                               color: colors.textPrimary,
@@ -98,9 +94,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
                         ),
                         Text(
                           promo.variableDelta,
-                          style: TextStyle(
-                            fontFamily: 'Silkscreen',
-                            fontFamilyFallback: const ['monospace'],
+                          style: zenithPixelDisplay(
                             fontSize: 9.0,
                             fontWeight: FontWeight.w700,
                             color: colors.accentSecondary,
@@ -155,10 +149,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
                     Flexible(
                       child: Text(
                         item.exerciseName.toUpperCase(),
-                        style: TextStyle(
-                          fontFamily: 'Silkscreen',
-                          fontFamilyFallback: const ['monospace'],
-                          fontSize: 11.5,
+                        style: zenithPixelDisplay(
+                          fontSize: 11.0,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 0.5,
                           color: colors.textPrimary,
@@ -256,10 +248,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
         children: [
           Text(
             '$label L$level',
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
-              fontSize: 8.0,
+            style: zenithPixelDisplay(
+              fontSize: 9.0,
               fontWeight: FontWeight.w700,
               color: level > 1 ? colors.amberAccent : colors.textMuted,
             ),
@@ -300,10 +290,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
         children: [
           Text(
             'TEMPO',
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
-              fontSize: 8.0,
+            style: zenithPixelDisplay(
+              fontSize: 9.0,
               fontWeight: FontWeight.w700,
               color: isSlow ? colors.accentSecondary : colors.textMuted,
             ),
@@ -311,10 +299,8 @@ class AdaptationLedgerCard extends ConsumerWidget {
           const SizedBox(height: 2.0),
           Text(
             isSlow ? '6s SLOW' : '4s STD',
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
-              fontSize: 7.0,
+            style: zenithPixelDisplay(
+              fontSize: 9.0,
               fontWeight: FontWeight.w800,
               color: isSlow ? colors.accentSecondary : colors.textMuted,
             ),

@@ -45,9 +45,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                   children: [
                     Text(
                       'EXPEDITION CONCLUDED',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.8,
@@ -57,9 +55,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                     const SizedBox(height: 4.0),
                     Text(
                       'SESSION DEBRIEF & NEUROMUSCULAR TELEMETRY',
-                      style: TextStyle(
-                        fontFamily: 'Silkscreen',
-                        fontFamilyFallback: const ['monospace'],
+                      style: zenithPixelDisplay(
                         fontSize: 10.0,
                         letterSpacing: 1.0,
                         color: colors.textMuted,
@@ -89,9 +85,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                               children: [
                                 Text(
                                   'COMPLETED SETS',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 9.0,
                                     color: colors.textMuted,
                                   ),
@@ -99,9 +93,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 const SizedBox(height: 4.0),
                                 Text(
                                   '$completedSets',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 26.0,
                                     fontWeight: FontWeight.w900,
                                     color: colors.amberAccent,
@@ -122,9 +114,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                               children: [
                                 Text(
                                   'TOTAL VOLUME',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 9.0,
                                     color: colors.textMuted,
                                   ),
@@ -132,9 +122,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 const SizedBox(height: 4.0),
                                 Text(
                                   '$totalReps REPS',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w900,
                                     color: colors.accentSecondary,
@@ -160,9 +148,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                               children: [
                                 Text(
                                   'AVERAGE RPE',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 9.0,
                                     color: colors.textMuted,
                                   ),
@@ -170,9 +156,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 const SizedBox(height: 4.0),
                                 Text(
                                   avgRpe,
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 26.0,
                                     fontWeight: FontWeight.w900,
                                     color: colors.amberGlow,
@@ -193,9 +177,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                               children: [
                                 Text(
                                   'DURATION',
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 9.0,
                                     color: colors.textMuted,
                                   ),
@@ -203,9 +185,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                 const SizedBox(height: 4.0),
                                 Text(
                                   durationText,
-                                  style: TextStyle(
-                                    fontFamily: 'Silkscreen',
-                                    fontFamilyFallback: const ['monospace'],
+                                  style: zenithPixelDisplay(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w900,
                                     color: colors.textPrimary,
@@ -238,9 +218,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                               const SizedBox(width: 8.0),
                               Text(
                                 'KENNETH MILLER ADAPTATIONS',
-                                style: TextStyle(
-                                  fontFamily: 'Silkscreen',
-                                  fontFamilyFallback: const ['monospace'],
+                                style: zenithPixelDisplay(
                                   fontSize: 11.0,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 1.0,
@@ -253,9 +231,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                           if (state.adaptations.isEmpty)
                             Text(
                               'Standard baseline completed. Mastery state saved to progression ledger.',
-                              style: TextStyle(
-                                fontFamily: 'Silkscreen',
-                                fontFamilyFallback: const ['monospace'],
+                              style: zenithBodyMono(
                                 fontSize: 11.0,
                                 color: colors.textMuted,
                               ),
@@ -290,11 +266,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                       children: [
                                         Text(
                                           a.exerciseName.toUpperCase(),
-                                          style: TextStyle(
-                                            fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const [
-                                              'monospace',
-                                            ],
+                                          style: zenithPixelDisplay(
                                             fontSize: 12.0,
                                             fontWeight: FontWeight.w900,
                                             color: colors.textPrimary,
@@ -302,11 +274,7 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
                                         ),
                                         Text(
                                           'RPE ${a.reportedRpe} (TARGET ${a.targetRpe})',
-                                          style: TextStyle(
-                                            fontFamily: 'Silkscreen',
-                                            fontFamilyFallback: const [
-                                              'monospace',
-                                            ],
+                                          style: zenithPixelDisplay(
                                             fontSize: 9.0,
                                             fontWeight: FontWeight.w700,
                                             color: actionColor,

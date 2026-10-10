@@ -36,23 +36,20 @@ class IllustrationCreditsSection extends StatelessWidget {
             'from Everkinetic artwork, also $kIllustrationLicenseName. '
             'Recolored at render time to match district theming, an '
             'adaptation under the same license.',
-            style: TextStyle(fontSize: 11.0, height: 1.4, color: colors.textMuted),
+            style: zenithBodyMono(fontSize: 11.0, height: 1.4, color: colors.textMuted),
           ),
           const SizedBox(height: 4.0),
           Text(
             kIllustrationSourceRepoUrl,
-            style: TextStyle(
+            style: zenithBodyMono(
               fontSize: 11.0,
               color: colors.amberAccent,
-              decoration: TextDecoration.underline,
-            ),
+            ).copyWith(decoration: TextDecoration.underline),
           ),
           const SizedBox(height: 12.0),
           Text(
             'SOURCED EXERCISES',
-            style: TextStyle(
-              fontFamily: 'Silkscreen',
-              fontFamilyFallback: const ['monospace'],
+            style: zenithPixelDisplay(
               fontSize: 9.0,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.0,
@@ -67,7 +64,7 @@ class IllustrationCreditsSection extends StatelessWidget {
                 kEverkineticSources.containsKey(exercise.id)
                     ? '${exercise.name} — includes Everkinetic artwork'
                     : exercise.name,
-                style: TextStyle(fontSize: 10.5, color: colors.textPrimary),
+                style: zenithBodyMono(fontSize: 11.0, color: colors.textPrimary),
               ),
             ),
         ],
