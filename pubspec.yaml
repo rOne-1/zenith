@@ -58,6 +58,7 @@ dependencies:
   flutter_svg: ^2.3.0
   video_player: ^2.9.2
   cryptography: ^2.9.0
+  flutter_secure_storage: ^11.2.0
 
 dev_dependencies:
   flutter_test:

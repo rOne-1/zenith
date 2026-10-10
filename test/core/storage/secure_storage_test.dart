@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cryptography/cryptography.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenith/core/storage/storage.dart';
@@ -11,6 +12,7 @@ void main() {
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
       prefs = await SharedPreferences.getInstance();
+      FlutterSecureStorageMasterKeyStore.resetTestStore();
     });
 
     test('Round-trip encryption and decryption restores exact string value', () async {
@@ -100,6 +102,137 @@ void main() {
     test('Reading nonexistent key returns null without exception', () async {
       final storage = AesGcmSecureStorage(prefs);
       expect(await storage.read('non_existent'), isNull);
+    });
+  });
+
+  group('SEC-1 Hardware-Backed Key Separation Tests', () {
+    late SharedPreferences prefs;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      prefs = await SharedPreferences.getInstance();
+      FlutterSecureStorageMasterKeyStore.resetTestStore();
+    });
+
+    test('Hardware-backed key isolation: master key is written to MasterKeyStore and NEVER to SharedPreferences', () async {
+      final keyStore = InMemoryMasterKeyStore();
+      final storage = AesGcmSecureStorage(prefs, keyStore: keyStore);
+      const testKey = 'patient_dna_marker';
+      const testValue = 'ATCGCGATCGATCGAT';
+
+      await storage.write(testKey, testValue);
+
+      // Verify data is persisted in SharedPreferences envelope
+      expect(prefs.containsKey('$kSecureStorageKeyPrefix$testKey'), isTrue);
+
+      // STRICT SEC-1: SharedPreferences must NEVER contain the master key
+      expect(prefs.getString(kSecureStorageMasterKeyPref), isNull);
+      expect(prefs.containsKey(kSecureStorageMasterKeyPref), isFalse);
+      expect(prefs.getKeys().contains(kSecureStorageMasterKeyPref), isFalse);
+
+      // Master key is stored in the vault
+      final vaultedKeyBase64 = await keyStore.readMasterKey();
+      expect(vaultedKeyBase64, isNotNull);
+      final keyBytes = base64Decode(vaultedKeyBase64!);
+      expect(keyBytes.length, equals(32)); // 256-bit AES key
+
+      // Decryption round-trip succeeds with the vaulted key
+      final decrypted = await storage.read(testKey);
+      expect(decrypted, equals(testValue));
+    });
+
+    test('Seamless legacy migration: legacy master key in SharedPreferences is migrated to MasterKeyStore and purged from SharedPreferences', () async {
+      // 1. Generate legacy 256-bit AES master key
+      final algorithm = AesGcm.with256bits();
+      final legacyKey = await algorithm.newSecretKey();
+      final legacyKeyBytes = await legacyKey.extract();
+      final legacyBase64Key = base64Encode(legacyKeyBytes.bytes);
+
+      // 2. Pre-populate legacy key and pre-encrypted payload into SharedPreferences
+      await prefs.setString(kSecureStorageMasterKeyPref, legacyBase64Key);
+
+      const secretText = 'LegacySecretDataBeforeV064Migration';
+      final secretBox = await algorithm.encrypt(
+        utf8.encode(secretText),
+        secretKey: legacyKey,
+      );
+      final envelope = {
+        'v': 1,
+        'cipher': base64Encode(secretBox.cipherText),
+        'nonce': base64Encode(secretBox.nonce),
+        'mac': base64Encode(secretBox.mac.bytes),
+      };
+      await prefs.setString('${kSecureStorageKeyPrefix}legacy_payload', jsonEncode(envelope));
+
+      // 3. Mount fresh vault without pre-existing key
+      final keyStore = InMemoryMasterKeyStore();
+      expect(await keyStore.readMasterKey(), isNull);
+
+      final storage = AesGcmSecureStorage(prefs, keyStore: keyStore);
+
+      // 4. Read payload: should transparently decrypt and trigger migration
+      final decrypted = await storage.read('legacy_payload');
+      expect(decrypted, equals(secretText));
+
+      // 5. Verify migration: key now exists in MasterKeyStore
+      expect(await keyStore.readMasterKey(), equals(legacyBase64Key));
+
+      // 6. Verify purge: legacy key is completely wiped from SharedPreferences
+      expect(prefs.getString(kSecureStorageMasterKeyPref), isNull);
+      expect(prefs.containsKey(kSecureStorageMasterKeyPref), isFalse);
+
+      // 7. Verify subsequent writes continue to use the migrated key and keep SharedPreferences clean
+      await storage.write('post_migration_key', 'PostMigrationValue');
+      expect(prefs.containsKey(kSecureStorageMasterKeyPref), isFalse);
+      expect(await storage.read('post_migration_key'), equals('PostMigrationValue'));
+    });
+
+    test('Wiping MasterKeyStore prevents decryption of existing ciphertext (zero key leakage)', () async {
+      final keyStore = InMemoryMasterKeyStore();
+      final storage1 = AesGcmSecureStorage(prefs, keyStore: keyStore);
+      await storage1.write('ephemeral_token', 'SuperSecretToken');
+
+      // Purge master key from vault
+      await keyStore.deleteMasterKey();
+
+      // Create new storage instance with the wiped vault
+      final storage2 = AesGcmSecureStorage(prefs, keyStore: keyStore);
+
+      // Reading should now fail with auth exception because a new key will be generated
+      expect(
+        () => storage2.read('ephemeral_token'),
+        throwsA(isA<SecureStorageAuthException>()),
+      );
+    });
+
+    test('FlutterSecureStorageMasterKeyStore headless fallback works safely in tests without channel hanging', () async {
+      final keyStore = FlutterSecureStorageMasterKeyStore();
+      const sampleKey = 'sampleBase64MasterKey1234567890==';
+
+      expect(await keyStore.readMasterKey(), isNull);
+      await keyStore.writeMasterKey(sampleKey);
+      expect(await keyStore.readMasterKey(), equals(sampleKey));
+
+      await keyStore.deleteMasterKey();
+      expect(await keyStore.readMasterKey(), isNull);
+    });
+
+    test('Riverpod Provider integration: secureStorageProvider uses masterKeyStoreProvider', () async {
+      final testKeyStore = InMemoryMasterKeyStore();
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          masterKeyStoreProvider.overrideWithValue(testKeyStore),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final storage = container.read(secureStorageProvider);
+      await storage.write('provider_key', 'provider_value');
+
+      expect(await storage.read('provider_key'), equals('provider_value'));
+      expect(await testKeyStore.readMasterKey(), isNotNull);
+      expect(prefs.containsKey(kSecureStorageMasterKeyPref), isFalse);
     });
   });
 
