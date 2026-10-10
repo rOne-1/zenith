@@ -122,13 +122,16 @@ class _PatternRecoveryRow extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: ZenithSpacing.md),
       padding: ZenithSpacing.edgeInsetsMd,
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: colors.backgroundVoid,
-        border: Border.all(
-          color: isFresh
-              ? colors.borderMuted
-              : statusColor.withValues(alpha: 0.6),
-          width: 1.0,
+        shape: SteppedPixelBorder(
+          side: BorderSide(
+            color: isFresh
+                ? colors.borderMuted
+                : statusColor.withValues(alpha: 0.6),
+            width: 1.0,
+          ),
+          stepSize: context.pixelMetrics.cornerStepSize,
         ),
       ),
       child: Column(
@@ -145,9 +148,12 @@ class _PatternRecoveryRow extends StatelessWidget {
                       width: 22.0,
                       height: 22.0,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
+                      decoration: ShapeDecoration(
                         color: lineTheme.color.withValues(alpha: 0.2),
-                        border: Border.all(color: lineTheme.color, width: 1.5),
+                        shape: SteppedPixelBorder(
+                          side: BorderSide(color: lineTheme.color, width: 1.5),
+                          stepSize: context.pixelMetrics.cornerStepSize,
+                        ),
                       ),
                       child: Text(
                         lineTheme.codePrefix,
@@ -183,9 +189,12 @@ class _PatternRecoveryRow extends StatelessWidget {
                   horizontal: 8.0,
                   vertical: 3.0,
                 ),
-                decoration: BoxDecoration(
+                decoration: ShapeDecoration(
                   color: statusColor.withValues(alpha: 0.12),
-                  border: Border.all(color: statusColor, width: 1.0),
+                  shape: SteppedPixelBorder(
+                    side: BorderSide(color: statusColor, width: 1.0),
+                    stepSize: context.pixelMetrics.cornerStepSize,
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

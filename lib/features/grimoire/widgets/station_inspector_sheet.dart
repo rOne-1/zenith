@@ -102,11 +102,14 @@ class StationInspectorSheet extends StatelessWidget {
                               horizontal: ZenithSpacing.sm,
                               vertical: ZenithSpacing.xs,
                             ),
-                            decoration: BoxDecoration(
+                            decoration: ShapeDecoration(
                               color: colors.backgroundVoid,
-                              border: Border.all(
-                                color: colors.amberAccent,
-                                width: 1.0,
+                              shape: SteppedPixelBorder(
+                                side: BorderSide(
+                                  color: colors.amberAccent,
+                                  width: 1.0,
+                                ),
+                                stepSize: metrics.cornerStepSize,
                               ),
                             ),
                             child: Text(
@@ -135,9 +138,12 @@ class StationInspectorSheet extends StatelessWidget {
                           horizontal: ZenithSpacing.sm,
                           vertical: ZenithSpacing.xs,
                         ),
-                        decoration: BoxDecoration(
+                        decoration: ShapeDecoration(
                           color: colors.backgroundVoid,
-                          border: Border.all(color: statusColor, width: 1.0),
+                          shape: SteppedPixelBorder(
+                            side: BorderSide(color: statusColor, width: 1.0),
+                            stepSize: metrics.cornerStepSize,
+                          ),
                         ),
                         child: Text(
                           statusBadgeText,
@@ -202,9 +208,12 @@ class StationInspectorSheet extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
+                    decoration: ShapeDecoration(
                       color: colors.backgroundVoid,
-                      border: Border.all(color: colors.borderMuted, width: 1.0),
+                      shape: SteppedPixelBorder(
+                        side: BorderSide(color: colors.borderMuted, width: 1.0),
+                        stepSize: metrics.cornerStepSize,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,9 +316,12 @@ class _PillBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: Theme.of(context).colorScheme.surface,
-        border: Border.all(color: color, width: 1.0),
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: color, width: 1.0),
+          stepSize: context.pixelMetrics.cornerStepSize,
+        ),
       ),
       child: Text(
         label,

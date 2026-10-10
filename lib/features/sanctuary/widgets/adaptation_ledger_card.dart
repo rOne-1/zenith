@@ -36,6 +36,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
 
   Widget _buildContent(BuildContext context, AdaptationLedgerState state) {
     final colors = context.colors;
+    final metrics = context.pixelMetrics;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,9 +59,12 @@ class AdaptationLedgerCard extends ConsumerWidget {
           Container(
             width: double.infinity,
             padding: ZenithSpacing.edgeInsetsMd,
-            decoration: BoxDecoration(
+            decoration: ShapeDecoration(
               color: colors.backgroundVoid,
-              border: Border.all(color: colors.borderBright, width: 1.0),
+              shape: SteppedPixelBorder(
+                side: BorderSide(color: colors.borderBright, width: 1.0),
+                stepSize: metrics.cornerStepSize,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,14 +124,18 @@ class AdaptationLedgerCard extends ConsumerWidget {
 
   Widget _buildAdaptationTile(BuildContext context, MillerAdaptationItem item) {
     final colors = context.colors;
+    final metrics = context.pixelMetrics;
     final patternColor = MetroLineTheme.forPattern(item.pattern).color;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12.0),
       padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: colors.backgroundVoid,
-        border: Border.all(color: colors.borderMuted, width: 1.0),
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: colors.borderMuted, width: 1.0),
+          stepSize: metrics.cornerStepSize,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,6 +198,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
                   level: item.variables.load,
                   maxLevel: 5,
                   colors: colors,
+                  cornerStepSize: metrics.cornerStepSize,
                 ),
               ),
               const SizedBox(width: 6.0),
@@ -199,6 +208,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
                   level: item.variables.bodyPosition,
                   maxLevel: 5,
                   colors: colors,
+                  cornerStepSize: metrics.cornerStepSize,
                 ),
               ),
               const SizedBox(width: 6.0),
@@ -208,6 +218,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
                   level: item.variables.rom,
                   maxLevel: 5,
                   colors: colors,
+                  cornerStepSize: metrics.cornerStepSize,
                 ),
               ),
               const SizedBox(width: 6.0),
@@ -217,6 +228,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
                   level: item.variables.height,
                   maxLevel: 5,
                   colors: colors,
+                  cornerStepSize: metrics.cornerStepSize,
                 ),
               ),
               const SizedBox(width: 6.0),
@@ -224,6 +236,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
                 child: _buildTempoMeter(
                   tempoLevel: item.variables.tempo,
                   colors: colors,
+                  cornerStepSize: metrics.cornerStepSize,
                 ),
               ),
             ],
@@ -238,12 +251,16 @@ class AdaptationLedgerCard extends ConsumerWidget {
     required int level,
     required int maxLevel,
     required ZenithDistrictColors colors,
+    required double cornerStepSize,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: colors.surfaceElevated,
-        border: Border.all(color: colors.borderMuted, width: 1.0),
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: colors.borderMuted, width: 1.0),
+          stepSize: cornerStepSize,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -279,13 +296,17 @@ class AdaptationLedgerCard extends ConsumerWidget {
   Widget _buildTempoMeter({
     required int tempoLevel,
     required ZenithDistrictColors colors,
+    required double cornerStepSize,
   }) {
     final isSlow = tempoLevel == 2;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: colors.surfaceElevated,
-        border: Border.all(color: colors.borderMuted, width: 1.0),
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: colors.borderMuted, width: 1.0),
+          stepSize: cornerStepSize,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

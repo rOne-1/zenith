@@ -374,7 +374,8 @@ void main() {
           find.byWidgetPredicate(
             (w) =>
                 w is Container &&
-                (w.decoration as BoxDecoration?)?.shape == BoxShape.circle,
+                w.decoration is BoxDecoration &&
+                (w.decoration as BoxDecoration).shape == BoxShape.circle,
           ),
         );
         final dotColor = (dot.decoration as BoxDecoration).color;

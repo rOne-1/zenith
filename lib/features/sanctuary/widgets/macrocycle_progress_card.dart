@@ -35,6 +35,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
 
   Widget _buildContent(BuildContext context, MacrocycleState state) {
     final colors = context.colors;
+    final metrics = context.pixelMetrics;
     final phaseColor = _resolvePhaseColor(state.phase, colors);
 
     return Column(
@@ -70,6 +71,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                   isPast: isPast,
                   isCurrent: isCurrent,
                   phaseColor: phaseColor,
+                  cornerStepSize: metrics.cornerStepSize,
                 ),
               ),
             );
@@ -109,9 +111,12 @@ class MacrocycleProgressCard extends ConsumerWidget {
         Container(
           width: double.infinity,
           padding: ZenithSpacing.edgeInsetsMd,
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
             color: colors.backgroundVoid,
-            border: Border.all(color: colors.borderMuted, width: 1.0),
+            shape: SteppedPixelBorder(
+              side: BorderSide(color: colors.borderMuted, width: 1.0),
+              stepSize: metrics.cornerStepSize,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,6 +169,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 label: 'WEEK SESSIONS',
                 value: '${state.completedSessionsInWeek}',
                 unit: 'DONE',
+                cornerStepSize: metrics.cornerStepSize,
               ),
             ),
             const SizedBox(width: 8.0),
@@ -173,6 +179,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 label: 'WEEK REPS',
                 value: '${state.totalRepsInWeek}',
                 unit: 'REPS',
+                cornerStepSize: metrics.cornerStepSize,
               ),
             ),
             const SizedBox(width: 8.0),
@@ -182,6 +189,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
                 label: 'LOAD VOLUME',
                 value: '${state.totalTonnageInWeek}',
                 unit: 'LV',
+                cornerStepSize: metrics.cornerStepSize,
               ),
             ),
           ],
@@ -196,6 +204,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
     required bool isPast,
     required bool isCurrent,
     required Color phaseColor,
+    required double cornerStepSize,
   }) {
     final String weekTag;
     if (weekNum <= 3) {
@@ -226,9 +235,12 @@ class MacrocycleProgressCard extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: ZenithSpacing.sm),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: bgColor,
-        border: Border.all(color: borderColor, width: isCurrent ? 2.0 : 1.0),
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: borderColor, width: isCurrent ? 2.0 : 1.0),
+          stepSize: cornerStepSize,
+        ),
       ),
       child: Column(
         children: [
@@ -256,12 +268,16 @@ class MacrocycleProgressCard extends ConsumerWidget {
     required String label,
     required String value,
     required String unit,
+    required double cornerStepSize,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: colors.surfaceElevated,
-        border: Border.all(color: colors.borderMuted, width: 1.0),
+        shape: SteppedPixelBorder(
+          side: BorderSide(color: colors.borderMuted, width: 1.0),
+          stepSize: cornerStepSize,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -630,13 +630,17 @@ class _ExpeditionPortalScreenState
                                           horizontal: 6.0,
                                           vertical: 2.0,
                                         ),
-                                        decoration: BoxDecoration(
+                                        decoration: ShapeDecoration(
                                           color: lineTheme.color.withValues(
                                             alpha: 0.15,
                                           ),
-                                          border: Border.all(
-                                            color: lineTheme.color,
-                                            width: 1.0,
+                                          shape: SteppedPixelBorder(
+                                            side: BorderSide(
+                                              color: lineTheme.color,
+                                              width: 1.0,
+                                            ),
+                                            stepSize:
+                                                context.pixelMetrics.cornerStepSize,
                                           ),
                                         ),
                                         child: Text(
@@ -716,11 +720,15 @@ class _ExpeditionPortalScreenState
                                               horizontal: 6.0,
                                               vertical: 2.0,
                                             ),
-                                            decoration: BoxDecoration(
+                                            decoration: ShapeDecoration(
                                               color: colors.backgroundVoid,
-                                              border: Border.all(
-                                                color: colors.borderMuted,
-                                                width: 1.0,
+                                              shape: SteppedPixelBorder(
+                                                side: BorderSide(
+                                                  color: colors.borderMuted,
+                                                  width: 1.0,
+                                                ),
+                                                stepSize:
+                                                    context.pixelMetrics.cornerStepSize,
                                               ),
                                             ),
                                             child: Text(
