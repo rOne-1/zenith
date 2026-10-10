@@ -22,11 +22,11 @@ class StreakService {
   Future<int> getCurrentStreak({DateTime? currentTime}) async {
     final now = currentTime ?? DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final windowStart = today.subtract(const Duration(days: lookbackDays));
+    final windowStart = DateTime(today.year, today.month, today.day - lookbackDays);
 
     final sessions = await _sessionRepository.getSessionsInDateRange(
       windowStart,
-      today.add(const Duration(days: 1)),
+      DateTime(today.year, today.month, today.day + 1),
     );
 
     final completedDays = <DateTime>{};
@@ -45,13 +45,13 @@ class StreakService {
 
     var cursor = completedDays.contains(today)
         ? today
-        : today.subtract(const Duration(days: 1));
+        : DateTime(today.year, today.month, today.day - 1);
     if (!completedDays.contains(cursor)) return 0;
 
     var streak = 0;
     while (completedDays.contains(cursor)) {
       streak++;
-      cursor = cursor.subtract(const Duration(days: 1));
+      cursor = DateTime(cursor.year, cursor.month, cursor.day - 1);
     }
     return streak;
   }

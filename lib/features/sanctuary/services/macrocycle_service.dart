@@ -207,8 +207,13 @@ class MacrocycleService {
       for (final set in session.sets) {
         if (set.reportedRpe != null) {
           totalCompletedSets++;
-          totalReps += set.reps;
-          totalTonnage += (set.reps * set.variables.load);
+          // Mirror ActiveSessionState.totalRepsCompleted: exclude static hold
+          // sets from reps and tonnage sums so that held durations in seconds
+          // do not artificially distort volume telemetry.
+          if (!set.isHold) {
+            totalReps += set.reps;
+            totalTonnage += (set.reps * set.variables.load);
+          }
         }
       }
     }

@@ -397,5 +397,84 @@ void main() {
         container.dispose();
       },
     );
+
+    testWidgets(
+      'completing a hold-type set logs elapsed hold duration clamped to prescribed duration',
+      (tester) async {
+        tester.view.physicalSize = const Size(600, 1200);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        final container = ProviderContainer(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            sbeeDatabaseProvider.overrideWithValue(database),
+          ],
+        );
+
+        final session = WorkoutSession(
+          id: 'hold_elapsed_session',
+          startTime: DateTime.now(),
+          sets: [
+            WorkoutSet(
+              id: 'set_hold_1',
+              sessionId: 'hold_elapsed_session',
+              exerciseId: 'side_plank',
+              movementPattern: MovementPattern.rotation,
+              setNumber: 1,
+              reps: 60,
+              targetRpe: 8,
+              variables: const MillerVariables(),
+              timestamp: DateTime.now(),
+              holdDurationSeconds: 60,
+            ),
+            WorkoutSet(
+              id: 'set_rep_2',
+              sessionId: 'hold_elapsed_session',
+              exerciseId: 'standard_pushup',
+              movementPattern: MovementPattern.pushing,
+              setNumber: 2,
+              reps: 10,
+              targetRpe: 8,
+              variables: const MillerVariables(),
+              timestamp: DateTime.now(),
+            ),
+          ],
+        );
+
+        final controller = container.read(
+          activeSessionControllerProvider.notifier,
+        );
+        await controller.startSession(session);
+        controller.completeWarmUp();
+
+        await tester.pumpWidget(createTestWidget(container: container));
+        await tester.pump();
+
+        // Prescribed duration is 60s
+        expect(find.text('60s'), findsOneWidget);
+
+        // Advance 25 seconds into the hold
+        await tester.pump(const Duration(seconds: 25));
+        expect(find.text('35s'), findsOneWidget);
+
+        // Tap COMPLETE SET early at 25 seconds elapsed
+        await tester.tap(find.text('✓ COMPLETE SET'));
+        await tester.pump();
+
+        // The completed set must record 25 seconds in reps
+        final completedSet = container
+            .read(activeSessionControllerProvider)
+            .session!
+            .sets
+            .first;
+        expect(completedSet.reps, equals(25));
+
+        // Cleanup
+        await tester.pumpWidget(const SizedBox());
+        container.dispose();
+      },
+    );
   });
 }

@@ -512,10 +512,18 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
                         variant: PixelButtonVariant.primary,
                         height: 52.0,
                         onPressed: () {
+                          final int? actualReps;
+                          if (set.isHold) {
+                            final prescribedSeconds =
+                                set.holdDurationSeconds ?? set.reps;
+                            actualReps = (state.totalWork - state.workRemaining)
+                                .inSeconds
+                                .clamp(0, prescribedSeconds);
+                          } else {
+                            actualReps = null;
+                          }
                           controller.completeCurrentSet(
-                            actualReps: set.isHold
-                                ? set.holdDurationSeconds
-                                : null,
+                            actualReps: actualReps,
                           );
                         },
                       ),

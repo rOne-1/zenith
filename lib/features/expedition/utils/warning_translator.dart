@@ -138,14 +138,16 @@ class WarningTranslator {
   }) async {
     final now = currentTime ?? DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day);
-    final endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59, 999);
+    final nextDay = DateTime(now.year, now.month, now.day + 1);
 
     final sessionsToday = await sessionRepository.getSessionsInDateRange(
       startOfDay,
-      endOfDay,
+      nextDay,
     );
 
-    return sessionsToday.any((s) => s.isCompleted);
+    return sessionsToday.any(
+      (s) => s.isCompleted && s.startTime.isBefore(nextDay),
+    );
   }
 
   /// Renders a modal confirmation dialog warning the athlete that an expedition

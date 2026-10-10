@@ -240,6 +240,58 @@ void main() {
       // Tonnage: 5 * 4 = 20
       expect(week2Status.totalTonnageInWeek, equals(20));
     });
+
+    test('excludes static hold sets from weekly reps and tonnage volume sums', () async {
+      final now = DateTime(2026, 9, 8, 10, 0);
+
+      // Session in current week with:
+      // Set 1: rep-based (10 reps, load 2)
+      // Set 2: hold-based (60s hold duration, load 3) -> reps=60, isHold=true
+      final session = WorkoutSession(
+        id: 'mixed_volume_session',
+        startTime: now,
+        endTime: now.add(const Duration(minutes: 30)),
+        isCompleted: true,
+        sets: [
+          WorkoutSet(
+            id: 'set_rep',
+            sessionId: 'mixed_volume_session',
+            exerciseId: 'standard_pushup',
+            movementPattern: MovementPattern.pushing,
+            setNumber: 1,
+            reps: 10,
+            targetRpe: 8,
+            reportedRpe: 8,
+            variables: const MillerVariables(load: 2),
+            timestamp: now,
+          ),
+          WorkoutSet(
+            id: 'set_hold',
+            sessionId: 'mixed_volume_session',
+            exerciseId: 'side_plank',
+            movementPattern: MovementPattern.rotation,
+            setNumber: 2,
+            reps: 60,
+            targetRpe: 7,
+            reportedRpe: 7,
+            variables: const MillerVariables(load: 3),
+            timestamp: now,
+            holdDurationSeconds: 60,
+          ),
+        ],
+      );
+
+      await sessionRepo.saveSession(session);
+
+      final status = await service.getMacrocycleStatus(currentTime: now);
+
+      // Both sets completed
+      expect(status.completedSetsInWeek, equals(2));
+      // Only rep set counts toward reps: 10 (not 10 + 60 = 70)
+      expect(status.totalRepsInWeek, equals(10));
+      // Only rep set counts toward tonnage: 10 * 2 = 20 (not 20 + 60*3 = 200)
+      expect(status.totalTonnageInWeek, equals(20));
+    });
   });
 
   group('MacrocycleProgressCard Widget Tests', () {

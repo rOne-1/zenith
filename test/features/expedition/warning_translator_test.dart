@@ -162,6 +162,59 @@ void main() {
         await database.close();
       },
     );
+
+    test(
+      'hasCompletedSessionToday accurately detects sessions in the final microsecond of a day',
+      () async {
+        final database = SbeeDatabase(NativeDatabase.memory());
+        final sessionRepo = DriftSessionRepository(database);
+
+        final queryTime = DateTime(2026, 9, 8, 12, 0);
+
+        // Session completed at the final microsecond of the day (23:59:59.999999)
+        final endOfDayMicrosecondSession = WorkoutSession(
+          id: 's_final_microsecond',
+          startTime: DateTime(2026, 9, 8, 23, 59, 59, 999, 999),
+          isCompleted: true,
+        );
+        await sessionRepo.saveSession(endOfDayMicrosecondSession);
+
+        expect(
+          await WarningTranslator.hasCompletedSessionToday(
+            sessionRepo,
+            currentTime: queryTime,
+          ),
+          isTrue,
+          reason:
+              'Session in final microsecond of today must be detected',
+        );
+
+        // Session starting at the first microsecond of the next day (00:00:00.000000)
+        // must NOT be detected as completed today
+        final databaseNextDay = SbeeDatabase(NativeDatabase.memory());
+        final sessionRepoNextDay = DriftSessionRepository(databaseNextDay);
+
+        final nextDaySession = WorkoutSession(
+          id: 's_next_day',
+          startTime: DateTime(2026, 9, 9, 0, 0, 0, 0, 0),
+          isCompleted: true,
+        );
+        await sessionRepoNextDay.saveSession(nextDaySession);
+
+        expect(
+          await WarningTranslator.hasCompletedSessionToday(
+            sessionRepoNextDay,
+            currentTime: queryTime,
+          ),
+          isFalse,
+          reason:
+              'Session on tomorrow midnight must not count as completed today',
+        );
+
+        await database.close();
+        await databaseNextDay.close();
+      },
+    );
   });
 
   group('SameDayAdvisoryDialog Widget Tests', () {
