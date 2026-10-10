@@ -2,6 +2,24 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.6.3] — 2026-10-10
+
+### Fixed
+- **Session finalization atomicity** — wrapped progression logging and session persistence in an atomic SQLite transaction (`db.transaction(...)`), preventing partial commits or replay on retry.
+- **GlobalKey duplication** — converted `ActiveExpeditionScreen` to a stateful widget with an instance-scoped toast host key, eliminating route-transition duplicate GlobalKey crashes.
+- **Streak calculation across DST boundaries** — replaced 24-hour duration subtraction with calendar-date arithmetic (`DateTime(y, m, d - 1)`), preventing false streak resets across Daylight Saving Time shifts.
+- **Static hold telemetry** — recorded actual elapsed hold seconds clamped to prescribed duration instead of defaulting unconditionally to target duration when completing sets early.
+- **Cold-start resume probe race condition** — guarded Expedition Portal initiate button against pending resume probe states, preventing concurrent session instantiation.
+- **Same-day session detection** — normalized `WarningTranslator` range query to an exclusive `[startOfDay, nextDay)` interval, resolving microsecond-boundary omissions near midnight.
+
+### Performance & Architectural Hygiene
+- **Backdrop repaint boundary isolation** — isolated background layers of `RailsideAtmosphereBackdrop` and `NeonAlleysAtmosphereBackdrop` inside dedicated `RepaintBoundary` widgets, preventing expensive repaints of complex backdrop media, noise grain, and scanlines during foreground timer ticks.
+- **Volume metric parity** — excluded static hold sets from weekly rep and tonnage totals in `MacrocycleService`, aligning weekly telemetry with session debrief metrics.
+- **Core storage decoupling** — relocated `sharedPreferencesProvider` from the UI theme layer to `lib/core/storage/preferences_provider.dart`, removing architectural inversion for non-UI domain providers.
+- **Desktop video controller guard** — guarded `districtVideoControllerProvider` against unsupported Windows and Linux desktop platforms, falling back cleanly to still art without unhandled platform-channel exceptions.
+- **Test ticker hygiene** — suppressed `PixelLoadingIndicator` infinite animation sweep during widget test execution to prevent test timeout hangs.
+- **Redundant logic cleanup** — cleaned redundant conditionals in `MacrocycleState` and eliminated duplicate catalog loops in `AdaptationLedgerService`.
+
 ## [0.6.2] — 2026-09-21
 
 ### Added
