@@ -46,3 +46,6 @@ app.*.map.json
 
 # Local project documentation and notes
 /local-notes/
+/graphify-out/
+.claude/
+
