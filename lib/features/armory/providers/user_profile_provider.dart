@@ -108,6 +108,7 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
   }
 
   Future<void> _persist(UserProfile profile) async {
+    await _initFuture;
     _hasMutated = true;
     state = profile;
 
@@ -124,6 +125,7 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
   ///
   /// **Safety Invariant**: [Equipment.bodyweight] can NEVER be removed.
   Future<void> toggleEquipment(Equipment equipment) async {
+    await _initFuture;
     if (equipment == Equipment.bodyweight) {
       // Bodyweight is immutable anchor; no-op.
       return;
@@ -142,6 +144,7 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
 
   /// Toggles joint protection mode (excluding high-impact plyometrics).
   Future<void> toggleJointProtection() async {
+    await _initFuture;
     final newJointPain = !state.hasJointPain;
     FemaleProfile? updatedFemale;
     if (state.femaleProfile != null) {
@@ -167,6 +170,7 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
     int cycleDay = 1,
     int age = 28,
   }) async {
+    await _initFuture;
     if (state.hasCycleAutoregulation) {
       final updated = state.copyWith(femaleProfile: () => null);
       await _persist(updated);
@@ -185,12 +189,14 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
 
   /// Sets the self-declared training experience level captured at onboarding.
   Future<void> setExperienceLevel(ExperienceLevel level) async {
+    await _initFuture;
     final updated = state.copyWith(experienceLevel: () => level);
     await _persist(updated);
   }
 
   /// Directly updates the menstrual cycle day if cycle autoregulation is enabled.
   Future<void> setCycleDay(int cycleDay) async {
+    await _initFuture;
     if (state.femaleProfile == null) return;
     final fp = state.femaleProfile!;
     final updatedFemale = FemaleProfile(
