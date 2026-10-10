@@ -57,7 +57,7 @@ class AdaptationLedgerCard extends ConsumerWidget {
         if (state.recentPromotions.isNotEmpty) ...[
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(10.0),
+            padding: ZenithSpacing.edgeInsetsMd,
             decoration: BoxDecoration(
               color: colors.backgroundVoid,
               border: Border.all(color: colors.borderBright, width: 1.0),
@@ -74,10 +74,12 @@ class AdaptationLedgerCard extends ConsumerWidget {
                     color: colors.amberGlow,
                   ),
                 ),
-                const SizedBox(height: 6.0),
+                const SizedBox(height: ZenithSpacing.sm),
                 ...state.recentPromotions.map(
                   (promo) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2.0),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: ZenithSpacing.xxs,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

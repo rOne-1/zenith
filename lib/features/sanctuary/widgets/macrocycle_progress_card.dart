@@ -61,7 +61,9 @@ class MacrocycleProgressCard extends ConsumerWidget {
             final isCurrent = weekNum == state.weekInCycle;
             return Expanded(
               child: Container(
-                margin: EdgeInsets.only(right: index < 4 ? 6.0 : 0.0),
+                margin: EdgeInsets.only(
+                  right: index < 4 ? ZenithSpacing.xs : 0.0,
+                ),
                 child: _buildWeekStepBlock(
                   colors: colors,
                   weekNum: weekNum,
@@ -73,14 +75,14 @@ class MacrocycleProgressCard extends ConsumerWidget {
             );
           }),
         ),
-        const SizedBox(height: 10.0),
+        const SizedBox(height: ZenithSpacing.sm),
 
         // Stepped text meter and Phase Chip
         Wrap(
           alignment: WrapAlignment.spaceBetween,
           crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 8.0,
-          runSpacing: 6.0,
+          spacing: ZenithSpacing.sm,
+          runSpacing: ZenithSpacing.xs,
           children: [
             Text(
               state.steppedMeterText,
@@ -101,12 +103,12 @@ class MacrocycleProgressCard extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 14.0),
+        const SizedBox(height: ZenithSpacing.lg),
 
         // Restorative Guidance Callout
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(10.0),
+          padding: ZenithSpacing.edgeInsetsMd,
           decoration: BoxDecoration(
             color: colors.backgroundVoid,
             border: Border.all(color: colors.borderMuted, width: 1.0),
@@ -223,7 +225,7 @@ class MacrocycleProgressCard extends ConsumerWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: ZenithSpacing.sm),
       decoration: BoxDecoration(
         color: bgColor,
         border: Border.all(color: borderColor, width: isCurrent ? 2.0 : 1.0),

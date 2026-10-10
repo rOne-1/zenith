@@ -120,8 +120,8 @@ class _PatternRecoveryRow extends StatelessWidget {
               : colors.amberAccent);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10.0),
-      padding: const EdgeInsets.all(10.0),
+      margin: const EdgeInsets.only(bottom: ZenithSpacing.md),
+      padding: ZenithSpacing.edgeInsetsMd,
       decoration: BoxDecoration(
         color: colors.backgroundVoid,
         border: Border.all(

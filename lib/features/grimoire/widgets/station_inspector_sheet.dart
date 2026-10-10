@@ -87,7 +87,7 @@ class StationInspectorSheet extends StatelessWidget {
           child: SafeArea(
             top: false,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20.0),
+              padding: ZenithSpacing.edgeInsetsLg,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -99,8 +99,8 @@ class StationInspectorSheet extends StatelessWidget {
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                              vertical: 3.0,
+                              horizontal: ZenithSpacing.sm,
+                              vertical: ZenithSpacing.xs,
                             ),
                             decoration: BoxDecoration(
                               color: colors.backgroundVoid,
@@ -118,7 +118,7 @@ class StationInspectorSheet extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8.0),
+                          const SizedBox(width: ZenithSpacing.sm),
                           Text(
                             'STATION INSPECTION PASS',
                             style: zenithPixelDisplay(
@@ -132,8 +132,8 @@ class StationInspectorSheet extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 3.0,
+                          horizontal: ZenithSpacing.sm,
+                          vertical: ZenithSpacing.xs,
                         ),
                         decoration: BoxDecoration(
                           color: colors.backgroundVoid,
@@ -211,7 +211,7 @@ class StationInspectorSheet extends StatelessWidget {
                       children: [
                         for (int i = 0; i < exercise.defaultCues.length; i++)
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 6.0),
+                            padding: const EdgeInsets.only(bottom: ZenithSpacing.sm),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

@@ -6,4 +6,5 @@ export 'zenith_hud_font.dart';
 export 'zenith_motion.dart';
 export 'zenith_pixel_metrics.dart';
 export 'zenith_pixel_theme_builder.dart';
+export 'zenith_spacing.dart';
 export 'zenith_text_styles.dart';
