@@ -217,6 +217,53 @@ void main() {
       expect(await keyStore.readMasterKey(), isNull);
     });
 
+    test('Transient keystore read error throws SecureStorageException and never overwrites master key (CRIT-1)', () async {
+      final throwingKeyStore = _FailingMasterKeyStore();
+      final storage = AesGcmSecureStorage(prefs, keyStore: throwingKeyStore);
+
+      expect(
+        () => storage.write('critical_key', 'critical_val'),
+        throwsA(
+          isA<SecureStorageException>().having(
+            (e) => e.message,
+            'message',
+            contains('Failed to read master key from secure vault'),
+          ),
+        ),
+      );
+
+      // Verify writeMasterKey was NEVER called (no key overwrite)
+      expect(throwingKeyStore.writeCalls, equals(0));
+
+      // Verify SharedPreferences does NOT contain any generated master key
+      expect(prefs.containsKey(kSecureStorageMasterKeyPref), isFalse);
+    });
+
+    test('Transient keystore read error during read() preserves existing ciphertext and throws SecureStorageException', () async {
+      const testKey = 'existing_patient_data';
+      await prefs.setString(
+        '$kSecureStorageKeyPrefix$testKey',
+        jsonEncode({'v': 1, 'cipher': 'dGVzdA==', 'nonce': 'dGVzdA==', 'mac': 'dGVzdA=='}),
+      );
+
+      final failingKeyStore = _FailingMasterKeyStore();
+      final storage = AesGcmSecureStorage(prefs, keyStore: failingKeyStore);
+
+      expect(
+        () => storage.read(testKey),
+        throwsA(
+          isA<SecureStorageException>().having(
+            (e) => e.message,
+            'message',
+            contains('Failed to read master key from secure vault'),
+          ),
+        ),
+      );
+
+      expect(failingKeyStore.writeCalls, equals(0));
+      expect(prefs.containsKey(kSecureStorageMasterKeyPref), isFalse);
+    });
+
     test('Riverpod Provider integration: secureStorageProvider uses masterKeyStoreProvider', () async {
       final testKeyStore = InMemoryMasterKeyStore();
       final container = ProviderContainer(
@@ -251,4 +298,21 @@ void main() {
       expect(await storage.containsKey('foo'), isFalse);
     });
   });
+}
+
+class _FailingMasterKeyStore implements MasterKeyStore {
+  int writeCalls = 0;
+
+  @override
+  Future<String?> readMasterKey() async {
+    throw Exception('Keystore daemon busy / device locked');
+  }
+
+  @override
+  Future<void> writeMasterKey(String base64Key) async {
+    writeCalls++;
+  }
+
+  @override
+  Future<void> deleteMasterKey() async {}
 }

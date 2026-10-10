@@ -2,6 +2,13 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.6.5] — 2026-10-10
+
+### Fixed
+- **Cryptographic master key overwrite prevention** — differentiated between clean key absence on fresh install and transient secure keystore read exceptions (locked device, daemon busy, channel error); rethrows wrapped in `SecureStorageException` rather than generating a new key and permanently destroying access to existing encrypted user records (PKG-HF.1, CRIT-1).
+- **Concurrency-safe state hydration in user profile** — guarded `_persist` and all public mutation methods in `UserProfileNotifier` (`toggleEquipment`, `toggleJointProtection`, `toggleCycleAutoregulation`, `setExperienceLevel`, `setCycleDay`) with `await _initFuture;` so mutations immediately on cold-start wait for asynchronous secure hydration and apply on top of loaded state rather than wiping sensitive health telemetry with null (PKG-HF.2, BUG-1).
+- **District 02 Neon Alleys typography alignment** — updated `neonAlleysPalette` tokens to canonical Japanese cyberpunk visual specification: `textPrimary` to `Color(0xFFEAF3FF)` (cool-white catching blue-violet mist), `textMuted` to `Color(0xFF7C8CB8)` (indigo-slate), and `signalRed` to `Color(0xFFFF4433)` (`emberSign`), eliminating residual District 01 teal text colors (PKG-HF.3, DES-7).
+
 ## [0.6.4] — 2026-10-10
 
 ### Security & Platform Hardening

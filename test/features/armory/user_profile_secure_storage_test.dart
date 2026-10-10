@@ -222,5 +222,94 @@ void main() {
 
       expect(reloaded.state.femaleProfile!.cycleDay, equals(10));
     });
+
+    test('Concurrency safety: mutations during in-flight hydration do not overwrite or wipe sensitive data (BUG-1)', () async {
+      // 1. Seed existing non-sensitive profile in SharedPreferences
+      final nonSensitiveProfile = {
+        'availableEquipment': ['bodyweight'],
+        'experienceLevel': 'intermediate',
+      };
+      await prefs.setString(kUserProfileStorageKey, jsonEncode(nonSensitiveProfile));
+
+      // 2. Seed sensitive health data in secure storage
+      final sensitiveHealthData = {
+        'hasJointPain': true,
+        'femaleProfile': {
+          'userStatus': 'Trained_Female',
+          'cycleDay': 14,
+          'hasKneeDiscomfort': false,
+          'age': 29,
+          'hasJointPain': true,
+        },
+      };
+
+      final underlyingStorage = InMemorySecureStorage();
+      await underlyingStorage.write(
+        kSensitiveHealthStorageKey,
+        jsonEncode(sensitiveHealthData),
+      );
+
+      final delayedStorage = _DelayedSecureStorage(
+        underlyingStorage,
+        delay: const Duration(milliseconds: 30),
+      );
+
+      // 3. Instantiate notifier - at construction, state only has non-sensitive data
+      final notifier = UserProfileNotifier(prefs, delayedStorage);
+      expect(notifier.state.femaleProfile, isNull);
+
+      // 4. Immediately trigger a mutation while hydration is still in flight
+      final mutationFuture = notifier.toggleEquipment(Equipment.pullUpBar);
+
+      // 5. Await both the mutation and the initialization
+      await mutationFuture;
+      await notifier.initialized;
+
+      // 6. Verify that sensitive health data was NOT wiped or overwritten with null
+      expect(notifier.state.hasJointPain, isTrue);
+      expect(notifier.state.femaleProfile, isNotNull);
+      expect(notifier.state.femaleProfile!.cycleDay, equals(14));
+      expect(notifier.state.femaleProfile!.age, equals(29));
+      expect(notifier.state.availableEquipment, contains(Equipment.pullUpBar));
+
+      // 7. Verify data-at-rest in secure storage retains the full sensitive telemetry
+      final rawSecure = await underlyingStorage.read(kSensitiveHealthStorageKey);
+      expect(rawSecure, isNotNull);
+      final decodedSecure = jsonDecode(rawSecure!) as Map<String, dynamic>;
+      expect(decodedSecure['hasJointPain'], isTrue);
+      expect(decodedSecure['femaleProfile']['cycleDay'], equals(14));
+    });
   });
 }
+
+class _DelayedSecureStorage implements SecureStorage {
+  final SecureStorage _delegate;
+  final Duration delay;
+
+  _DelayedSecureStorage(this._delegate, {required this.delay});
+
+  @override
+  Future<String?> read(String key) async {
+    await Future.delayed(delay);
+    return _delegate.read(key);
+  }
+
+  @override
+  Future<void> write(String key, String value) async {
+    await Future.delayed(delay);
+    return _delegate.write(key, value);
+  }
+
+  @override
+  Future<void> delete(String key) async {
+    await Future.delayed(delay);
+    return _delegate.delete(key);
+  }
+
+  @override
+  Future<bool> containsKey(String key) async {
+    await Future.delayed(delay);
+    return _delegate.containsKey(key);
+  }
+}
+
