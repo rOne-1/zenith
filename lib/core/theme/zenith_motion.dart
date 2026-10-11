@@ -1,4 +1,4 @@
-import 'package:flutter/animation.dart';
+import 'package:flutter/widgets.dart';
 
 /// The app's shared interaction-motion curve: continuous (not stepped) and
 /// front-loaded so the motion reads as a fast, decisive snap into place
@@ -20,3 +20,27 @@ const zenithMotionCurve = Curves.easeOutExpo;
 /// curve like [zenithMotionCurve] still reads as a snap rather than a
 /// lingering animation.
 const zenithMotionDuration = Duration(milliseconds: 160);
+
+/// Accessibility motion extensions on [BuildContext] complying with WCAG 2.1 AA 2.3.3.
+extension ZenithMotionContext on BuildContext {
+  /// Whether the user or operating system has requested animations to be disabled.
+  ///
+  /// Backed by [MediaQueryData.disableAnimations].
+  bool get animationsDisabled {
+    try {
+      return MediaQuery.maybeDisableAnimationsOf(this) ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Adapts [duration] based on [animationsDisabled].
+  ///
+  /// Returns [Duration.zero] when animations are disabled; otherwise returns [duration].
+  Duration adaptiveDuration(Duration duration) {
+    return animationsDisabled ? Duration.zero : duration;
+  }
+
+  /// Default motion duration adapted for the current motion preference.
+  Duration get motionDuration => adaptiveDuration(zenithMotionDuration);
+}

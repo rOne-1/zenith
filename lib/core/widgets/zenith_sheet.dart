@@ -26,7 +26,7 @@ class ZenithSheet {
       barrierDismissible: barrierDismissible,
       barrierLabel: 'Dismiss',
       barrierColor: Colors.black54,
-      transitionDuration: zenithMotionDuration,
+      transitionDuration: context.motionDuration,
       pageBuilder: (dialogContext, animation, secondaryAnimation) {
         // showModalBottomSheet's own BottomSheet route wraps content in a
         // route-scoping Semantics node (empty label on iOS/macOS, the
@@ -50,6 +50,9 @@ class ZenithSheet {
         );
       },
       transitionBuilder: (dialogContext, animation, secondaryAnimation, child) {
+        if (dialogContext.animationsDisabled || context.animationsDisabled) {
+          return child;
+        }
         final curved = CurvedAnimation(
           parent: animation,
           curve: zenithMotionCurve,

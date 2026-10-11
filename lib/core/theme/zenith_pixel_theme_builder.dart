@@ -23,6 +23,9 @@ class ZenithPageTransitionsBuilder extends PageTransitionsBuilder {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
+    if (context.animationsDisabled) {
+      return child;
+    }
     final curvedAnimation = CurvedAnimation(
       parent: animation,
       curve: zenithMotionCurve,

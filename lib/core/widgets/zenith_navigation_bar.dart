@@ -75,27 +75,30 @@ class ZenithNavigationBar extends StatelessWidget {
       ),
       child: SafeArea(
         top: false,
-        child: Container(
-          height: 64.0,
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: List.generate(tabs.length, (index) {
-              final item = tabs[index];
-              final isSelected = index == currentIndex;
+        child: MediaQuery.withClampedTextScaling(
+          maxScaleFactor: 1.25,
+          child: Container(
+            height: 64.0,
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: List.generate(tabs.length, (index) {
+                final item = tabs[index];
+                final isSelected = index == currentIndex;
 
-              return Expanded(
-                child: _TicketTabItem(
-                  item: item,
-                  isSelected: isSelected,
-                  onTap: () {
-                    if (!isSelected) {
-                      onDestinationSelected(index);
-                    }
-                  },
-                ),
-              );
-            }),
+                return Expanded(
+                  child: _TicketTabItem(
+                    item: item,
+                    isSelected: isSelected,
+                    onTap: () {
+                      if (!isSelected) {
+                        onDestinationSelected(index);
+                      }
+                    },
+                  ),
+                );
+              }),
+            ),
           ),
         ),
       ),
