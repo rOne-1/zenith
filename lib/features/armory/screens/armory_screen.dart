@@ -9,6 +9,7 @@ import '../../../core/widgets/pixel_button.dart';
 import '../../../core/widgets/pixel_toast.dart';
 import '../../../core/widgets/stepped_pixel_border.dart';
 import '../providers/user_profile_provider.dart';
+import '../widgets/data_archive_section.dart';
 import '../widgets/gear_tile.dart';
 import '../widgets/illustration_credits_section.dart';
 
@@ -240,6 +241,10 @@ class ArmoryScreen extends ConsumerWidget {
                           notifier.toggleCycleAutoregulation();
                         },
                       ),
+
+                      const SizedBox(height: 24.0),
+
+                      const DataArchiveSection(),
 
                       const SizedBox(height: 24.0),
 

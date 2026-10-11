@@ -2,6 +2,16 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.9.0] — 2026-10-11
+
+### Local Data Sovereignty & Offline Archive System (AUD-001)
+- **Typed Archive Bundle & Schema Validation Engine (PKG-11.1)** — introduced `ZenithArchiveBundle` adhering to schema `zenith://data-archive/v1` with canonical SHA-256 digest computation; created `ArchiveValidator` with strict 10MB payload gating, enum bound checking (`MovementPattern`, `DayType`), physiological parameter clamping (`cycleDay` 1..35, `age` 1..120), and SQLite referential integrity verification (CWE-20).
+- **Cryptographic Vault Decoupling & Atomic Drift Exchange (PKG-11.2 / SEC-1)** — implemented in-memory decryption on export (`secureStorage.read(kSensitiveHealthStorageKey)`) ensuring zero `zenith_sec_*` ciphertext leakage in JSON; implemented dynamic re-encryption under the destination host's `MasterKeyStore` on restore; implemented Two-Phase Rollback protocol snapshotting SharedPreferences and SecureStorage, executing atomic Drift SQLite transactions (`db.transaction`) with cascade deletion, and cleanly rolling back preferences upon database transaction failure.
+- **Cross-Platform Storage Bridge (PKG-11.3)** — implemented `ArchiveFileBridge` bridging platform-native file save and pick dialogs on Desktop/Web and native share sheets on Mobile via `flutter_refined_kit` (`saveJsonFile`, `shareJsonFile`, `pickJsonFile`).
+- **Active Expedition Lockout & Reactive Shell Invalidation (PKG-11.4)** — guarded data restoration with `ActiveSessionInProgressException` when a workout expedition is in-flight (`SessionState.warmUp`, `activeSet`, `rest`, `coolDown`); orchestrated coordinated Riverpod invalidation across all 9 core shell providers post-restore (`sbeeDatabaseProvider`, `sessionRepositoryProvider`, `userProfileProvider`, `macrocycleServiceProvider`, `sanctuaryStateProvider`, `streakDaysProvider`, `activeNavigationTabIndexProvider`, `activeSessionResumeProvider`, `exerciseProgressionSummaryProvider`).
+- **Armory Data Archive Section & Inspection Modal (PKG-11.5 / SP-2)** — added amber-indicator `DATA ARCHIVE // LOCAL BACKUP` section to The Armory with `EXPORT DATA ARCHIVE` and `RESTORE FROM ARCHIVE` pixel controls; built two-stage inspection modal (`ArchiveInspectionDialog`) displaying archive metadata, entity counts, warning callout, and Cancel/Confirm Overwrite actions.
+- **Automated Verification Suite (PKG-11.6)** — added 25 new automated unit and widget tests covering schema parsing, checksum validation, cryptographic decoupling, two-phase rollback atomicity, in-flight lockout guards, and Armory UI flows; total test suite expanded from 283 to 308 tests passing (100%) with 0 issues reported by `flutter analyze`.
+
 ## [0.8.0] — 2026-10-11
 
 ### Platform Polish, Motion Ergonomics & Accessibility Resilience
