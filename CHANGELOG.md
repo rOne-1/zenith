@@ -2,6 +2,15 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.8.0] — 2026-10-11
+
+### Platform Polish, Motion Ergonomics & Accessibility Resilience
+- **Reduced Motion Architecture (PKG-10.1 / A11Y-4)** — introduced centralized `ZenithMotionContext` extension on `BuildContext` (`animationsDisabled`, `adaptiveDuration(Duration)`, `motionDuration`); suppressed infinite animation tickers and rendered static representations in `PixelPulseDot` and `PixelLoadingIndicator` under reduced motion; paused ambient video playback in `DistrictBackgroundMediaLayer`; and bypassed slide/fade route and modal animations in `ZenithPageTransitionsBuilder`, `ZenithDialog`, and `ZenithSheet`.
+- **Dynamic Type Scale Clamping & Layout Resilience (PKG-10.2 / A11Y-5)** — applied selective font scale clamping via `MediaQuery.withClampedTextScaling(maxScaleFactor: 1.25)` across fixed chrome in `ZenithNavigationBar` and `withClampedTextScaling(maxScaleFactor: 1.3)` across RPE rating buttons in `RpeSelectorCard`; converted hard `SizedBox` height constraints in `PixelButton` to `ConstrainedBox(minHeight: ...)` to support vertical expansion on multiline labels without `RenderFlex` overflow at 2.0x system scale.
+- **App Shell 4-Phase Gesture Discrimination (PKG-10.3 / UX-1)** — implemented 4-phase horizontal drag tracking (`onHorizontalDragStart`, `Update`, `Cancel`, `End`) in `ZenithAppShell`; gated tab transitions on dual displacement ($\ge 64$dp) and velocity ($\ge 500$px/s) thresholds with directional sign validation; and isolated nested horizontal scrolls (Grimoire pattern pills, illustration carousels) via gesture arena cancellation.
+- **Abort Flow Navigation Sequencing (PKG-10.4 / POL-1)** — refactored `ActiveExpeditionScreen._handleAbort()` to pop the route from the navigator *before* awaiting `controller.abortSession()`, eliminating transient 1-2 frame flashes of the Warm-Up screen on workout cancellation.
+- **Automated Testing Suite (PKG-10.5)** — added comprehensive automated test suites covering reduced motion behavior, Dynamic Type 2.0x scale resilience, shell gesture discrimination, and clean abort route pops, bringing the project test baseline to 283/283 tests passing (100%).
+
 ## [0.7.0] — 2026-10-11
 
 ### Design System Unification, Typography Resilience & Visual Rhythm
