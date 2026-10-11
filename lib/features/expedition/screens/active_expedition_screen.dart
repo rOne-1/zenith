@@ -138,7 +138,7 @@ class _ActiveExpeditionScreenState
     };
 
     return Scaffold(
-      backgroundColor: colors.backgroundVoid,
+      backgroundColor: Colors.transparent,
       body: PixelToastHost(
         key: _toastHostKey,
         child: SafeArea(
@@ -209,9 +209,8 @@ class _WarmUpView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
-    return DistrictAtmosphereBackdrop(
-      child: SafeArea(
-        child: Padding(
+    return SafeArea(
+      child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -282,8 +281,7 @@ class _WarmUpView extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _checklistRow(ZenithDistrictColors colors, String text) {
@@ -335,9 +333,8 @@ class _CoolDownView extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.colors;
 
-    return DistrictAtmosphereBackdrop(
-      child: SafeArea(
-        child: Padding(
+    return SafeArea(
+      child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -416,7 +413,6 @@ class _CoolDownView extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

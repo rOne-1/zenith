@@ -53,9 +53,8 @@ class RestScreen extends ConsumerWidget {
         : null;
 
     return Scaffold(
-      backgroundColor: colors.backgroundVoid,
-      body: DistrictAtmosphereBackdrop(
-        child: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -251,7 +250,6 @@ class RestScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

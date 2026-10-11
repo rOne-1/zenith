@@ -4,6 +4,7 @@ export 'zenith_district_colors.dart';
 export 'zenith_district_palette.dart';
 export 'zenith_hud_font.dart';
 export 'zenith_motion.dart';
+export 'zenith_page_route.dart';
 export 'zenith_pixel_metrics.dart';
 export 'zenith_pixel_theme_builder.dart';
 export 'zenith_spacing.dart';

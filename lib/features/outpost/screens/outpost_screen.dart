@@ -282,7 +282,7 @@ class _TodaySessionCard extends ConsumerWidget {
                 label: '▶ TODAY\'S EXPEDITION',
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    ZenithTransparentPageRoute(
                       builder: (_) => const ExpeditionPortalScreen(),
                     ),
                   );
