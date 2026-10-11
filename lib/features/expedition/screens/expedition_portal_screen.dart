@@ -78,7 +78,9 @@ class _ExpeditionPortalScreenState
               'EXPEDITION DISPATCHED (${session.sets.length} SETS)';
         });
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const ActiveExpeditionScreen()),
+          ZenithTransparentPageRoute(
+            builder: (_) => const ActiveExpeditionScreen(),
+          ),
         );
       }
     } catch (e) {
@@ -112,9 +114,8 @@ class _ExpeditionPortalScreenState
     final now = DateTime.now();
 
     return Scaffold(
-      backgroundColor: colors.backgroundVoid,
-      body: DistrictAtmosphereBackdrop(
-        child: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -389,7 +390,7 @@ class _ExpeditionPortalScreenState
                                                   )
                                                   .resumeSession(manager);
                                               Navigator.of(context).push(
-                                                MaterialPageRoute(
+                                                ZenithTransparentPageRoute(
                                                   builder: (_) =>
                                                       const ActiveExpeditionScreen(),
                                                 ),
@@ -814,7 +815,6 @@ class _ExpeditionPortalScreenState
             ],
           ),
         ),
-      ),
     );
   }
 }

@@ -42,11 +42,11 @@ class ArchiveInspectionDialog extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 8.0,
-                height: 8.0,
+                width: ZenithSpacing.sm,
+                height: ZenithSpacing.sm,
                 color: colors.amberAccent,
               ),
-              const SizedBox(width: 8.0),
+              const SizedBox(width: ZenithSpacing.sm),
               Expanded(
                 child: Text(
                   'ARCHIVE INSPECTION',
@@ -60,13 +60,13 @@ class ArchiveInspectionDialog extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: ZenithSpacing.lg),
 
           // Metadata Grid Container
           PixelCard(
             backgroundColor: colors.backgroundVoid,
             borderColor: colors.borderMuted,
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(ZenithSpacing.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -75,43 +75,43 @@ class ArchiveInspectionDialog extends StatelessWidget {
                   label: 'EXPORT DATE',
                   value: exportedDateStr,
                 ),
-                const SizedBox(height: 6.0),
+                const SizedBox(height: ZenithSpacing.xs),
                 _buildMetaRow(
                   context,
                   label: 'APP VERSION',
                   value: 'v${bundle.appVersion}',
                 ),
-                const SizedBox(height: 6.0),
+                const SizedBox(height: ZenithSpacing.xs),
                 _buildMetaRow(
                   context,
                   label: 'SESSIONS LOGGED',
                   value: '${bundle.database.workoutSessions.length}',
                 ),
-                const SizedBox(height: 6.0),
+                const SizedBox(height: ZenithSpacing.xs),
                 _buildMetaRow(
                   context,
                   label: 'SETS COMPLETED',
                   value: '${bundle.database.workoutSets.length}',
                 ),
-                const SizedBox(height: 6.0),
+                const SizedBox(height: ZenithSpacing.xs),
                 _buildMetaRow(
                   context,
                   label: 'PROGRESSIONS',
                   value: '${bundle.database.exerciseProgressions.length} exercises',
                 ),
-                const SizedBox(height: 6.0),
+                const SizedBox(height: ZenithSpacing.xs),
                 _buildMetaRow(
                   context,
                   label: 'MILESTONES',
                   value: '${bundle.database.statusAchieved.length}',
                 ),
-                const SizedBox(height: 6.0),
+                const SizedBox(height: ZenithSpacing.xs),
                 _buildMetaRow(
                   context,
                   label: 'EXPERIENCE TIER',
                   value: experienceLevel.toUpperCase(),
                 ),
-                const SizedBox(height: 6.0),
+                const SizedBox(height: ZenithSpacing.xs),
                 _buildMetaRow(
                   context,
                   label: 'EQUIPMENT POOL',
@@ -122,11 +122,11 @@ class ArchiveInspectionDialog extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: ZenithSpacing.lg),
 
           // Danger Warning Banner
           Container(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(ZenithSpacing.md),
             decoration: BoxDecoration(
               color: colors.signalRed.withValues(alpha: 0.12),
               border: Border.all(
@@ -142,7 +142,7 @@ class ArchiveInspectionDialog extends StatelessWidget {
                   color: colors.signalRed,
                   size: 20.0,
                 ),
-                const SizedBox(width: 10.0),
+                const SizedBox(width: ZenithSpacing.sm),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,10 +156,10 @@ class ArchiveInspectionDialog extends StatelessWidget {
                           color: colors.signalRed,
                         ),
                       ),
-                      const SizedBox(height: 4.0),
+                      const SizedBox(height: ZenithSpacing.xs),
                       Text(
                         'Restoring this archive will replace all current training history, local profile settings, and encrypted health data on this device.',
-                        style: TextStyle(
+                        style: zenithBodyMono(
                           fontSize: 12.0,
                           height: 1.35,
                           color: colors.textPrimary,
@@ -171,7 +171,7 @@ class ArchiveInspectionDialog extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 20.0),
+          const SizedBox(height: ZenithSpacing.xl),
 
           // Action Buttons
           Row(
@@ -183,7 +183,7 @@ class ArchiveInspectionDialog extends StatelessWidget {
                   onPressed: () => Navigator.of(context).pop(false),
                 ),
               ),
-              const SizedBox(width: 12.0),
+              const SizedBox(width: ZenithSpacing.md),
               Expanded(
                 child: PixelButton(
                   variant: PixelButtonVariant.danger,
@@ -222,7 +222,7 @@ class ArchiveInspectionDialog extends StatelessWidget {
         Expanded(
           child: Text(
             value,
-            style: TextStyle(
+            style: zenithBodyMono(
               fontSize: 11.0,
               fontWeight: FontWeight.w600,
               color: colors.textPrimary,

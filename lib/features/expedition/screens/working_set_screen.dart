@@ -134,9 +134,8 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
               ['Maintain steady core alignment and controlled tempo.']);
 
     return Scaffold(
-      backgroundColor: colors.backgroundVoid,
-      body: DistrictAtmosphereBackdrop(
-        child: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -514,7 +513,6 @@ class _WorkingSetScreenState extends ConsumerState<WorkingSetScreen> {
             ],
           ),
         ),
-      ),
     );
   }
 }

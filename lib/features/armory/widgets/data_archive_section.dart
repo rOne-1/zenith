@@ -106,7 +106,7 @@ class DataArchiveSection extends ConsumerWidget {
                 color: colors.signalRed,
                 size: 20.0,
               ),
-              const SizedBox(width: 8.0),
+              const SizedBox(width: ZenithSpacing.sm),
               Expanded(
                 child: Text(
                   title,
@@ -120,16 +120,16 @@ class DataArchiveSection extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12.0),
+          const SizedBox(height: ZenithSpacing.md),
           Text(
             message,
-            style: TextStyle(
+            style: zenithBodyMono(
               fontSize: 12.0,
               height: 1.4,
               color: colors.textPrimary,
             ),
           ),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: ZenithSpacing.lg),
           PixelButton(
             variant: PixelButtonVariant.secondary,
             label: 'DISMISS',
@@ -151,11 +151,11 @@ class DataArchiveSection extends ConsumerWidget {
         Row(
           children: [
             Container(
-              width: 6.0,
-              height: 6.0,
+              width: ZenithSpacing.sm,
+              height: ZenithSpacing.sm,
               color: colors.amberAccent,
             ),
-            const SizedBox(width: 8.0),
+            const SizedBox(width: ZenithSpacing.sm),
             Expanded(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
@@ -173,13 +173,13 @@ class DataArchiveSection extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12.0),
+        const SizedBox(height: ZenithSpacing.md),
 
         // Info Card
         PixelCard(
           backgroundColor: colors.surfaceDark,
           borderColor: colors.borderBright,
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(ZenithSpacing.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -192,16 +192,16 @@ class DataArchiveSection extends ConsumerWidget {
                   color: colors.amberAccent,
                 ),
               ),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: ZenithSpacing.sm),
               Text(
                 'Export complete training telemetry, SQLite history, and encrypted health data as an offline JSON archive, or restore local state from a verified backup. Zero external network telemetry.',
-                style: TextStyle(
+                style: zenithBodyMono(
                   fontSize: 12.0,
                   height: 1.4,
                   color: colors.textMuted,
                 ),
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: ZenithSpacing.lg),
 
               // Action Buttons
               PixelButton(
@@ -210,7 +210,7 @@ class DataArchiveSection extends ConsumerWidget {
                 icon: const Icon(CupertinoIcons.tray_arrow_up, size: 16.0),
                 onPressed: () => _handleExport(context, ref),
               ),
-              const SizedBox(height: 10.0),
+              const SizedBox(height: ZenithSpacing.md),
               PixelButton(
                 variant: PixelButtonVariant.danger,
                 label: 'RESTORE FROM ARCHIVE',

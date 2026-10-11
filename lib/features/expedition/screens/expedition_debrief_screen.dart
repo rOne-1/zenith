@@ -28,9 +28,8 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
     final durationText = '${durationSeconds ~/ 60}m ${durationSeconds % 60}s';
 
     return Scaffold(
-      backgroundColor: colors.backgroundVoid,
-      body: DistrictAtmosphereBackdrop(
-        child: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -326,7 +325,6 @@ class ExpeditionDebriefScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

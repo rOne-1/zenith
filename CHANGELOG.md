@@ -2,6 +2,14 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.9.1] — 2026-10-11
+
+### Stability, Video Texture Lifecycle & Design Token Polish
+- **Systemic Video Texture Lifecycle & Single Backdrop Invariant (PKG-12.1 / BUG-MED-01 / SP-1)** — introduced `ZenithTransparentPageRoute` preserving route transparency (`opaque: false`) across modal expedition and portal navigation flows; eradicated duplicate `DistrictAtmosphereBackdrop` tree instantiations across expedition routes (`ExpeditionPortalScreen`, `ActiveExpeditionScreen`, `WorkingSetScreen`, `RestScreen`, `ExpeditionDebriefScreen`), allowing the root `ZenithAppShell` backdrop to render continuously without platform video texture detachments or black void flashes.
+- **Archive Feature Typography Token Migration (PKG-12.2 / AUD-F1)** — eliminated all 4 raw `TextStyle` instantiations in `ArchiveInspectionDialog` and `DataArchiveSection`, migrating them to the canonical `zenithBodyMono` design system helper.
+- **Archive Feature Spacing Scale Tokenization (PKG-12.3 / AUD-F2)** — refactored all raw double spacing literals across archive dialogs and armory sections to standard `ZenithSpacing` tokens (`xs`, `sm`, `md`, `lg`, `xl`).
+- **Automated Lifecycle Integration & Token Regression Test Suite (PKG-12.4)** — implemented automated full-expedition backdrop singleton assertion test (`backdrop_lifecycle_test.dart`) and static token audit test (`typography_regression_test.dart`) asserting 0 raw `TextStyle` instantiations across all feature code; full test suite expanded to 310/310 passing tests (100%) with 0 issues reported by `flutter analyze`.
+
 ## [0.9.0] — 2026-10-11
 
 ### Local Data Sovereignty & Offline Archive System (AUD-001)
