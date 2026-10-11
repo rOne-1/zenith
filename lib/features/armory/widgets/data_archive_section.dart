@@ -123,7 +123,7 @@ class DataArchiveSection extends ConsumerWidget {
           const SizedBox(height: 12.0),
           Text(
             message,
-            style: TextStyle(
+            style: zenithBodyMono(
               fontSize: 12.0,
               height: 1.4,
               color: colors.textPrimary,
@@ -195,7 +195,7 @@ class DataArchiveSection extends ConsumerWidget {
               const SizedBox(height: 8.0),
               Text(
                 'Export complete training telemetry, SQLite history, and encrypted health data as an offline JSON archive, or restore local state from a verified backup. Zero external network telemetry.',
-                style: TextStyle(
+                style: zenithBodyMono(
                   fontSize: 12.0,
                   height: 1.4,
                   color: colors.textMuted,

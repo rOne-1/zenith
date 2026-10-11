@@ -159,7 +159,7 @@ class ArchiveInspectionDialog extends StatelessWidget {
                       const SizedBox(height: 4.0),
                       Text(
                         'Restoring this archive will replace all current training history, local profile settings, and encrypted health data on this device.',
-                        style: TextStyle(
+                        style: zenithBodyMono(
                           fontSize: 12.0,
                           height: 1.35,
                           color: colors.textPrimary,
@@ -222,7 +222,7 @@ class ArchiveInspectionDialog extends StatelessWidget {
         Expanded(
           child: Text(
             value,
-            style: TextStyle(
+            style: zenithBodyMono(
               fontSize: 11.0,
               fontWeight: FontWeight.w600,
               color: colors.textPrimary,
