@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/features/districts/railside_outskirts/railside_atmosphere_backdrop.dart';
@@ -86,10 +87,12 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: RailsideAtmosphereBackdrop(
-              child: Center(child: Text('Workout In Progress')),
+        const ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: RailsideAtmosphereBackdrop(
+                child: Center(child: Text('Workout In Progress')),
+              ),
             ),
           ),
         ),
@@ -109,7 +112,11 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
 
         await tester.pumpWidget(
-          const MaterialApp(home: Scaffold(body: RailsideAtmosphereBackdrop())),
+          const ProviderScope(
+            child: MaterialApp(
+              home: Scaffold(body: RailsideAtmosphereBackdrop()),
+            ),
+          ),
         );
 
         expect(find.byType(RailsideAtmosphereBackdrop), findsOneWidget);
@@ -126,12 +133,14 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: RailsideAtmosphereBackdrop(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Text('Bottom Controls'),
+        const ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: RailsideAtmosphereBackdrop(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text('Bottom Controls'),
+                ),
               ),
             ),
           ),
@@ -146,10 +155,12 @@ void main() {
       'isolates background atmosphere layers inside RepaintBoundary separate from child',
       (tester) async {
         await tester.pumpWidget(
-          const MaterialApp(
-            home: Scaffold(
-              body: RailsideAtmosphereBackdrop(
-                child: Text('Foreground Railside Content'),
+          const ProviderScope(
+            child: MaterialApp(
+              home: Scaffold(
+                body: RailsideAtmosphereBackdrop(
+                  child: Text('Foreground Railside Content'),
+                ),
               ),
             ),
           ),
@@ -161,11 +172,14 @@ void main() {
         );
         expect(repaintBoundaryFinder, findsOneWidget);
 
-        // Backdrop layers are inside the RepaintBoundary
+        // Backdrop layers are inside the RepaintBoundary. video_player has
+        // no registered platform implementation under `flutter test`, so
+        // the media layer falls back to its placeholder ColoredBox here
+        // rather than an actual decoded video frame.
         expect(
           find.descendant(
             of: repaintBoundaryFinder,
-            matching: find.byType(Image),
+            matching: find.byType(ColoredBox),
           ),
           findsOneWidget,
         );
@@ -190,4 +204,3 @@ void main() {
     );
   });
 }
-
