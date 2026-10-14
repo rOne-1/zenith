@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbee/sbee.dart';
 
+import '../../../core/audio/audio.dart';
 import '../../../engine/engine.dart';
 import '../../armory/providers/user_profile_provider.dart';
 import '../../outpost/services/streak_service.dart';
@@ -185,6 +187,50 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
 
   SessionStreamManager? get currentManager => _manager;
 
+  void _playCue(AudioCue cue) {
+    try {
+      final sensory = _ref.read(sensorySettingsProvider);
+      if (sensory.soundEffectsEnabled) {
+        _ref.read(audioServiceProvider).playCue(cue).catchError((_) {});
+      }
+    } catch (_) {
+      // Audio failures fail silently without blocking workout FSM progression.
+    }
+  }
+
+  void _triggerSelectionHaptic() {
+    try {
+      final sensory = _ref.read(sensorySettingsProvider);
+      if (sensory.hapticFeedbackEnabled) {
+        HapticFeedback.selectionClick().catchError((_) {});
+      }
+    } catch (_) {
+      // Haptic failures fail silently without blocking workout FSM progression.
+    }
+  }
+
+  void _triggerMediumHaptic() {
+    try {
+      final sensory = _ref.read(sensorySettingsProvider);
+      if (sensory.hapticFeedbackEnabled) {
+        HapticFeedback.mediumImpact().catchError((_) {});
+      }
+    } catch (_) {
+      // Haptic failures fail silently without blocking workout FSM progression.
+    }
+  }
+
+  void _triggerHeavyHaptic() {
+    try {
+      final sensory = _ref.read(sensorySettingsProvider);
+      if (sensory.hapticFeedbackEnabled) {
+        HapticFeedback.heavyImpact().catchError((_) {});
+      }
+    } catch (_) {
+      // Haptic failures fail silently without blocking workout FSM progression.
+    }
+  }
+
   /// Starts a new active expedition workout session.
   Future<void> startSession(WorkoutSession session) async {
     _cancelTimer();
@@ -298,6 +344,8 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       selectedRpe: () => curSet?.targetRpe ?? 8,
     );
     _startWorkTimerIfNeeded(curSet);
+    _playCue(AudioCue.start);
+    _triggerMediumHaptic();
   }
 
   /// Updates the planned rep count before completing the active set.
@@ -324,6 +372,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       // Transition to rest: initiate countdown
       final restDuration = set.restDuration ?? const Duration(seconds: 90);
       _startRestTimer(restDuration);
+      _playCue(AudioCue.rest);
 
       final next = state.nextSet;
       state = state.copyWith(
@@ -380,9 +429,17 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       if (current.inSeconds <= 1) {
         timer.cancel();
         state = state.copyWith(restRemaining: Duration.zero);
+        _playCue(AudioCue.start);
+        _triggerMediumHaptic();
       } else {
+        final newRemaining = current - const Duration(seconds: 1);
+        final seconds = newRemaining.inSeconds;
+        if (seconds == 3 || seconds == 2 || seconds == 1) {
+          _playCue(AudioCue.tick);
+          _triggerSelectionHaptic();
+        }
         state = state.copyWith(
-          restRemaining: current - const Duration(seconds: 1),
+          restRemaining: newRemaining,
         );
       }
     });
@@ -411,9 +468,17 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       if (current.inSeconds <= 1) {
         timer.cancel();
         state = state.copyWith(workRemaining: Duration.zero);
+        _playCue(AudioCue.complete);
+        _triggerMediumHaptic();
       } else {
+        final newRemaining = current - const Duration(seconds: 1);
+        final seconds = newRemaining.inSeconds;
+        if (seconds == 3 || seconds == 2 || seconds == 1) {
+          _playCue(AudioCue.tick);
+          _triggerSelectionHaptic();
+        }
         state = state.copyWith(
-          workRemaining: current - const Duration(seconds: 1),
+          workRemaining: newRemaining,
         );
       }
     });
@@ -434,6 +499,7 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
   /// Concludes the rest phase and starts the next set.
   void completeRest() {
     if (state.fsmState != SessionState.rest) return;
+    final wasAlreadyZero = state.restRemaining.inSeconds <= 0;
     _cancelTimer();
     _ensureManager();
 
@@ -451,6 +517,11 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
       restRemaining: Duration.zero,
     );
     _startWorkTimerIfNeeded(curSet);
+
+    if (!wasAlreadyZero) {
+      _playCue(AudioCue.start);
+      _triggerMediumHaptic();
+    }
   }
 
   /// Concludes the cool down phase and transitions to debrief / [SessionState.completed].
@@ -579,6 +650,8 @@ class ActiveSessionController extends StateNotifier<ActiveSessionState> {
         adaptations: adaptationList,
         isFinalizing: false,
       );
+      _playCue(AudioCue.complete);
+      _triggerHeavyHaptic();
     } catch (e) {
       state = state.copyWith(
         isFinalizing: false,
