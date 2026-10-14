@@ -59,6 +59,7 @@ dependencies:
   video_player: ^2.9.2
   cryptography: ^2.9.0
   flutter_secure_storage: ^11.2.0
+  audioplayers: ^6.8.1
 
 dev_dependencies:
   flutter_test:
