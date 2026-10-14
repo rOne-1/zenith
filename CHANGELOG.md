@@ -2,6 +2,13 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.10.1] — 2026-10-15
+
+### Visual Stacking Bug Fix & Root Backdrop Hoisting
+- **Root Backdrop Hoisting & Single Backdrop Invariant (BUG-CRIT-STACK / SP-1)** — hoisted `DistrictAtmosphereBackdrop` to the root in `MaterialApp.builder` in `lib/main.dart`, mounting it persistently behind the entire `Navigator`; eradicated redundant duplicate backdrop trees from `ZenithAppShell` and `OnboardingFlowScreen`; hoisted global web audio autoplay unlock pointer listener to `MaterialApp.builder`.
+- **Route Opacity Restoration & Visual Stacking Elimination** — restored `opaque: true` on `ZenithTransparentPageRoute`, instructing Flutter's `RenderTheater` to occlude and cease painting underlying routes (e.g. `ExpeditionPortalScreen` behind `ActiveExpeditionScreen` / `WorkingSetScreen`), completely eliminating visual bleed-through and GPU overdraw while allowing the persistent root backdrop to shine through transparent scaffolds.
+- **Automated Occlusion & Backdrop Lifecycle Verification** — augmented `backdrop_lifecycle_test.dart` to assert that underlying portal content is offstage and not rendered while modal workout routes are active, verifying 100% occlusion without visual bleed-through; full test baseline maintained at 342/342 passing tests with 0 analyzer issues and successful release web build.
+
 ## [0.10.0] — 2026-10-15
 
 ### 16-Bit Neo-Pixel Audio Engine & Chime System (Sprint 13)
