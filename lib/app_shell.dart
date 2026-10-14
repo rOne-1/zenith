@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'core/audio/audio.dart';
-import 'core/theme/theme.dart';
 import 'core/widgets/widgets.dart';
 import 'features/armory/armory.dart';
 import 'features/grimoire/grimoire.dart';
@@ -46,14 +44,6 @@ class ZenithAppShell extends ConsumerStatefulWidget {
 
 class _ZenithAppShellState extends ConsumerState<ZenithAppShell> {
   double _cumulativeDragDeltaX = 0.0;
-  bool _audioUnlocked = false;
-
-  void _onPointerDown(PointerDownEvent _) {
-    if (!_audioUnlocked) {
-      _audioUnlocked = true;
-      ref.read(audioServiceProvider).unlockWebAudio();
-    }
-  }
 
   void _onHorizontalDragStart(DragStartDetails details) {
     _cumulativeDragDeltaX = 0.0;
@@ -94,32 +84,20 @@ class _ZenithAppShellState extends ConsumerState<ZenithAppShell> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.colors;
     final currentIndex = ref.watch(activeNavigationTabIndexProvider);
 
     return Scaffold(
-      backgroundColor: colors.backgroundVoid,
-      // The district backdrop renders exactly once here, behind every tab,
-      // instead of each tab screen mounting its own copy -- IndexedStack
-      // keeps all 4 tabs mounted simultaneously for the app's whole
-      // lifetime, so a per-screen backdrop meant N co-mounted media players
-      // competing for the same asset, of which only one actually rendered.
-      body: Listener(
+      backgroundColor: Colors.transparent,
+      body: GestureDetector(
+        key: const Key('zenithTabSwipeDetector'),
         behavior: HitTestBehavior.translucent,
-        onPointerDown: _onPointerDown,
-        child: DistrictAtmosphereBackdrop(
-          child: GestureDetector(
-            key: const Key('zenithTabSwipeDetector'),
-            behavior: HitTestBehavior.translucent,
-            onHorizontalDragStart: _onHorizontalDragStart,
-            onHorizontalDragUpdate: _onHorizontalDragUpdate,
-            onHorizontalDragCancel: _onHorizontalDragCancel,
-            onHorizontalDragEnd: _onHorizontalDragEnd,
-            child: IndexedStack(
-              index: currentIndex,
-              children: ZenithAppShell._screens,
-            ),
-          ),
+        onHorizontalDragStart: _onHorizontalDragStart,
+        onHorizontalDragUpdate: _onHorizontalDragUpdate,
+        onHorizontalDragCancel: _onHorizontalDragCancel,
+        onHorizontalDragEnd: _onHorizontalDragEnd,
+        child: IndexedStack(
+          index: currentIndex,
+          children: ZenithAppShell._screens,
         ),
       ),
       bottomNavigationBar: ZenithNavigationBar(

@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zenith/app_shell.dart';
 import 'package:zenith/core/audio/audio.dart';
 import 'package:zenith/core/storage/storage.dart';
 import 'package:zenith/features/armory/armory.dart';
+import 'package:zenith/features/onboarding/providers/onboarding_provider.dart';
+import 'package:zenith/main.dart';
 
 class _RecordingAudioService implements AudioService {
   final List<AudioCue> playedCues = <AudioCue>[];
@@ -52,31 +52,35 @@ void main() {
   });
 
   group('NoOpAudioService', () {
-    test('safely executes all contract methods with zero-throw semantics', () async {
-      const service = NoOpAudioService();
-      await expectLater(service.initialize(), completes);
-      await expectLater(service.preloadAll(), completes);
-      await expectLater(service.playCue(AudioCue.tick), completes);
-      expect(service.unlockWebAudio, returnsNormally);
-      expect(service.dispose, returnsNormally);
-    });
+    test(
+      'safely executes all contract methods with zero-throw semantics',
+      () async {
+        const service = NoOpAudioService();
+        await expectLater(service.initialize(), completes);
+        await expectLater(service.preloadAll(), completes);
+        await expectLater(service.playCue(AudioCue.tick), completes);
+        expect(service.unlockWebAudio, returnsNormally);
+        expect(service.dispose, returnsNormally);
+      },
+    );
   });
 
   group('audioServiceProvider', () {
-    test('automatically resolves to NoOpAudioService under test environment', () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
+    test(
+      'automatically resolves to NoOpAudioService under test environment',
+      () {
+        final container = ProviderContainer();
+        addTearDown(container.dispose);
 
-      final service = container.read(audioServiceProvider);
-      expect(service, isA<NoOpAudioService>());
-    });
+        final service = container.read(audioServiceProvider);
+        expect(service, isA<NoOpAudioService>());
+      },
+    );
 
     test('cleanly supports test double overrides', () async {
       final mock = _RecordingAudioService();
       final container = ProviderContainer(
-        overrides: [
-          audioServiceProvider.overrideWithValue(mock),
-        ],
+        overrides: [audioServiceProvider.overrideWithValue(mock)],
       );
       addTearDown(container.dispose);
 
@@ -88,9 +92,13 @@ void main() {
     });
   });
 
-  group('ZenithAppShell Web Audio Gesture Unlock', () {
-    testWidgets('triggers unlockWebAudio on first pointer down', (tester) async {
-      SharedPreferences.setMockInitialValues({});
+  group('ZenithApp Web Audio Gesture Unlock', () {
+    testWidgets('triggers unlockWebAudio on first pointer down', (
+      tester,
+    ) async {
+      SharedPreferences.setMockInitialValues({
+        kHasCompletedOnboardingKey: true,
+      });
       final prefs = await SharedPreferences.getInstance();
 
       final mockAudio = _RecordingAudioService();
@@ -99,9 +107,7 @@ void main() {
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
           audioServiceProvider.overrideWithValue(mockAudio),
-          userProfileProvider.overrideWith(
-            (ref) => UserProfileNotifier(prefs),
-          ),
+          userProfileProvider.overrideWith((ref) => UserProfileNotifier(prefs)),
         ],
       );
       addTearDown(container.dispose);
@@ -109,9 +115,7 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(
-            home: ZenithAppShell(),
-          ),
+          child: const ZenithApp(),
         ),
       );
       await tester.pumpAndSettle();

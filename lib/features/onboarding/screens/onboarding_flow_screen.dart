@@ -52,32 +52,30 @@ class _OnboardingFlowScreenState extends ConsumerState<OnboardingFlowScreen> {
     };
 
     return Scaffold(
-      backgroundColor: colors.backgroundVoid,
-      body: DistrictAtmosphereBackdrop(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (_step > 0)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 14.0, 20.0, 0.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        'SETUP ${_step + 1}/$_stepCount',
-                        style: zenithPixelDisplay(
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1.0,
-                          color: colors.textMuted,
-                        ),
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (_step > 0)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 14.0, 20.0, 0.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'SETUP ${_step + 1}/$_stepCount',
+                      style: zenithPixelDisplay(
+                        fontSize: 10.0,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.0,
+                        color: colors.textMuted,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              Expanded(child: stepContent),
-            ],
-          ),
+              ),
+            Expanded(child: stepContent),
+          ],
         ),
       ),
     );

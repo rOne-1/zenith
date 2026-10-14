@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_shell.dart';
+import 'core/audio/audio.dart';
 import 'core/storage/storage.dart';
 import 'core/theme/theme.dart';
+import 'core/widgets/widgets.dart';
 import 'features/onboarding/providers/onboarding_provider.dart';
 import 'features/onboarding/screens/onboarding_flow_screen.dart';
 
@@ -71,6 +73,13 @@ class ZenithApp extends ConsumerWidget {
       title: 'Zenith',
       debugShowCheckedModeBanner: false,
       theme: themeController.current.themeData,
+      builder: (context, child) {
+        return Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: (_) => ref.read(audioServiceProvider).unlockWebAudio(),
+          child: DistrictAtmosphereBackdrop(child: child),
+        );
+      },
       home: hasCompletedOnboarding(prefs)
           ? const ZenithAppShell()
           : const OnboardingFlowScreen(),

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:zenith/core/theme/zenith_motion.dart';
 
-/// A transparent [PageRoute] that does not occlude underlying routes.
+/// A [PageRoute] that occludes underlying routes while allowing the root backdrop to shine through.
 ///
-/// Ensures the persistent [DistrictAtmosphereBackdrop] in [ZenithAppShell]
-/// remains rendered and active behind pushed screens, enforcing the
-/// Single Backdrop Invariant (SP-1) and preventing native video texture
-/// unbinding when pushed routes are popped or aborted.
+/// In Zenith, [DistrictAtmosphereBackdrop] is hosted at the root in
+/// [MaterialApp.builder] behind the [Navigator]. With [opaque] returning true,
+/// Flutter's [RenderTheater] occludes and ceases painting underlying routes
+/// (such as [ExpeditionPortalScreen] behind [ActiveExpeditionScreen]),
+/// completely eliminating visual stacking and GPU overdraw while letting the
+/// root backdrop shine through each screen's transparent [Scaffold].
 class ZenithTransparentPageRoute<T> extends PageRoute<T> {
   ZenithTransparentPageRoute({
     required this.builder,
@@ -27,7 +29,7 @@ class ZenithTransparentPageRoute<T> extends PageRoute<T> {
   Duration get reverseTransitionDuration => transitionDuration;
 
   @override
-  bool get opaque => false;
+  bool get opaque => true;
 
   @override
   Color? get barrierColor => null;
