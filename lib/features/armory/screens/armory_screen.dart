@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sbee/sbee.dart';
 
 import '../../../app_shell.dart';
+import '../../../core/audio/audio.dart';
 import '../../../core/theme/theme.dart';
 import '../../../core/widgets/pixel_button.dart';
+import '../../../core/widgets/pixel_card.dart';
 import '../../../core/widgets/pixel_toast.dart';
 import '../../../core/widgets/stepped_pixel_border.dart';
 import '../providers/user_profile_provider.dart';
@@ -33,6 +35,8 @@ class ArmoryScreen extends ConsumerWidget {
     final metrics = context.pixelMetrics;
     final userProfile = ref.watch(userProfileProvider);
     final notifier = ref.read(userProfileProvider.notifier);
+    final sensorySettings = ref.watch(sensorySettingsProvider);
+    final sensoryNotifier = ref.read(sensorySettingsProvider.notifier);
 
     final equippedCount = userProfile.availableEquipment
         .where((e) => kArmoryEquipmentGrid.contains(e))
@@ -242,7 +246,57 @@ class ArmoryScreen extends ConsumerWidget {
                         },
                       ),
 
-                      const SizedBox(height: 24.0),
+                      ZenithSpacing.gapVerticalXl,
+
+                      // Section Header: Audio & Sensory
+                      Row(
+                        children: [
+                          Container(
+                            width: 6.0,
+                            height: 6.0,
+                            color: colors.amberAccent,
+                          ),
+                          ZenithSpacing.gapHorizontalSm,
+                          Text(
+                            'AUDIO & SENSORY',
+                            style: zenithPixelDisplay(
+                              fontSize: 11.0,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
+                              color: colors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      ZenithSpacing.gapVerticalMd,
+
+                      // Sound Effects Toggle Tile
+                      _SensoryToggleTile(
+                        title: 'SOUND EFFECTS',
+                        subtitle: 'Countdown ticks, chimes, and victory fanfare',
+                        isActive: sensorySettings.soundEffectsEnabled,
+                        onTap: () {
+                          if (sensorySettings.hapticFeedbackEnabled) {
+                            HapticFeedback.selectionClick();
+                          }
+                          sensoryNotifier.toggleSoundEffects();
+                        },
+                      ),
+
+                      ZenithSpacing.gapVerticalMd,
+
+                      // Haptic Feedback Toggle Tile
+                      _SensoryToggleTile(
+                        title: 'HAPTIC FEEDBACK',
+                        subtitle: 'Tactile vibration pulses during workout cues',
+                        isActive: sensorySettings.hapticFeedbackEnabled,
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          sensoryNotifier.toggleHapticFeedback();
+                        },
+                      ),
+
+                      ZenithSpacing.gapVerticalXl,
 
                       const DataArchiveSection(),
 
@@ -352,7 +406,7 @@ class _PhysiologyToggleTile extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsets.all(12.0),
+        padding: ZenithSpacing.edgeInsetsMd,
         decoration: ShapeDecoration(
           color: isActive ? colors.surfaceElevated : colors.surfaceDark,
           shape: SteppedPixelBorder(
@@ -377,7 +431,7 @@ class _PhysiologyToggleTile extends StatelessWidget {
                       color: isActive ? colors.textPrimary : colors.textMuted,
                     ),
                   ),
-                  const SizedBox(height: 2.0),
+                  ZenithSpacing.gapVerticalXxs,
                   Text(
                     subtitle,
                     style: zenithBodyMono(
@@ -388,11 +442,11 @@ class _PhysiologyToggleTile extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 12.0),
+            ZenithSpacing.gapHorizontalMd,
             Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 6.0,
+                horizontal: ZenithSpacing.sm + ZenithSpacing.xxs,
+                vertical: ZenithSpacing.xs + ZenithSpacing.xxs,
               ),
               decoration: BoxDecoration(
                 color: isActive ? colors.amberAccent : colors.backgroundVoid,
@@ -412,6 +466,86 @@ class _PhysiologyToggleTile extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Retro neo-pixel toggle switch card for audio and haptic sensory settings.
+class _SensoryToggleTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const _SensoryToggleTile({
+    required this.title,
+    required this.subtitle,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = context.colors;
+    final metrics = context.pixelMetrics;
+
+    return PixelCard(
+      onTap: onTap,
+      padding: ZenithSpacing.edgeInsetsMd,
+      backgroundColor: isActive ? colors.surfaceElevated : colors.surfaceDark,
+      borderColor: isActive ? colors.amberAccent : colors.borderMuted,
+      bevelColor: isActive ? colors.borderBright : colors.surfaceDark,
+      borderWidth: metrics.borderWidth,
+      cornerStepSize: metrics.cornerStepSize,
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: zenithPixelDisplay(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                    color: isActive ? colors.textPrimary : colors.textMuted,
+                  ),
+                ),
+                ZenithSpacing.gapVerticalXxs,
+                Text(
+                  subtitle,
+                  style: zenithBodyMono(
+                    fontSize: 11.0,
+                    color: colors.textMuted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ZenithSpacing.gapHorizontalMd,
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: ZenithSpacing.sm + ZenithSpacing.xxs,
+              vertical: ZenithSpacing.xs + ZenithSpacing.xxs,
+            ),
+            decoration: BoxDecoration(
+              color: isActive ? colors.amberAccent : colors.backgroundVoid,
+              border: Border.all(
+                color: isActive ? colors.amberGlow : colors.borderMuted,
+                width: 1.0,
+              ),
+            ),
+            child: Text(
+              isActive ? 'ON  ●' : 'OFF ○',
+              style: zenithPixelDisplay(
+                fontSize: 10.0,
+                fontWeight: FontWeight.w900,
+                color: isActive ? colors.surfaceDark : colors.textMuted,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

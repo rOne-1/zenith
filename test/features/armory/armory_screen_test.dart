@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenith/app_shell.dart';
+import 'package:zenith/core/audio/audio.dart';
 import 'package:zenith/core/storage/storage.dart';
 import 'package:zenith/core/theme/theme.dart';
 import 'package:zenith/core/widgets/pixel_button.dart';
@@ -121,11 +122,11 @@ void main() {
       expect(find.text('OFF ○'), findsNWidgets(2));
       expect(find.textContaining('joint protection OFF'), findsOneWidget);
 
-      // Tap Joint Protection -> becomes ON
+      // Tap Joint Protection -> becomes ON (in addition to default ON Sound Effects and Haptic Feedback)
       await tester.tap(find.text('JOINT PROTECTION'));
       await tester.pumpAndSettle();
 
-      expect(find.text('ON  ●'), findsOneWidget);
+      expect(find.text('ON  ●'), findsNWidgets(3));
       expect(find.text('OFF ○'), findsOneWidget);
       expect(find.textContaining('joint protection ON'), findsOneWidget);
 
@@ -135,8 +136,17 @@ void main() {
       await tester.tap(find.text('CYCLE AUTOREGULATION'));
       await tester.pumpAndSettle();
 
-      expect(find.text('ON  ●'), findsNWidgets(2));
+      expect(find.text('ON  ●'), findsNWidgets(4));
+      expect(find.text('OFF ○'), findsNothing);
       expect(find.textContaining('cycle autoreg ON'), findsOneWidget);
+
+      // 8. Scroll and verify Audio & Sensory Section
+      await tester.ensureVisible(find.text('AUDIO & SENSORY'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('AUDIO & SENSORY'), findsOneWidget);
+      expect(find.text('SOUND EFFECTS'), findsOneWidget);
+      expect(find.text('HAPTIC FEEDBACK'), findsOneWidget);
     },
   );
 
@@ -164,6 +174,75 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'ArmoryScreen manages audio & sensory operator toggles and persists to SharedPreferences',
+    (WidgetTester tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      final container = ProviderContainer(
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp(
+            theme: zenithThemeRegistry.defaultTheme.themeData,
+            home: const ArmoryScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Scroll to AUDIO & SENSORY section
+      await tester.ensureVisible(find.text('AUDIO & SENSORY'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('AUDIO & SENSORY'), findsOneWidget);
+      expect(find.text('SOUND EFFECTS'), findsOneWidget);
+      expect(find.text('HAPTIC FEEDBACK'), findsOneWidget);
+
+      // Verify initial defaults in provider and SharedPreferences
+      final initialSensory = container.read(sensorySettingsProvider);
+      expect(initialSensory.soundEffectsEnabled, isTrue);
+      expect(initialSensory.hapticFeedbackEnabled, isTrue);
+
+      // Tap Sound Effects -> toggles OFF
+      await tester.tap(find.text('SOUND EFFECTS'));
+      await tester.pumpAndSettle();
+
+      expect(
+        container.read(sensorySettingsProvider).soundEffectsEnabled,
+        isFalse,
+      );
+      expect(prefs.getBool(kSoundEffectsEnabledKey), isFalse);
+
+      // Tap Haptic Feedback -> toggles OFF
+      await tester.tap(find.text('HAPTIC FEEDBACK'));
+      await tester.pumpAndSettle();
+
+      expect(
+        container.read(sensorySettingsProvider).hapticFeedbackEnabled,
+        isFalse,
+      );
+      expect(prefs.getBool(kHapticFeedbackEnabledKey), isFalse);
+
+      // Tap Sound Effects -> toggles back ON
+      await tester.tap(find.text('SOUND EFFECTS'));
+      await tester.pumpAndSettle();
+
+      expect(
+        container.read(sensorySettingsProvider).soundEffectsEnabled,
+        isTrue,
+      );
+      expect(prefs.getBool(kSoundEffectsEnabledKey), isTrue);
     },
   );
 }
