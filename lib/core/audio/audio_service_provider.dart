@@ -4,6 +4,7 @@ import '../theme/test_env/test_env.dart';
 import 'audio_service.dart';
 import 'no_op_audio_service.dart';
 import 'platform_audio_service.dart';
+import 'sensory_settings_provider.dart';
 
 /// Global Riverpod provider exposing the active [AudioService].
 ///
@@ -15,6 +16,13 @@ final audioServiceProvider = Provider<AudioService>((ref) {
   }
 
   final service = PlatformAudioService();
+  final initialSettings = ref.read(sensorySettingsProvider);
+  service.setSoundEffectsEnabled(initialSettings.soundEffectsEnabled);
+
+  ref.listen(sensorySettingsProvider, (_, next) {
+    service.setSoundEffectsEnabled(next.soundEffectsEnabled);
+  });
+
   service.initialize().catchError((_) {});
   ref.onDispose(service.dispose);
   return service;

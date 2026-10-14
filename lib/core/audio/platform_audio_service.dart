@@ -10,8 +10,24 @@ class PlatformAudioService implements AudioService {
   final Map<AudioCue, DateTime> _lastPlayed = <AudioCue, DateTime>{};
   bool _initialized = false;
   bool _webAudioUnlocked = false;
+  bool _soundEffectsEnabled = true;
 
   static const Duration _debounceThreshold = Duration(milliseconds: 80);
+
+  /// Whether sound effects are currently active.
+  bool get soundEffectsEnabled => _soundEffectsEnabled;
+
+  /// Sets sound effects state. When disabled, immediately silences all active playback.
+  void setSoundEffectsEnabled(bool enabled) {
+    _soundEffectsEnabled = enabled;
+    if (!enabled) {
+      for (final player in _players.values) {
+        try {
+          player.stop().catchError((_) {});
+        } catch (_) {}
+      }
+    }
+  }
 
   @override
   Future<void> initialize() async {
@@ -68,6 +84,8 @@ class PlatformAudioService implements AudioService {
 
   @override
   Future<void> playCue(AudioCue cue) async {
+    if (!_soundEffectsEnabled) return;
+
     if (!_initialized) {
       await initialize();
     }
