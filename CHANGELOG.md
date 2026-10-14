@@ -2,6 +2,15 @@
 
 All notable changes to Zenith are documented here.
 
+## [0.10.0] — 2026-10-15
+
+### 16-Bit Neo-Pixel Audio Engine & Chime System (Sprint 13)
+- **Multiplatform Audio Service Layer (PKG-13.1)** — introduced abstract `AudioService` contract (`initialize`, `playCue`, `preloadAll`, `unlockWebAudio`, `dispose`) and `AudioCue` enum mapping cues to asset paths (`tick`, `start`, `rest`, `complete`); implemented `PlatformAudioService` using `audioplayers: ^6.8.1` configured with non-intrusive ambient audio sessions (iOS `AVAudioSessionCategoryAmbient` with `mixWithOthers`, Android `USAGE_ASSISTANCE_SONIFICATION` with `audioFocus: none`) allowing athlete background music (Spotify/Apple Music) to play without interruption; implemented `NoOpAudioService` dynamically injected when `isTestEnvironment` is active; added web autoplay gesture unlock listener in `ZenithAppShell`.
+- **16-Bit Neo-Pixel Sound Pool Asset Library (PKG-13.2)** — bundled authentic, uncompressed 16-bit PCM WAV cues (`tick.wav`, `start.wav`, `rest.wav`, `complete.wav`) totaling only 114 KB (<25% of the 500 KB sprint ceiling); implemented in-memory pre-decoding via `preloadAll()` for $< 15$ms playback latency; registered assets in `pubspec.yaml`.
+- **Live Workout FSM & Timer Audio Binding (PKG-13.3)** — integrated cue playback and tactile haptics into `ActiveSessionController`: `start.wav` on warm-up completion and rest expiration/skip, `rest.wav` on set completion, `tick.wav` + `selectionClick` at exact 3s, 2s, and 1s countdown thresholds, and `complete.wav` + `heavyImpact` fanfare on debrief screen entry; all audio cues safely decoupled from SBEE periodization and Drift database transactions.
+- **The Armory Audio & Sensory Settings UI (PKG-13.4)** — added dedicated "AUDIO & SENSORY" section in `ArmoryScreen` with "SOUND EFFECTS" and "HAPTIC FEEDBACK" neo-pixel toggle tiles; persisted toggles in `SharedPreferences`; implemented immediate reactive muting in `PlatformAudioService`; adhered strictly to `ZenithSpacing`, `PixelCard`, and `SteppedPixelBorder` with 0 raw `TextStyle` instantiations.
+- **Automated Regression & Verification Suite (PKG-13.5)** — added 25 net new automated unit, widget, and integration tests covering audio service lifecycle, countdown threshold ticks, sensory settings persistence, and FSM bindings, bringing the project test baseline to 342/342 passing tests (100%) with 0 issues reported by `flutter analyze`.
+
 ## [0.9.1] — 2026-10-11
 
 ### Stability, Video Texture Lifecycle & Design Token Polish
